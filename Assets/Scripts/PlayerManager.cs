@@ -77,7 +77,7 @@ public class PlayerManager : MonoBehaviour
             }
             else
             {
-                //throw error
+                ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             } 
 
         }
