@@ -5,12 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GridManager gridManager;
-    public PlayerManager playerManager;
     // Start is called before the first frame update
     void Start()
     {
-        State.onLevelLoad += gridManager.generateGrid;
-        State.onLevelLoad += playerManager.initializePlayer;
+        //gridManager.generateGrid(null, null);
+        //playerManager.initializePlayer(null, null);
         State.initializeLevel();
     }
 

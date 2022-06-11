@@ -42,7 +42,17 @@ public class GridManager : MonoBehaviour
                 State.GridContents[height, width] = new Tile(tile);
             }
         }
+
+        foreach (PlayerManager playerManager in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            playerManager.initializePlayer();
+        }
     }
+
+    /*public List<GameObject> findNeighbours()
+    {
+
+    }*/
 
 
 }
