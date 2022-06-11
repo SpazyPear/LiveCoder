@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class Soldier : Character
 {
-
-
-    public Soldier()
+   
+    // Start is called before the first frame update
+    void Start()
     {
-        maxEnergy = 5;
-        currentEnergy = maxEnergy;
-        playerSpeed = 2;
-        range = 1;
+        initializePlayer("ScriptableObjects/SoldierScriptableObject");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public override float attack()
+    {
+        return 0f;
     }
 }

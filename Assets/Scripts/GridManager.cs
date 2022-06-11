@@ -43,16 +43,11 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        foreach (PlayerManager playerManager in GameObject.FindObjectsOfType<PlayerManager>())
+        foreach (Character playerManager in GameObject.FindObjectsOfType(typeof(Character)))
         {
-            playerManager.initializePlayer();
+            playerManager.initializePlayer(playerManager.GetType().Name + "ScriptableObject");
         }
     }
-
-    /*public List<GameObject> findNeighbours()
-    {
-
-    }*/
 
 
 }
