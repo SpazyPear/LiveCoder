@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab90241aed9445228f7c60821296e65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  source: "using UnityEngine;\nclass ScriptTest {\n\t\n\tvoid RunMethod() {\n\t\tDebug.Log(\"Hey!\");\n\t\tCodeExecutor.CallMe();\n\t}\n\n}"
+  referenceAsset: {fileID: 11400000, guid: fe49826e6ef004cb885140d7c03d61d0, type: 2}
 --- !u!4 &842672690
 Transform:
   m_ObjectHideFlags: 0
