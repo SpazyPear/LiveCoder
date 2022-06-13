@@ -121,7 +121,7 @@ public abstract class Character : MonoBehaviour
             }
             else
             {
-                //ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
+                ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             }
 
         }

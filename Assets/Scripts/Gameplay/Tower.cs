@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour
 {
+    public int towerHealth = 5;
     // Start is called before the first frame update
     void Start()
     {
