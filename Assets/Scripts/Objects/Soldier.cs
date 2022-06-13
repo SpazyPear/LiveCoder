@@ -17,8 +17,14 @@ public class Soldier : Character
         
     }
 
-    public override float attack()
+    public override float attack(Character enemy)
     {
-        return 0f;
+        if (checkForInRangeEnemies().Contains(enemy))
+            return enemy.takeDamage(1);
+        else
+        {
+            ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That enemy isn't in range."));
+            return -1;
+        }
     }
 }

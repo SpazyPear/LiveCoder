@@ -13,6 +13,7 @@ public abstract class Character : MonoBehaviour
     public Vector2Int gridPos;
     bool canRegen = true;
     public Vector2Int startPos;
+    public float currentHealth;
     public bool debugMove;
 
     // Start is called before the first frame update
@@ -29,12 +30,12 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    async void healthRegen()
+    async void energyRegen()
     {
         while (canRegen)
         {
             await Task.Delay(State.EnergyRegen * 1000);
-            currentEnergy++;
+            currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
         }
     }
 
@@ -58,7 +59,8 @@ public abstract class Character : MonoBehaviour
         tweener = gameObject.AddComponent<Tweener>();
         characterData = Resources.Load(CharacterDataPath) as CharacterData;
         currentEnergy = characterData.maxEnergy;
-        healthRegen();
+        currentHealth = characterData.maxHealth;
+        energyRegen();
     }
 
     public void movePlayer(int XDirection, int YDirecton)
@@ -109,5 +111,16 @@ public abstract class Character : MonoBehaviour
         return foundCharacters;
     }
 
-    abstract public float attack();
+    public void die()
+    {
+        Destroy(gameObject);
+    }
+
+    public float takeDamage(float damage)
+    {
+        if (currentHealth - damage <= 0)
+            return currentHealth -= damage;
+        return -1;
+    }
+    abstract public float attack(Character enemy);
 }
