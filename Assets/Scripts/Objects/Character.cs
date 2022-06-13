@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 
+
 public abstract class Character : MonoBehaviour
 {
     public CharacterData characterData;
@@ -44,6 +45,12 @@ public abstract class Character : MonoBehaviour
         moveSet = path;
     }
 
+    public void MoveToCharacter (Character character)
+    {
+        SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
+    }
+
+
     public bool PathCompleted()
     {
         if (moveIndex >= moveSet.Count - 1) return true;
@@ -80,11 +87,12 @@ public abstract class Character : MonoBehaviour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        movePlayer(0, 1);
+        movePlayer(1, 0);
         await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public async void initializePlayer(string CharacterDataPath)
     {
         while (State.GridContents == null)
@@ -97,6 +105,7 @@ public abstract class Character : MonoBehaviour
         energyRegen();
     }
 
+    //TODO Only support move if this is an enemy player
     public void movePlayer(int XDirection, int YDirecton)
     {
         if (currentEnergy > 0)
@@ -145,11 +154,14 @@ public abstract class Character : MonoBehaviour
         return foundCharacters;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public void die()
     {
         Destroy(gameObject);
     }
 
+
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public float takeDamage(float damage)
     {
         if (currentHealth - damage > 0)
@@ -157,5 +169,6 @@ public abstract class Character : MonoBehaviour
 
         return -1;
     }
+
     abstract public float attack(Character enemy);
 }

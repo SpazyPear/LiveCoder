@@ -8,9 +8,9 @@ public interface PlayerHandlerInterface
     void MovePlayer(Vector2Int moveDirection);
 }
 
-public class PlayerHandler : MonoBehaviour, PlayerHandlerInterface
+public class PlayerHandler : MonoBehaviour
 {
-    Character selectedPlayer;
+    public Character selectedPlayer;
 
     private void Update()
     {
@@ -32,48 +32,25 @@ public class PlayerHandler : MonoBehaviour, PlayerHandlerInterface
     }
 
 
-    public void MovePlayer(Vector2Int vector2)
-    {
-        if (selectedPlayer != null)
-        {
-            selectedPlayer.movePlayer(vector2.x, vector2.y);
-            print($"New player position : {selectedPlayer.gridPos}");
-        }
-    }
-
-    public void SetPath(List<Vector2Int> path)
-    {
-        if (selectedPlayer != null) selectedPlayer.SetPath(path);
-    }
-
-    public bool PathCompleted()
-    {
-        if (selectedPlayer != null) return selectedPlayer.PathCompleted();
-        else return true;
-    }
-
-    public void MoveOnPathNext()
-    {
-
-        if (selectedPlayer != null) selectedPlayer.MoveOnPathNext();
-    }
 
 }
 
 
-public class PlayerHandlerProxy : PlayerHandlerInterface
+public class CharacterHandlerProxy 
 {
-    PlayerHandler target;
+    Character target;
 
     [MoonSharpHidden]
-    public PlayerHandlerProxy(PlayerHandler p)
+    public CharacterHandlerProxy(Character p)
     {
         this.target = p;
     }
 
-    public void MovePlayer(Vector2Int move) { target.MovePlayer(move); }
+    public void MovePlayer(Vector2Int move) { target.movePlayer(move.x, move.y); }
     public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
     public bool PathCompleted() { return target.PathCompleted(); }
     public void MoveOnPathNext() { target.MoveOnPathNext(); }
+    public List<Character> getNearbyUnits() { return target.checkForInRangeEnemies(); }
+    public void Attack(Character character) { target.attack(character); }
 
 }

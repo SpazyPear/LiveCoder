@@ -61,6 +61,11 @@ public class Pathfinder : ControlledMonoBehavour
         return moves;
     }
 
+    public List<Vector2Int> FindPath (Character from, Character to)
+    {
+        return FindPath(from.gridPos, to.gridPos);
+    }
+
 }
 
 /*
