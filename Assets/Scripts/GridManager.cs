@@ -28,9 +28,9 @@ public class GridManager : MonoBehaviour
     {
         State.GridContents = new Tile[GridWidth, GridBreadth];
 
-        for (int height = 0; height < GridBreadth; height++)
+        for (int height = 0; height < GridWidth; height++)
         {
-            for (int width = 0; width < GridWidth; width++)
+            for (int width = 0; width < GridBreadth; width++)
             {
                 GameObject tile = Instantiate(tilePrefabs[UnityEngine.Random.Range(0, tilePrefabs.Length)], new Vector3(height * TileSize, 0, width * TileSize), Quaternion.identity, GridParent);
                 tile.transform.localScale = new Vector3(TileSize, 2, TileSize);
@@ -38,16 +38,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        foreach (PlayerManager playerManager in GameObject.FindObjectsOfType<PlayerManager>())
-        {
-            playerManager.initializePlayer();
-        }
     }
-
-    /*public List<GameObject> findNeighbours()
-    {
-
-    }*/
 
 
 }

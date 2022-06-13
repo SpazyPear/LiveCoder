@@ -1,16 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Soldier : Character
 {
-
-
-    public Soldier()
+   
+    // Start is called before the first frame update
+    void Start()
     {
-        maxEnergy = 5;
-        currentEnergy = maxEnergy;
-        playerSpeed = 2;
-        range = 1;
+        initializePlayer("Soldier");  
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        BaseUpdate();
+    }
+
+    public override float attack(Character enemy)
+    {
+        if (checkForInRangeEnemies().Contains(enemy))
+        {
+            float enemyHealthLeft = enemy.takeDamage(1);
+            if (enemyHealthLeft == -1)
+                enemy.die();
+            return enemyHealthLeft;
+        }
+
+        else
+        {
+            //ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That enemy isn't in range."));
+            return -1;
+        }
     }
 }

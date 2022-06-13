@@ -8,12 +8,12 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public GameObject playerPrefab;
+/*    public GameObject playerPrefab;
     public GameObject player;
     public GridManager gridManager;
     public Tweener tweener;
     public bool isMoveThreadRunning;
-    public Soldier character;
+    public CharacterData character;
     public Vector2Int gridPos;
     bool canRegen = true;
     public Vector2Int startPos;
@@ -22,11 +22,9 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        character = new Soldier();
+        CharacterData character = new SoldierData();
         healthRegen();
         await Task.Delay(1000);
-        // movePlayer(0, 1);
-
     }
 
     // Update is called once per frame
@@ -112,5 +110,5 @@ public class PlayerManager : MonoBehaviour
             }
         }
         return foundCharacters;
-    }
+    }*/
 }
