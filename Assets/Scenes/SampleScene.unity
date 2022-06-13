@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1123,6 +1123,7 @@ GameObject:
   - component: {fileID: 1341797142}
   - component: {fileID: 1341797141}
   - component: {fileID: 1341797143}
+  - component: {fileID: 1341797144}
   m_Layer: 0
   m_Name: Code Executor
   m_TagString: Untagged
@@ -1144,6 +1145,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input: {fileID: 1505856735}
   codeEditor: {fileID: 1076862239}
+  preScript:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1341797144}
+        m_TargetAssemblyTypeName: PlayerHandler, Assembly-CSharp
+        m_MethodName: OnScriptSetup
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   referenceAsset: {fileID: 11400000, guid: fe49826e6ef004cb885140d7c03d61d0, type: 2}
 --- !u!4 &1341797142
 Transform:
@@ -1187,6 +1203,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1341797144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341797140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9cfafa187d248c9948ad100d9968a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1407332135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,6 +1511,7 @@ GameObject:
   - component: {fileID: 1483440550}
   - component: {fileID: 1483440549}
   - component: {fileID: 1483440552}
+  - component: {fileID: 1483440553}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1538,6 +1567,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 1483440549}
+--- !u!114 &1483440553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483440548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd9cfafa187d248c9948ad100d9968a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1505856733
 GameObject:
   m_ObjectHideFlags: 0

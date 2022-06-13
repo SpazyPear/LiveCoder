@@ -4,13 +4,16 @@ using UnityEngine;
 using RoslynCSharp;
 using RoslynCSharp.Compiler;
 using UnityEngine.UI;
-
-
+using System.Reflection;
+using MoonSharp.Interpreter;
+using UnityEngine.Events;
 
 public class CodeExecutor : MonoBehaviour
 {
     public InputField input;
     public Transform codeEditor;
+
+    public UnityEvent<Script> preScript;
 
     public AssemblyReferenceAsset referenceAsset;
 
@@ -18,74 +21,52 @@ public class CodeExecutor : MonoBehaviour
     string source = "";
     public void OnExecuteCode()
     {
+
+
         source = input.text;
-       
-        StartCoroutine("AwakeCoroutine");
+
+        StartCoroutine("AwakeCoroutineLua");
 
     }
 
 
-
-    private IEnumerator AwakeCoroutine()
+    private IEnumerator AwakeCoroutineLua()
     {
-        print("Starting compilation");
 
-        source = @"
-            using UnityEngine;
+        Script script = new Script();
 
-            class PlayerRunner {
-        " + source + " } ";
+        this.preScript.Invoke(script);
 
-            ScriptDomain domain = ScriptDomain.CreateDomain("Example");
-
-            domain.RoslynCompilerService.ReferenceAssemblies.Add(referenceAsset);
-
-
-        AsyncCompileOperation operation;
+        script.DoString(source);
 
         try
         {
-            operation = domain.CompileAndLoadSourceAsync(source);
+
+            script.Call(script.Globals["OnStart"], 4);
         }
-        catch (System.Exception e)
+        catch (ScriptRuntimeException e)
         {
-            Debug.LogWarning($"Compiler Error => {e}");
-            operation = null;       
+            Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
         }
 
-        if (operation == null) yield break;
-
-        yield return operation;
-
-        if (domain.CompileResult.Success == true)
+        while (Application.isPlaying)
         {
-
-            ScriptProxy proxy = operation.CompiledType.CreateInstance();
-
-            proxy.Call("Start");
-
-            codeEditor.gameObject.SetActive(false);
-
-            while (Application.isPlaying)
+            try
             {
-                proxy.Call("OnStep");
-                yield return new WaitForSeconds(1);
+                script.Call(script.Globals["OnStep"]);
+            }
+            catch (ScriptRuntimeException e)
+            {
+                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
             }
 
-            
+            yield return new WaitForSeconds(1);
         }
-        else
-        {
-            foreach (CompilationError error in domain.CompileResult.Errors)
-            {
-                if (error.IsError)
-                {
-                    Debug.LogWarning($"Caught Compiler Error => {error}");
-                }
-            }
-        }
+
     }
-    
+
+
+
 }
 
 

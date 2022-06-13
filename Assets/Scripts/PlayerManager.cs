@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
 public class PlayerManager : MonoBehaviour
 {
     public GameObject playerPrefab;
@@ -17,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     bool canRegen = true;
     public Vector2Int startPos;
     public bool debugMove;
-    
+
     // Start is called before the first frame update
     async void Start()
     {
@@ -44,7 +45,7 @@ public class PlayerManager : MonoBehaviour
             await Task.Delay(State.EnergyRegen * 1000);
             character.currentEnergy++;
         }
-    } 
+    }
 
     async void continuosMove()
     {
@@ -78,7 +79,7 @@ public class PlayerManager : MonoBehaviour
             else
             {
                 ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
-            } 
+            }
 
         }
     }
