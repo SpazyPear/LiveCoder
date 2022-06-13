@@ -18,17 +18,12 @@ public class GridManager : MonoBehaviour
         State.onLevelLoad += generateGrid;
     }
 
-    void Start()
+    public void HighlightGrid(int x, int y)
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
+
     public void generateGrid(object sender, EventArgs e)
     {
         State.GridContents = new Tile[GridWidth, GridBreadth];

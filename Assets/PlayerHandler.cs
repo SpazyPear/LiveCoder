@@ -31,9 +31,15 @@ public class PlayerHandler : MonoBehaviour
         if (selectedPlayer != null)
             selectedPlayer.movePlayer(x, y);
     }
+    public void DebugLog(string debug)
+    {
+        Debug.Log(debug);
+    }
 
     public void OnScriptSetup(Script script)
     {
+
         script.Globals["MovePlayer"] = (System.Action<int, int>)MovePlayer;
+        script.Globals["DebugLog"] = (System.Action<string>)DebugLog;
     }
 }
