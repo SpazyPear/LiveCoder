@@ -18,6 +18,7 @@ class GlobalManager
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
         script.Globals["selected"] = handler.selectedPlayer;
+        script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
 
     }
 

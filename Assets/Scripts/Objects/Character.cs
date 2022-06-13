@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 
 
-public abstract class Character : MonoBehaviour
+public abstract class Character : ControlledMonoBehavour
 {
     public CharacterData characterData;
     public Tweener tweener;
@@ -15,7 +15,7 @@ public abstract class Character : MonoBehaviour
     bool canRegen = true;
     public float currentHealth;
     public bool debugMove;
-
+    public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
 
@@ -25,17 +25,16 @@ public abstract class Character : MonoBehaviour
     {
         if (!isMoveThreadRunning && debugMove)
         {
-            continuosMove();
+            //continuosMove();
             await Task.Delay(100);
-            try
-            {
-
-                attack(checkForInRangeEnemies()[0]);
-            }
-            catch (ArgumentOutOfRangeException e)
-            { 
-            }
+           
         }
+    }
+
+    public override void OnStep()
+    {
+        base.OnStep();
+        if (debugMove) moveUnit(1, 0);
     }
 
     public void SetPath(List<Vector2Int> path)
@@ -48,6 +47,7 @@ public abstract class Character : MonoBehaviour
     public void MoveToCharacter (Character character)
     {
         SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
+        MoveOnPathNext();
     }
 
 
@@ -62,7 +62,7 @@ public abstract class Character : MonoBehaviour
 
         if (moveIndex < moveSet.Count - 1)
         {
-            movePlayer(moveSet[moveIndex].x, moveSet[moveIndex].y);
+            moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
             moveIndex += 1;
         }
         else
@@ -87,7 +87,7 @@ public abstract class Character : MonoBehaviour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        movePlayer(1, 0);
+        moveUnit(1, 0);
         await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
@@ -103,10 +103,19 @@ public abstract class Character : MonoBehaviour
         State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
         transform.position = State.GridContents[gridPos.x, gridPos.y].Object.transform.position;
         energyRegen();
+        addUnitToPlayer();
     }
 
-    //TODO Only support move if this is an enemy player
-    public void movePlayer(int XDirection, int YDirecton)
+    public void addUnitToPlayer()
+    {
+        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            if (player.playerID == ownerPlayer)
+                player.units.Add(this);
+        }
+    }
+
+    public void moveUnit(int XDirection, int YDirecton)
     {
         if (currentEnergy > 0)
         {

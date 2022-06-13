@@ -160,7 +160,7 @@ MonoBehaviour:
   tilePrefabs:
   - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
   - {fileID: 3113893959486586600, guid: 2549529e9c582364eb25bcb29fa0ace7, type: 3}
-  GridParent: {fileID: 0}
+  GridParent: {fileID: 362907438}
 --- !u!114 &143205206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,6 +453,52 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &427652262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 427652264}
+  - component: {fileID: 427652263}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &427652263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427652262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695d8e228ae2d4583b08513d73e570ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerID: 0
+  units: []
+--- !u!4 &427652264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427652262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 735.69995, y: -225.55115, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &477111767
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,7 +1912,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858208622}
   m_CullTransparentMesh: 0
---- !u!1001 &2042839139
+--- !u!1001 &1943631232
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1930,24 +1976,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
-      propertyPath: gridPos.y
-      value: 4
+      propertyPath: debugMove
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
-      propertyPath: characterData
-      value: 
-      objectReference: {fileID: 11400000, guid: 14f9211f565d84d4ca53706e6270eed9,
-        type: 2}
+      propertyPath: gridPos.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
-      propertyPath: currentHealth
-      value: 100
+      propertyPath: ownerPlayer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8548406550646563085, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
       propertyPath: m_Name
-      value: Enemy
+      value: SoldierPrefab (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de042299c60983744bab7dc50bddc73c, type: 3}

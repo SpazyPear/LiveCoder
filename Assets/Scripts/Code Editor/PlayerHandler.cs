@@ -31,6 +31,19 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
+    public List<Character> getEnemies()
+    {
+        List<Character> characters = new List<Character>();
+        foreach (Character c in GameObject.FindObjectsOfType<Character>())
+        {
+            if (c.ownerPlayer == 1)
+            {
+                characters.Add(c);
+            }
+        }
+
+        return characters;
+    }
 
 
 }
@@ -46,11 +59,12 @@ public class CharacterHandlerProxy
         this.target = p;
     }
 
-    public void MovePlayer(Vector2Int move) { target.movePlayer(move.x, move.y); }
+    public void MovePlayer(Vector2Int move) { target.moveUnit(move.x, move.y); }
     public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
     public bool PathCompleted() { return target.PathCompleted(); }
     public void MoveOnPathNext() { target.MoveOnPathNext(); }
     public List<Character> getNearbyUnits() { return target.checkForInRangeEnemies(); }
     public void Attack(Character character) { target.attack(character); }
+    public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
 
 }
