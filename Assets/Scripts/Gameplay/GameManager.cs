@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private async void Start()
     {
         await Task.Delay(1000);
-        spawnTowers();
+        //spawnTowers();
     }
 
     // Update is called once per frame
