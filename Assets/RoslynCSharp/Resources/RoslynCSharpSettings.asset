@@ -54,20 +54,8 @@ MonoBehaviour:
   languageVersion: 0
   targetPlatform: 0
   refeferences:
-  - UnityEngine.dll
-  - UnityEngine.AIModule.dll
-  - UnityEngine.AnimationModule.dll
-  - UnityEngine.AssetBundleModule.dll
-  - UnityEngine.AudioModule.dll
-  - UnityEngine.CoreModule.dll
-  - UnityEngine.ParticleSystemModule.dll
-  - UnityEngine.Physics2DModule.dll
-  - UnityEngine.PhysicsModule.dll
-  - UnityEngine.UIModule.dll
   - mscorlib
-  - RoslynCSharp.Examples.dll
-  defineSymbols:
-  - CodeExecutor
+  defineSymbols: []
   allowHotReloading: 1
   hotReloadCopySerializedFields: 1
   hotReloadCopyNonSerializedFields: 1

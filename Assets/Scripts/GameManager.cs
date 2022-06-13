@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
         //gridManager.generateGrid(null, null);
         //playerManager.initializePlayer(null, null);
         State.initializeLevel();
+        //await Task.Delay(100);
+       // GameObject.FindObjectOfType<UnitSpawner>().spawnUnit("Soldier", new Vector2Int(3, 3));
     }
 
     // Update is called once per frame

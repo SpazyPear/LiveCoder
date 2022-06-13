@@ -12,21 +12,25 @@ public abstract class Character : MonoBehaviour
     public int currentEnergy;
     public Vector2Int gridPos;
     bool canRegen = true;
-    public Vector2Int startPos;
     public float currentHealth;
     public bool debugMove;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     // Update is called once per frame
-    void Update()
+    public async void BaseUpdate()
     {
         if (!isMoveThreadRunning && debugMove)
         {
             continuosMove();
+            await Task.Delay(100);
+            try
+            {
+
+                attack(checkForInRangeEnemies()[0]);
+            }
+            catch (ArgumentOutOfRangeException e)
+            { 
+            }
         }
     }
 
@@ -42,24 +46,20 @@ public abstract class Character : MonoBehaviour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        State.GridContents[gridPos.x, gridPos.y].Entity = null;
         movePlayer(0, 1);
-        await tweener.waitForComplete();
-        State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
-        await Task.Delay(500);
+        await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
 
-    public void initializePlayer(string CharacterDataPath)
+    public async void initializePlayer(string CharacterDataPath)
     {
-        /*Vector3 spawnPos = State.GridContents[startPos.x, startPos.y].Object.transform.position;
-        characterObj = Instantiate(playerPrefab, spawnPos, Quaternion.identity, this.transform);
-        gridPos = new Vector2Int(startPos.x, startPos.y);
-        State.GridContents[startPos.x, startPos.y].Entity = gameObject;*/
-        tweener = gameObject.AddComponent<Tweener>();
-        characterData = Resources.Load(CharacterDataPath) as CharacterData;
+        while (State.GridContents == null)
+            await Task.Yield();
+        characterData = Resources.Load("ScriptableObjects/" + CharacterDataPath + "ScriptableObject") as CharacterData;
         currentEnergy = characterData.maxEnergy;
         currentHealth = characterData.maxHealth;
+        State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
+        transform.position = State.GridContents[gridPos.x, gridPos.y].Object.transform.position;
         energyRegen();
     }
 
@@ -69,13 +69,15 @@ public abstract class Character : MonoBehaviour
         {
             if (checkPosOnGrid(new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton)))
             {
+                State.GridContents[gridPos.x, gridPos.y].Entity = null;
                 gridPos = new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton);
+                State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
                 tweener.AddTween(transform, transform.position, State.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);
                 currentEnergy -= XDirection + YDirecton;
             }
             else
             {
-                ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
+                //ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             }
 
         }
@@ -83,25 +85,23 @@ public abstract class Character : MonoBehaviour
 
     public bool checkPosOnGrid(Vector2Int pos)
     {
-        if (pos.x < State.GridContents.Length && pos.y < State.GridContents.GetLength(0) && State.GridContents[pos.x, pos.y].Entity == null)
-        {
-            return true;
-        }
-        return false;
+        try { return State.GridContents[pos.x, pos.y].Entity == null; }
+        catch(IndexOutOfRangeException) { return false; }
     }
 
 
     public List<Character> checkForInRangeEnemies()
     {
         List<Character> foundCharacters = new List<Character>();
-        for (int x = -characterData.range; x < characterData.range; x++)
+        for (int x = -characterData.range; x <= characterData.range; x++)
         {
-            for (int y = -characterData.range; y < characterData.range; y++)
+            for (int y = -characterData.range; y <= characterData.range; y++)
             {
                 try
-                {
-                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity)
+                 {
+                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity != gameObject)
                     {
+                        
                         foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponent(typeof(Character)) as Character);
                     }
                 }
@@ -118,8 +118,9 @@ public abstract class Character : MonoBehaviour
 
     public float takeDamage(float damage)
     {
-        if (currentHealth - damage <= 0)
+        if (currentHealth - damage > 0)
             return currentHealth -= damage;
+
         return -1;
     }
     abstract public float attack(Character enemy);

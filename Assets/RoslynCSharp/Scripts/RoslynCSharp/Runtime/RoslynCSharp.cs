@@ -392,7 +392,6 @@ namespace RoslynCSharp
                 else
                 {
                     Debug.LogWarningFormat(format, args);
-                    
                 }
             }
         }
@@ -408,7 +407,7 @@ namespace RoslynCSharp
             {
                 if(args.Length == 0)
                 {
-                    Debug.LogWarning("Compiler Error (Unhandled) " + format);
+                    Debug.LogError(format);
                 }
                 else
                 {
