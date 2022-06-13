@@ -36,7 +36,7 @@ public class PlayerHandler : MonoBehaviour, PlayerHandlerInterface
     {
         if (selectedPlayer != null)
         {
-            selectedPlayer.movePlayer(vector2.x, vector2.y);
+            selectedPlayer.moveUnit(vector2.x, vector2.y);
             print($"New player position : {selectedPlayer.gridPos}");
         }
     }

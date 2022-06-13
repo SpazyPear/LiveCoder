@@ -62,18 +62,3 @@ public class Pathfinder : ControlledMonoBehavour
     }
 
 }
-
-/*
- * 
-function OnStart()
-	path = FindPath(vec2(0,0), vec2(0,2))
-	i = 1
-	max = len(path)
-end
-
-function OnStep()
-	if i <= max then
-		currentPlayer.MovePlayer(path[i])
-		i = i + 1
-	end	
-end*/

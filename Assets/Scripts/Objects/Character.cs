@@ -14,7 +14,7 @@ public abstract class Character : MonoBehaviour
     bool canRegen = true;
     public float currentHealth;
     public bool debugMove;
-
+    public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
 
@@ -55,7 +55,7 @@ public abstract class Character : MonoBehaviour
 
         if (moveIndex < moveSet.Count - 1)
         {
-            movePlayer(moveSet[moveIndex].x, moveSet[moveIndex].y);
+            moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
             moveIndex += 1;
         }
         else
@@ -80,7 +80,7 @@ public abstract class Character : MonoBehaviour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        movePlayer(0, 1);
+        moveUnit(0, 1);
         await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
@@ -95,9 +95,19 @@ public abstract class Character : MonoBehaviour
         State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
         transform.position = State.GridContents[gridPos.x, gridPos.y].Object.transform.position;
         energyRegen();
+        addUnitToPlayer();
     }
 
-    public void movePlayer(int XDirection, int YDirecton)
+    public void addUnitToPlayer()
+    {
+        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            if (player.playerID == ownerPlayer)
+                player.units.Add(this);
+        }
+    }
+
+    public void moveUnit(int XDirection, int YDirecton)
     {
         if (currentEnergy > 0)
         {

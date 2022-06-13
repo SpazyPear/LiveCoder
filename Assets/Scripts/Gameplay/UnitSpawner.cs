@@ -15,8 +15,6 @@ public class UnitSpawner : MonoBehaviour
             character.gridPos = spawnPos;
             character.enabled = true;
             character.initializePlayer(characterType);
-
-
             return obj.GetComponent(typeof(Character)) as Character;
         }
         return null;
