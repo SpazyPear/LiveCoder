@@ -24,7 +24,7 @@ public abstract class Character : ControlledMonoBehavour
     {
         if (!isMoveThreadRunning && debugMove)
         {
-            continuosMove();
+            //continuosMove();
             await Task.Delay(100);
             try
             {
@@ -36,12 +36,25 @@ public abstract class Character : ControlledMonoBehavour
         }
     }
 
+    public override void OnStep()
+    {
+        base.OnStep();
+        if (debugMove) moveUnit(1, 0);
+    }
+
     public void SetPath(List<Vector2Int> path)
     {
         print("Setting path with length " + path.Count);
         moveIndex = 0;
         moveSet = path;
     }
+
+    public void MoveToCharacter (Character character)
+    {
+        SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
+        MoveOnPathNext();
+    }
+
 
     public bool PathCompleted()
     {
@@ -79,11 +92,12 @@ public abstract class Character : ControlledMonoBehavour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        moveUnit(0, 1);
+        moveUnit(1, 0);
         await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public async void initializePlayer(string CharacterDataPath)
     {
         while (State.GridContents == null)
@@ -154,11 +168,14 @@ public abstract class Character : ControlledMonoBehavour
         return foundCharacters;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public void die()
     {
         Destroy(gameObject);
     }
 
+
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public float takeDamage(float damage)
     {
         if (currentHealth - damage > 0)
@@ -166,5 +183,6 @@ public abstract class Character : ControlledMonoBehavour
 
         return -1;
     }
+
     abstract public float attack(Character enemy);
 }

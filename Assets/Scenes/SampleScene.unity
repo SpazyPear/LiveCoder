@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1140,6 +1140,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
+        type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8548406550646563085, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
       propertyPath: m_Name
@@ -1329,6 +1334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9cfafa187d248c9948ad100d9968a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedPlayer: {fileID: 0}
 --- !u!114 &1341797145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1481,7 +1487,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -0.30603027, y: 0.0014648438}
-  m_SizeDelta: {x: 0, y: 176.75537}
+  m_SizeDelta: {x: 0, y: 46.0784}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1410674597
 MonoBehaviour:
@@ -1928,13 +1934,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
-      propertyPath: gridPos.y
+      propertyPath: debugMove
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
+      propertyPath: gridPos.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6187588074854275754, guid: de042299c60983744bab7dc50bddc73c,
+        type: 3}
       propertyPath: ownerPlayer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8548406550646563085, guid: de042299c60983744bab7dc50bddc73c,
         type: 3}
