@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        State.gameManager = this;
         State.initializeLevel();
     }
 
@@ -27,6 +28,32 @@ public class GameManager : MonoBehaviour
 
     void spawnTowers()
     {
-        Instantiate(towerPrefab, State.gridToWorldPos(new Vector2Int(State.GridContents.GetLength(0) / 2, 0)), Quaternion.identity);
+        GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
+        instance.AddComponent<Tower>().belongingPlayer = findPlayer(0);
+        GameObject instance2 = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, State.GridContents.GetLength(1) - 1));
+        instance.AddComponent<Tower>().belongingPlayer = findPlayer(2);
+    }
+
+    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
+    {
+        if (State.validMovePosition(pos))
+        {
+            GameObject instance = Instantiate(obj, State.gridToWorldPos(pos), Quaternion.identity);
+            float y = obj.transform.GetChild(0).GetComponent<Renderer>().localBounds.extents.y * instance.transform.GetChild(0).localScale.y; // needs to be recursive search for the first renderer
+            instance.transform.position += new Vector3(0, y, 0);
+            State.GridContents[pos.x, pos.y].Entity = instance;
+            return instance;
+        }
+        return null;
+    }
+
+    public static PlayerManager findPlayer(int playerID)
+    {
+        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            if (player.playerID == playerID)
+                return player;
+        }
+        return null;
     }
 }

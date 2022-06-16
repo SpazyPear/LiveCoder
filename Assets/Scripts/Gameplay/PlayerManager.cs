@@ -47,6 +47,11 @@ public class PlayerManager : ControlledMonoBehavour
         return null;
     }
 
+    public void win()
+    {
+        Debug.Log("Won");
+    }
+
     public bool checkUnitOwnerShip(Character unit)
     {
         return units.Contains(unit);

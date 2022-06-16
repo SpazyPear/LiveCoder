@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 
-public abstract class Character : MonoBehaviour
+public abstract class Character : ControlledMonoBehavour
 {
     public CharacterData characterData;
     public Tweener tweener;
@@ -28,7 +28,6 @@ public abstract class Character : MonoBehaviour
             await Task.Delay(100);
             try
             {
-
                 attack(checkForInRangeEnemies()[0]);
             }
             catch (ArgumentOutOfRangeException e)
