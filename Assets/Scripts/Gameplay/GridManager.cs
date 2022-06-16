@@ -42,11 +42,11 @@ public class GridManager : MonoBehaviour
 
     public float[,] CostMap()
     {
-        float[,] costMap = new float[GridWidth, GridHeight];
+        float[,] costMap = new float[GridWidth, GridBreadth];
 
         for (int x = 0; x < GridWidth; x++)
         {
-            for (int y = 0; y < GridHeight; y++)
+            for (int y = 0; y < GridBreadth; y++)
             {
                 if (State.GridContents[x, y].Entity != null) costMap[x, y] = 0f;
                 else costMap[x, y] = 1f;
