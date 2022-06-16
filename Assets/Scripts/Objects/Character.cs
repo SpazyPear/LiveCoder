@@ -17,6 +17,7 @@ public abstract class Character : ControlledMonoBehavour
     public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
+   
 
 
     // Update is called once per frame

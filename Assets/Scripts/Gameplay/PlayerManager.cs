@@ -19,8 +19,8 @@ public class PlayerManager : ControlledMonoBehavour
 
     public async void Start()
     {
-        await Task.Delay(1000);
-        spawnUnit("Soldier", new Vector2Int(0, 0));
+        /*await Task.Delay(1000);
+        spawnUnit("Soldier", new Vector2Int(0, 0));*/
     }
 
     public Character spawnUnit(string characterType, Vector2Int spawnPos)

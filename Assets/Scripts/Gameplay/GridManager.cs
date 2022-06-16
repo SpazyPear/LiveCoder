@@ -48,8 +48,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < GridBreadth; y++)
             {
-                if (State.GridContents[x, y].Entity != null) costMap[x, y] = 0f;
-                else costMap[x, y] = 1f;
+                costMap[x, y] = 1f;
             }
         }
 

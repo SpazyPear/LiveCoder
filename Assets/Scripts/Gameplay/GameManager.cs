@@ -56,4 +56,19 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
+
+    public static Character findClosestPlayer(Character sender, Vector2Int startPos)
+    {
+        float min = Mathf.Infinity;
+        Character closest = null;
+        foreach (Character character in GameObject.FindObjectsOfType<Character>())
+        {
+            if (Vector2Int.Distance(startPos, character.gridPos) < min && character != sender)
+            {
+                min = Vector2Int.Distance(startPos, character.gridPos);
+                closest = character;
+            }
+        }
+        return closest;
+    }
 }
