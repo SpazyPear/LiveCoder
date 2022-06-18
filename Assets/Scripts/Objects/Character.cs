@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 public abstract class Character : ControlledMonoBehavour
 {
+
+    public CodeContext codeContext = new CodeContext();
+
     public CharacterData characterData;
     public Tweener tweener;
     public bool isMoveThreadRunning;
@@ -18,6 +21,13 @@ public abstract class Character : ControlledMonoBehavour
     public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
+
+
+    private void Awake()
+    {
+        codeContext.character = this;
+        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+    }
 
 
     // Update is called once per frame
@@ -46,6 +56,7 @@ public abstract class Character : ControlledMonoBehavour
 
     public void MoveToCharacter (Character character)
     {
+        print("Setting path to " + character.transform.name);
         SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
         MoveOnPathNext();
     }
@@ -60,7 +71,7 @@ public abstract class Character : ControlledMonoBehavour
     public void MoveOnPathNext()
     {
 
-        if (moveIndex < moveSet.Count - 1)
+        if (moveIndex < moveSet.Count)
         {
             moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
             moveIndex += 1;

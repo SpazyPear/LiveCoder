@@ -6,6 +6,29 @@ using System.Reflection;
 using MoonSharp.Interpreter;
 using UnityEngine.Events;
 
+#nullable enable
+
+[System.Serializable]
+public class CodeContext
+{
+    [Multiline]
+    public string source = @"
+
+        function OnStart()
+
+        end
+
+
+        function OnStep()
+
+        end
+
+    ";
+    public Script script = new Script();
+    public Character character;
+}
+
+
 public class CodeExecutor : MonoBehaviour
 {
     public InputField input;
@@ -13,43 +36,67 @@ public class CodeExecutor : MonoBehaviour
 
     public UnityEvent<Script> preScript;
 
+    public List<CodeContext> codeContexts;
 
-    string source = "";
-    public void OnExecuteCode()
+
+    public void RunCode ()
     {
-
-
-        source = input.text;
         StopAllCoroutines();
         StartCoroutine("AwakeCoroutineLua");
+    }
 
+
+    // Saves code
+    public void OnExecuteCode()
+    {
+        editingContext.source = input.text;
+    }
+
+    public void CloseEditor()
+    {
+        codeEditor.gameObject.SetActive(false);
+    }
+
+    CodeContext editingContext;
+
+    public void OpenEditor (CodeContext context)
+    {
+        codeEditor.gameObject.SetActive(true);
+        input.text = context.source;
+        editingContext = context;
     }
 
 
     private IEnumerator AwakeCoroutineLua()
     {
-
-        Script script = new Script();
-
         GlobalManager globalManager = new GlobalManager();
-        globalManager.OnScriptStart(script);
 
-        script.DoString(source);
-        
-        
 
+        foreach (CodeContext context in codeContexts)
+        {
+            context.script.DoString(context.source);
+            globalManager.OnScriptStart(context.script, target: context.character);
+        }
+        
         try
         {
-            foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
+            foreach (CodeContext context in codeContexts)
             {
-                o.OnStart();
+                context.script.Call(context.script.Globals["OnStart"]);
+
+                print("Calling start for " + context.script);
             }
-            script.Call(script.Globals["OnStart"], 4);
         }
         catch (ScriptRuntimeException e)
         {
             Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
         }
+
+        foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
+        {
+            o.OnStart();
+        }
+
 
         while (Application.isPlaying)
         {
@@ -59,7 +106,13 @@ public class CodeExecutor : MonoBehaviour
                 {
                     o.OnStep();
                 }
-                script.Call(script.Globals["OnStep"]);
+
+
+                foreach (CodeContext context in codeContexts)
+                {
+                    context.script.Call(context.script.Globals["OnStep"]);
+                }
+
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
                 {
                     o.OnPostStep();
