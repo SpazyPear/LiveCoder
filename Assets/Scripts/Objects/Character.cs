@@ -4,8 +4,7 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 
-
-public abstract class Character : ControlledMonoBehavour
+public abstract class Character : Entity
 {
 
     public CodeContext codeContext = new CodeContext();
@@ -14,13 +13,11 @@ public abstract class Character : ControlledMonoBehavour
     public Tweener tweener;
     public bool isMoveThreadRunning;
     public int currentEnergy;
-    public Vector2Int gridPos;
     bool canRegen = true;
-    public float currentHealth;
     public bool debugMove;
-    public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
+   
 
 
     private void Awake()
@@ -34,15 +31,7 @@ public abstract class Character : ControlledMonoBehavour
 
 
     // Update is called once per frame
-    public async void BaseUpdate()
-    {
-        if (!isMoveThreadRunning && debugMove)
-        {
-            //continuosMove();
-            await Task.Delay(100);
-           
-        }
-    }
+
 
     public override void OnStep()
     {
@@ -131,7 +120,7 @@ public abstract class Character : ControlledMonoBehavour
             }
             else
             {
-                //ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
+                ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             }
 
         }
@@ -144,9 +133,9 @@ public abstract class Character : ControlledMonoBehavour
     }
 
 
-    public List<Character> checkForInRangeEnemies()
+    public List<T> checkForInRangeEntities<T>() where T : Entity
     {
-        List<Character> foundCharacters = new List<Character>();
+        List<T> foundCharacters = new List<T>();
         for (int x = -characterData.range; x <= characterData.range; x++)
         {
             for (int y = -characterData.range; y <= characterData.range; y++)
@@ -156,7 +145,7 @@ public abstract class Character : ControlledMonoBehavour
                     if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity != gameObject)
                     {
                         
-                        foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponent(typeof(Character)) as Character);
+                        foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponent(typeof(T)) as T);
                     }
                 }
                 catch (IndexOutOfRangeException) { }
@@ -165,21 +154,22 @@ public abstract class Character : ControlledMonoBehavour
         return foundCharacters;
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
-    public void die()
+    
+
+    public virtual float attack<T> (T target) where T : Entity
     {
-        Destroy(gameObject);
+        if (target != null && checkForInRangeEntities<T>().Contains(target))
+        {
+            float enemyHealthLeft = target.takeDamage(1);
+            if (enemyHealthLeft == -1)
+                target.die();
+            return enemyHealthLeft;
+        }
+
+        else
+        {
+            ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
+            return -1;
+        }
     }
-
-
-    [MoonSharp.Interpreter.MoonSharpHidden]
-    public float takeDamage(float damage)
-    {
-        if (currentHealth - damage > 0)
-            return currentHealth -= damage;
-
-        return -1;
-    }
-
-    abstract public float attack(Character enemy);
 }

@@ -29,7 +29,7 @@ public class Pathfinder : ControlledMonoBehavour
 
     private void Awake()
     {
-        
+        pathGrid = new PathFind.Grid(grid.GridWidth, grid.GridBreadth, grid.CostMap());
     }
 
     // Returns a move set of how to get to this path

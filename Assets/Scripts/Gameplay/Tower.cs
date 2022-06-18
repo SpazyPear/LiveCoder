@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : MonoBehaviour
+public class Tower : Entity
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public PlayerManager belongingPlayer;
+    public int towerHealth = 5;
 
-    // Update is called once per frame
-    void Update()
+    /*public override float takeDamage(int damage)
     {
-        
-    }
+        float healthLeft = base.takeDamage(damage);
+        if (healthLeft == -1)
+
+    }*/
 }
