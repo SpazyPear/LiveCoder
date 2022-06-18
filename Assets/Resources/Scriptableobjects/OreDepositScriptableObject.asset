@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3444960a6dde9ff439a0d0d91f069495, type: 3}
-  m_Name: OreDeopistScriptableObject
+  m_Name: OreDepositScriptableObject
   m_EditorClassIdentifier: 
   value: 5
   duration: 10

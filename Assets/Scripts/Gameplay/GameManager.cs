@@ -34,9 +34,9 @@ public class GameManager : MonoBehaviour
     void spawnTowers()
     {
         GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
-        instance.AddComponent<Tower>().belongingPlayer = findPlayer(0);
+        instance.GetComponent<Tower>().ownerPlayer = 0;
         GameObject instance2 = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, State.GridContents.GetLength(1) - 1));
-        instance.AddComponent<Tower>().belongingPlayer = findPlayer(2);
+        instance2.GetComponent<Tower>().ownerPlayer = 1;
     }
 
     public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
             float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
             instance.transform.position += new Vector3(0, y, 0);
             State.GridContents[pos.x, pos.y].Entity = instance;
+            instance.GetComponent<Entity>().gridPos = pos;
             return instance;
         }
         return null;

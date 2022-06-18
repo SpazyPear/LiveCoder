@@ -1,6 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
+using MoonSharp.Interpreter;
+
+public class EntityProxy
+{
+    Entity target;
+
+    [MoonSharpHidden]
+    public EntityProxy(Entity p)
+    {
+        this.target = p;
+    }
+
+
+
+}
 
 public class Entity : ControlledMonoBehavour
 {
@@ -9,19 +25,19 @@ public class Entity : ControlledMonoBehavour
     public int ownerPlayer;
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public void die()
+    public virtual void die(Character sender = null)
     {
         Destroy(gameObject);
     }
 
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public virtual float takeDamage(int damage)
+    public virtual void takeDamage(Character sender, int damage)
     {
         if (currentHealth - damage > 0)
-            return currentHealth -= damage;
+            currentHealth -= damage;
 
-        return -1;
+        die(sender);
     }
 
 }

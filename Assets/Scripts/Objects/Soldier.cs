@@ -14,15 +14,11 @@ public class SoldierProxy : CharacterHandlerProxy
         this.target = p;
     }
 
-    public string soldierSpecific => target.soldierSpecific;
-
-
 }
 
 
 public class Soldier : Character
 {
-    public string soldierSpecific = "specificProperty";
     // Start is called before the first frame update
     void Start()
     {
