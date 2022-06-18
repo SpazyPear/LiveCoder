@@ -40,6 +40,12 @@ public abstract class Character : Entity
         energyRegen();
     }
 
+    public void MoveTo(Vector2Int pos)
+    {
+        SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(gridPos, pos));
+        MoveOnPathNext();
+    }
+
     public void SetPath(List<Vector2Int> path)
     {
         moveIndex = 0;
@@ -154,22 +160,23 @@ public abstract class Character : Entity
         return foundCharacters;
     }
 
+    public void recieveOre(OreDepositData data)
+    {
+        currentEnergy += data.value;
+    }
     
 
-    public virtual float attack<T> (T target) where T : Entity
+    public virtual void attack<T> (T target) where T : Entity
     {
-        if (target != null && checkForInRangeEntities<T>().Contains(target))
+        if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target))
         {
-            float enemyHealthLeft = target.takeDamage(1);
-            if (enemyHealthLeft == -1)
-                target.die();
-            return enemyHealthLeft;
+            currentEnergy--;
+            target.takeDamage(this, 1);
         }
 
         else
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
-            return -1;
         }
     }
 }

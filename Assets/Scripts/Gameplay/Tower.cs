@@ -7,10 +7,9 @@ public class Tower : Entity
     public PlayerManager belongingPlayer;
     public int towerHealth = 5;
 
-    /*public override float takeDamage(int damage)
+    public override void die(Character sender = null)
     {
-        float healthLeft = base.takeDamage(damage);
-        if (healthLeft == -1)
-
-    }*/
+        GameManager.findPlayer(sender.ownerPlayer).win();
+        base.die(sender);
+    }
 }

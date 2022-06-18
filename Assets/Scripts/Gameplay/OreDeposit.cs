@@ -1,6 +1,18 @@
+using MoonSharp.Interpreter;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public class OreDepositProxy : EntityProxy
+{
+    OreDeposit target;
+
+    [MoonSharpHidden]
+    public OreDepositProxy(OreDeposit p) : base (p)
+    {
+        this.target = p;
+    }
+}
 
 public class OreDeposit : Entity
 {
@@ -12,8 +24,9 @@ public class OreDeposit : Entity
         currentHealth = data.health;
     }
 
-    public override float takeDamage(int damage)
+    public override void die(Character sender = null)
     {
-        return base.takeDamage(damage);
+        sender.recieveOre(data);
+        base.die();
     }
 }

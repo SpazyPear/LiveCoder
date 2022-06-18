@@ -14,6 +14,9 @@ class GlobalManager
 
         UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
         UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
+        UserData.RegisterProxyType<EntityProxy, Entity>(r => new EntityProxy(r));
+        UserData.RegisterProxyType<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
+
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
@@ -21,6 +24,9 @@ class GlobalManager
 
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
         script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
+        script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
+        script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
+
 
     }
 
