@@ -39,4 +39,5 @@ public static class State
         return GridContents[gridPoint.x, gridPoint.y].Object.transform.position;
     }
 
+
 }

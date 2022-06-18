@@ -17,14 +17,21 @@ public class PlayerHandler : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            print("Clicking");
+          
             if (Physics.Raycast(ray, out hit))
             {
                 print(hit.transform.parent.name);
                 if (hit.transform.parent != null && hit.transform.parent.GetComponent<Character>() != null)
                 {
                     print($"Player {hit.transform.parent.name} has been selected");
-                    this.selectedPlayer = hit.transform.parent.GetComponent<Character>();
+
+
+                    if (hit.transform.parent.GetComponent<Character>().ownerPlayer == 0)
+                    {
+                        this.selectedPlayer = hit.transform.parent.GetComponent<Character>();
+
+                        GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
+                    }
                 }
             }
         }
@@ -58,12 +65,29 @@ public class CharacterHandlerProxy
         this.target = p;
     }
 
-    public void MovePlayer(Vector2Int move) { target.moveUnit(move.x, move.y); }
-    public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
-    public bool PathCompleted() { return target.PathCompleted(); }
-    public void MoveOnPathNext() { target.MoveOnPathNext(); }
-    public List<T> getNearbyUnits<T>() where T : Entity { return target.checkForInRangeEntities<T>(); }
-    public void Attack(Character character) { target.attack(character); }
-    public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
+    public bool isDead() { return (target == null || target.currentHealth <= 0); }
+    public Vector2Int position
+    {
+        get
+        {
+            return target.gridPos;
+        }
+    }
+
+    public double attackRange
+    {
+        get
+        {
+            return target.characterData.range;
+        }
+    }
+
+    public void MovePlayer(Vector2Int move) { if (target.ownerPlayer == 0) target.moveUnit(move.x, move.y); }
+    public void SetPath(List<Vector2Int> path ) { if (target.ownerPlayer == 0) target.SetPath(path); }
+    public bool PathCompleted() { if (target.ownerPlayer == 0) return target.PathCompleted(); else return false; }
+    public void MoveOnPathNext() { if (target.ownerPlayer == 0) target.MoveOnPathNext(); }
+    public List<Character> getNearbyUnits() { if (target.ownerPlayer == 0) return target.checkForInRangeEntities<Character>(); else return new List<Character>(); }
+    public void Attack(Character character) { if (target.ownerPlayer == 0) target.attack(character); }
+    public void MoveToCharacter (Character character) { if (target.ownerPlayer == 0) target.MoveToCharacter(character); }
 
 }

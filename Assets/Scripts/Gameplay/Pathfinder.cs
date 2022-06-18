@@ -19,6 +19,7 @@ public class Pathfinder : ControlledMonoBehavour
     {
         
         pathGrid = new PathFind.Grid(grid.GridWidth, grid.GridBreadth, grid.CostMap());
+       
     }
 
     public override void OnPostStep()
@@ -37,8 +38,10 @@ public class Pathfinder : ControlledMonoBehavour
         PathFind.Point _from = new PathFind.Point(from.x, from.y);
         PathFind.Point _to = new PathFind.Point(to.x, to.y);
 
-        print($"Finding path from {_from.x}, {_from.y} => {_to.x}, {_to.y} on grid size {pathGrid.nodes.GetLength(0)}, {pathGrid.nodes.GetLength(1)}");
+        ///print($"Finding path from {_from.x}, {_from.y} => {_to.x}, {_to.y} on grid size {pathGrid.nodes.GetLength(0)}, {pathGrid.nodes.GetLength(1)}");
 
+
+        // TODO Disallow overlap of pathfinding ...
         List<PathFind.Point> path = PathFind.Pathfinding.FindPath(pathGrid, _from, _to);
 
         List<Vector2Int> moves = new List<Vector2Int>();
@@ -63,7 +66,6 @@ public class Pathfinder : ControlledMonoBehavour
 
         }
 
-        foreach (Vector2Int moveset in moves) print($"C# added : {moveset.x},{moveset.y}");
 
         return moves;
     }

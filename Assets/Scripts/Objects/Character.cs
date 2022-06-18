@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 public abstract class Character : Entity
 {
+
+    public CodeContext codeContext = new CodeContext();
+
     public CharacterData characterData;
     public Tweener tweener;
     public bool isMoveThreadRunning;
@@ -17,28 +20,28 @@ public abstract class Character : Entity
    
 
 
+    private void Awake()
+    {
+        if (ownerPlayer == 0)
+        {
+            codeContext.character = this;
+            GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        }
+    }
+
+
     // Update is called once per frame
 
 
     public override void OnStep()
     {
         base.OnStep();
-        if (debugMove)
-        {
-            moveUnit(0, 1);
-            try
-            {
-                attack(checkForInRangeEntities<Character>()[0]);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-            }
-        }
+        if (debugMove) moveUnit(1, 0);
+        energyRegen();
     }
 
     public void SetPath(List<Vector2Int> path)
     {
-        print("Setting path with length " + path.Count);
         moveIndex = 0;
         moveSet = path;
     }
@@ -59,7 +62,7 @@ public abstract class Character : Entity
     public void MoveOnPathNext()
     {
 
-        if (moveIndex < moveSet.Count - 1)
+        if (moveIndex < moveSet.Count)
         {
             moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
             moveIndex += 1;
@@ -76,19 +79,8 @@ public abstract class Character : Entity
 
     async void energyRegen()
     {
-        while (canRegen)
-        {
-            await Task.Delay(State.EnergyRegen * 1000);
-            currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
-        }
-    }
-
-    async void continuosMove()
-    {
-        isMoveThreadRunning = true;
-        moveUnit(1, 0);
-        await Task.Delay(1000);
-        isMoveThreadRunning = false;
+       currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
+     
     }
 
     [MoonSharp.Interpreter.MoonSharpHidden]

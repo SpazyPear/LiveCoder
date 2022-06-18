@@ -34,7 +34,15 @@ public class GridManager : MonoBehaviour
             {
                 GameObject tile = Instantiate(tilePrefabs[UnityEngine.Random.Range(0, tilePrefabs.Length)], new Vector3(height * TileSize, 0, width * TileSize), Quaternion.identity, GridParent);
                 tile.transform.localScale = new Vector3(TileSize, 2, TileSize);
-                State.GridContents[height, width] = new Tile(tile);
+
+
+                State.GridContents[height, width] = new Tile(tile, new Vector2Int(height, width));
+
+
+                if (tile.transform.GetComponent<GridTile>() != null)
+                {
+                    tile.transform.GetComponent<GridTile>().gridTile = State.GridContents[height, width];
+                }
             }
         }
 
@@ -58,3 +66,46 @@ public class GridManager : MonoBehaviour
 
 
 }
+
+
+/*
+ * 
+ * function OnStart()
+	e = getEnemies()
+	
+	if len(e) > 0 then
+		closest = e[1]
+		
+		for i,v in e do
+			if dist(current.position, v) < dist(current.position, closest) then
+				closest = v
+			end
+		end
+	end
+end
+
+
+function OnStep()
+	current.MoveToCharacter(closest)
+end
+*/
+
+/*
+ * function OnStart()
+	e = getEnemies()
+	
+	if len(e) > 0 then
+		closest = e[1]
+		
+		for i,v in e do
+			if dist(current.position, v) < dist(current.position, closest) then
+				closest = v
+			end
+		end
+	end
+end
+
+
+function OnStep()
+	current.MoveToCharacter(closest)
+end*/
