@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: adfd8dff40032a6459f4285cd888c33f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,5 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51919da2d55ccc74ba089b55ea77408f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: 0
   belongingPlayer: {fileID: 0}
   towerHealth: 5

@@ -43,6 +43,8 @@ public class CodeExecutor : MonoBehaviour
     public List<CodeContext> codeContexts;
 
 
+    public static List<UnityEngine.Events.UnityAction> onStepActions = new List<UnityAction>();
+
     public void RunCode ()
     {
         StopAllCoroutines();
@@ -150,7 +152,10 @@ public class CodeExecutor : MonoBehaviour
                     o.OnStep();
                 }
 
-
+                foreach (UnityAction action in CodeExecutor.onStepActions)
+                {
+                    action.Invoke();
+                }
                 foreach (CodeContext context in codeContexts)
                 {
                     context.script.Call(context.script.Globals["OnStep"]);

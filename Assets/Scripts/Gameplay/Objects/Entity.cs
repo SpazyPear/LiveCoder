@@ -35,8 +35,11 @@ public class Entity : ControlledMonoBehavour
     public virtual void takeDamage(Character sender, int damage)
     {
         if (currentHealth - damage > 0)
+        {
             currentHealth -= damage;
-
+            return;
+        }
+            
         die(sender);
     }
 
