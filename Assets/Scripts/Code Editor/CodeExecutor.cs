@@ -6,7 +6,7 @@ using TMPro;
 using System.Reflection;
 using MoonSharp.Interpreter;
 using UnityEngine.Events;
-
+using System.Linq;
 #nullable enable
 
 [System.Serializable]
@@ -27,6 +27,18 @@ public class CodeContext
     ";
     public Script script = new Script();
     public Character character;
+}
+
+public enum CodeSuggestionType
+{
+    Function, 
+    Property
+}
+
+public struct CodeSuggestion
+{
+    public string name;
+    public CodeSuggestionType type;
 }
 
 
@@ -64,46 +76,161 @@ public class CodeExecutor : MonoBehaviour
     GlobalManager globalManager = new GlobalManager();
 
     CodeContext editingContext;
+    Dictionary<string, DynValue> currentGlobalsMap = new Dictionary<string, DynValue>();
 
     public void OpenEditor (CodeContext context)
     {
+        currentGlobalsMap.Clear();
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
         headerText.text = context.character.GetType().ToString();
         editingContext = context;
         editingContext.script.DoString(context.source);
         globalManager.OnScriptStart(editingContext.script, target: context.character);
-        Dictionary<string, DynValue> map = setupIntellisense(editingContext.script.Globals);
-        foreach (string key in suggestions("current", map)) print("Key in current" + key);
+        currentGlobalsMap = setupIntellisense(editingContext.script.Globals);
+
+        input.onValueChanged.AddListener(OnValueChanged);
+        
     }
 
-    public List<string> suggestions (string lastWord, Dictionary<string, DynValue> map)
+    string loadedSuggestion = "";
+    string lastWord = "";
+
+    private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            print(loadedSuggestion);
+            input.text = input.text.Insert(input.caretPosition, loadedSuggestion);
+        }
+    }
+
+    string getLastWord (string value)
+    {
+        string sub = value.Substring(0, input.caretPosition+1).Trim();
+        
+        int lastIndex = sub.LastIndexOf(' ');
+        int lastNewLineIndex = sub.LastIndexOf('\n');
+
+        if (lastIndex == -1) lastIndex = lastNewLineIndex;
+        if (lastIndex < lastNewLineIndex && lastNewLineIndex != -1) lastIndex = lastNewLineIndex;
+        
+
+        if (lastIndex != -1) {
+            try
+            {
+                return sub.Substring(lastIndex, (input.caretPosition - lastIndex));
+            }
+            catch (System.Exception e) { return ""; }
+        }
+
+        return "";
+    }
+
+
+    void printList(List<string> strings)
+    {
+        string b = "[";
+        foreach (string s in strings) b += s + ",";
+        b += "]";
+        print(b);
+    }
+
+
+
+    void OnValueChanged (string value) {
+        string lastWord = getLastWord(value);
+        
+
+        string[] split = lastWord.Split(".");
+
+        print(split.Length);
+        if (split.Length == 1)
+        {
+
+            List<string> keys = new List<string>(currentGlobalsMap.Keys);
+
+            keys = keys.Where((s) => s.Contains(split[0].Trim())).ToList<string>();
+
+            printList(keys);
+
+            if (keys.Count > 0)
+                loadedSuggestion = keys[0];
+            else
+                loadedSuggestion = "";
+        }
+        else
+        {
+
+        }
+
+    }
+
+    public List<CodeSuggestion> suggestions (string lastWord, Dictionary<string, DynValue> map)
+    {
+
+        List<CodeSuggestion> temp = new List<CodeSuggestion>();
         if (map.ContainsKey(lastWord))
         {
             DynValue val = map[lastWord];
+
+
+            if (val.UserData != null)
+            {
+                System.Type type = GlobalManager.proxyMappings[val.UserData.Object.GetType()];
+                MethodInfo[] methods = type.GetMethods();
+                FieldInfo[] fields = type.GetFields();
+
+                foreach (MethodInfo info in methods)
+                {
+                    if (info.IsPublic) {
+                        temp.Add(new CodeSuggestion { name = info.Name, type = CodeSuggestionType.Function });
+                    }
+                }
+
+                foreach (FieldInfo info in fields)
+                {
+                    if (info.IsPublic)
+                    {
+                        temp.Add(new CodeSuggestion { name = info.Name, type = CodeSuggestionType.Property });
+                    }
+                }
+
+            }
+
+
             
             if (val.Table != null)
             {
-                List<string> keys = new List<string>(setupIntellisense(val.Table).Keys);
-                return keys;
+                foreach (KeyValuePair<string, DynValue> pair in setupIntellisense(val.Table, true))
+                {
+                    temp.Add(new CodeSuggestion { name = pair.Key, type = (pair.Value.Function != null) ? CodeSuggestionType.Function : CodeSuggestionType.Property });
+                }
+
+            }
+        }
+        else if (lastWord == "")
+        {
+            foreach (KeyValuePair<string, DynValue> pair in map)
+            {
+                temp.Add(new CodeSuggestion { name = pair.Key, type = (pair.Value.Function != null) ? CodeSuggestionType.Function : CodeSuggestionType.Property });
             }
         }
 
-        return new List<string>();
+        return temp;
     }
 
-    public Dictionary<string, DynValue> setupIntellisense(Table inputTable)
+    public Dictionary<string, DynValue> setupIntellisense(Table inputTable, bool printLog = false)
     {
         print("Setting up intellisense");
         Dictionary<string, DynValue> keyValues = new Dictionary<string, DynValue>();
 
         foreach (string key in inputTable.Keys.AsObjects<string>())
         {
+            if (printLog)
             print("Found : " + key + " in " + inputTable);
             keyValues.Add(key, inputTable.Get(key));
         }
-
 
         return keyValues;
     }

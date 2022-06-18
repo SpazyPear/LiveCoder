@@ -1,7 +1,11 @@
 using UnityEngine;
 using MoonSharp.Interpreter;
+using System.Collections.Generic;
+
 class GlobalManager
 {
+
+    public static Dictionary<System.Type, System.Type> proxyMappings = new Dictionary<System.Type, System.Type>();
 
     public Vector2Int vec2(int x, int y)
     {
@@ -9,11 +13,17 @@ class GlobalManager
 
     }
 
+    public void RegisterProxy <T, U> (System.Func<U,T> creator) where T : class where U : class
+    {
+        UserData.RegisterProxyType<T, U>(r => creator(r));
+        GlobalManager.proxyMappings.Add(typeof(U), typeof(T));
+    }
+
     private void SetupPlayerHandler(Script script)
     {
 
-        UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
-        UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
+        RegisterProxy<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        RegisterProxy<SoldierProxy, Soldier>(r => new SoldierProxy(r));
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
