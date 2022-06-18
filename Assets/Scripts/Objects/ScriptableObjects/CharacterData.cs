@@ -8,6 +8,6 @@ public class CharacterData : ScriptableObject
     public int maxEnergy = 5;
     public float playerSpeed = 2;
     public int range = 1;
-    public float maxHealth = 4;
+    public int maxHealth = 4;
 }
 

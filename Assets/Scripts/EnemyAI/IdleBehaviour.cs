@@ -15,7 +15,7 @@ public class IdleBehaviour : StateMachineBehaviour
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (GameManager.findClosestPlayer(unit, unit.gridPos) != null && Vector2Int.Distance(GameManager.findClosestPlayer(unit, unit.gridPos).gridPos, unit.gridPos) < pursueRange)
+        if (GameManager.findClosestEnemy(unit) != null && Vector2Int.Distance(GameManager.findClosestEnemy(unit).gridPos, unit.gridPos) < pursueRange)
         {
             animator.SetTrigger("Pursue");
         }

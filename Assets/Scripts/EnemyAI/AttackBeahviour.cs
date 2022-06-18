@@ -2,27 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PursueBehaviour : StateMachineBehaviour
+public class AttackBeahviour : StateMachineBehaviour
 {
-    public Soldier unit;
-    public Character chasing;
-    
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    public Soldier unit;
+    public Character attacking;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         unit = animator.GetComponent<Soldier>();
-        chasing = GameManager.findClosestPlayer(unit, unit.gridPos);
+        attacking = GameManager.findClosestEnemy(unit);
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (chasing != null)
-        {
-            unit.MoveToCharacter(chasing);
-            if (Vector2Int.Distance(chasing.gridPos, unit.gridPos) == 1)
-                animator.SetBool("Attack", true);
-        }
+        if (attacking != null)
+            unit.attack(attacking);
+        else
+            animator.SetTrigger("Stop");
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -42,6 +39,4 @@ public class PursueBehaviour : StateMachineBehaviour
     //{
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
-
-
 }

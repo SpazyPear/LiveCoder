@@ -1,7 +1,6 @@
-using System.Collections;
+using MoonSharp.Interpreter;
 using System.Collections.Generic;
 using UnityEngine;
-using MoonSharp.Interpreter;
 
 public interface PlayerHandlerInterface
 {
@@ -63,7 +62,7 @@ public class CharacterHandlerProxy
     public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
     public bool PathCompleted() { return target.PathCompleted(); }
     public void MoveOnPathNext() { target.MoveOnPathNext(); }
-    public List<Character> getNearbyUnits() { return target.checkForInRangeEnemies(); }
+    public List<T> getNearbyUnits<T>() where T : Entity { return target.checkForInRangeEntities<T>(); }
     public void Attack(Character character) { target.attack(character); }
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
 

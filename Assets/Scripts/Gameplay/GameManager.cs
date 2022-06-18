@@ -6,7 +6,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GridManager gridManager;
+    public static Vector3 gridDimensions;
     public GameObject towerPrefab;
+    public int numOfOreToSpawn;
+    public GameObject orePrefab;
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,7 +20,9 @@ public class GameManager : MonoBehaviour
     private async void Start()
     {
         await Task.Delay(1000);
+        gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
         spawnTowers();
+        spawnOreDeposits();
     }
 
     // Update is called once per frame
@@ -39,12 +44,22 @@ public class GameManager : MonoBehaviour
         if (State.validMovePosition(pos))
         {
             GameObject instance = Instantiate(obj, State.gridToWorldPos(pos), Quaternion.identity);
-            float y = obj.transform.GetChild(0).GetComponent<Renderer>().localBounds.extents.y * instance.transform.GetChild(0).localScale.y; // needs to be recursive search for the first renderer
+            Transform mesh = findTopLayerMesh(findTopLayerMesh(obj.transform));
+            float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
             instance.transform.position += new Vector3(0, y, 0);
             State.GridContents[pos.x, pos.y].Entity = instance;
             return instance;
         }
         return null;
+    }
+
+    public static Transform findTopLayerMesh(Transform obj)
+    {
+        if (!obj.GetComponent<Renderer>() && obj.childCount > 0)
+        {
+            return findTopLayerMesh(obj.GetChild(0));
+        }
+        return obj;
     }
 
     public static PlayerManager findPlayer(int playerID)
@@ -57,18 +72,49 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public static Character findClosestPlayer(Character sender, Vector2Int startPos)
+    public static T findClosest<T>(Character sender, bool ignoreOwn) where T : Entity
+    {
+        float min = Mathf.Infinity;
+        T closest = null;
+        foreach (T entity in GameObject.FindObjectsOfType<T>())
+        {
+            if (Vector2Int.Distance(sender.gridPos, entity.gridPos) < min)
+            {
+                if (ignoreOwn && entity.ownerPlayer != sender.ownerPlayer)
+                    continue;
+
+                min = Vector2Int.Distance(sender.gridPos, entity.gridPos);
+                closest = entity;
+            }
+        }
+        return closest;
+    }
+    public static Character findClosestEnemy(Character sender)
     {
         float min = Mathf.Infinity;
         Character closest = null;
         foreach (Character character in GameObject.FindObjectsOfType<Character>())
         {
-            if (Vector2Int.Distance(startPos, character.gridPos) < min && character != sender)
+            if (Vector2Int.Distance(sender.gridPos, character.gridPos) < min && character.ownerPlayer != sender.ownerPlayer)
             {
-                min = Vector2Int.Distance(startPos, character.gridPos);
+                min = Vector2Int.Distance(sender.gridPos, character.gridPos);
                 closest = character;
             }
         }
         return closest;
+    }
+
+    public void spawnOreDeposits()
+    {
+        for (int x = 0; x < numOfOreToSpawn / 2; x++)
+        {
+            spawnOnGrid(orePrefab, new Vector2Int(Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(0) / 2)), Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+        }
+
+        for (int x = 0; x < numOfOreToSpawn / 2; x++)
+        {
+            spawnOnGrid(orePrefab, new Vector2Int(Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+        }
+
     }
 }
