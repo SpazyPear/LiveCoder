@@ -61,6 +61,8 @@ public class CodeExecutor : MonoBehaviour
         codeEditor.gameObject.SetActive(false);
     }
 
+    GlobalManager globalManager = new GlobalManager();
+
     CodeContext editingContext;
 
     public void OpenEditor (CodeContext context)
@@ -69,12 +71,46 @@ public class CodeExecutor : MonoBehaviour
         input.text = context.source;
         headerText.text = context.character.GetType().ToString();
         editingContext = context;
+        editingContext.script.DoString(context.source);
+        globalManager.OnScriptStart(editingContext.script, target: context.character);
+        Dictionary<string, DynValue> map = setupIntellisense(editingContext.script.Globals);
+        foreach (string key in suggestions("current", map)) print("Key in current" + key);
     }
 
+    public List<string> suggestions (string lastWord, Dictionary<string, DynValue> map)
+    {
+        if (map.ContainsKey(lastWord))
+        {
+            DynValue val = map[lastWord];
+            
+            if (val.Table != null)
+            {
+                List<string> keys = new List<string>(setupIntellisense(val.Table).Keys);
+                return keys;
+            }
+        }
+
+        return new List<string>();
+    }
+
+    public Dictionary<string, DynValue> setupIntellisense(Table inputTable)
+    {
+        print("Setting up intellisense");
+        Dictionary<string, DynValue> keyValues = new Dictionary<string, DynValue>();
+
+        foreach (string key in inputTable.Keys.AsObjects<string>())
+        {
+            print("Found : " + key + " in " + inputTable);
+            keyValues.Add(key, inputTable.Get(key));
+        }
+
+
+        return keyValues;
+    }
 
     private IEnumerator AwakeCoroutineLua()
     {
-        GlobalManager globalManager = new GlobalManager();
+       
 
 
         foreach (CodeContext context in codeContexts)

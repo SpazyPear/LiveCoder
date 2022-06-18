@@ -17,7 +17,7 @@ public class PlayerHandler : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            print("Clicking");
+          
             if (Physics.Raycast(ray, out hit))
             {
                 print(hit.transform.parent.name);
@@ -83,10 +83,10 @@ public class CharacterHandlerProxy
     }
 
     public void MovePlayer(Vector2Int move) { if (target.ownerPlayer == 0) target.moveUnit(move.x, move.y); }
-    public void SetPath(List<Vector2Int> path) { if (target.ownerPlayer == 0) target.SetPath(path); }
+    public void SetPath(List<Vector2Int> path ) { if (target.ownerPlayer == 0) target.SetPath(path); }
     public bool PathCompleted() { if (target.ownerPlayer == 0) return target.PathCompleted(); else return false; }
     public void MoveOnPathNext() { if (target.ownerPlayer == 0) target.MoveOnPathNext(); }
-    public List<Character> getNearbyUnits() { if (target.ownerPlayer == 0) return target.checkForInRangeEnemies(); else return new List<Character>(); }
+    public List<Character> getNearbyUnits() { if (target.ownerPlayer == 0) return target.checkForInRangeEntities<Character>(); else return new List<Character>(); }
     public void Attack(Character character) { if (target.ownerPlayer == 0) target.attack(character); }
     public void MoveToCharacter (Character character) { if (target.ownerPlayer == 0) target.MoveToCharacter(character); }
 

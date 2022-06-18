@@ -10,7 +10,7 @@ public class UnitSpawner : MonoBehaviour
         GameObject prefab = Resources.Load("Prefabs/" + characterType + "Prefab") as GameObject;
         if (prefab)
         {
-            GameObject obj = Instantiate(prefab, State.GridContents[spawnPos.x, spawnPos.y].Object.transform.position, Quaternion.identity);
+            GameObject obj = Instantiate(prefab, State.gridToWorldPos(spawnPos), Quaternion.identity);
             Character character = obj.GetComponent(typeof(Character)) as Character;
             character.gridPos = spawnPos;
             character.enabled = true;

@@ -47,6 +47,24 @@ public class DragAndDropUnit : MonoBehaviour
     {
         if (_temp != null) GameObject.Destroy(_temp.gameObject);
         dragging = false;
+
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        print(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            print("Transform " + hit.transform.name);
+            if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
+            {
+                print("Spawning player");
+                Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
+                print(pos);
+                GameObject.FindObjectOfType<UnitSpawner>().spawnUnit(unitType,pos);       
+            }
+        }
+        
         print($"Drag ended of {unitType} at {Input.mousePosition}");
 
     }
