@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Reflection;
 using MoonSharp.Interpreter;
 using UnityEngine.Events;
@@ -31,11 +32,14 @@ public class CodeContext
 
 public class CodeExecutor : MonoBehaviour
 {
+    
+    [Header("Editor UI")]
     public InputField input;
+    public TextMeshProUGUI headerText;
     public Transform codeEditor;
 
+    [Header("Context & Script Management")]
     public UnityEvent<Script> preScript;
-
     public List<CodeContext> codeContexts;
 
 
@@ -63,6 +67,7 @@ public class CodeExecutor : MonoBehaviour
     {
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
+        headerText.text = context.character.GetType().ToString();
         editingContext = context;
     }
 
@@ -90,6 +95,8 @@ public class CodeExecutor : MonoBehaviour
         catch (ScriptRuntimeException e)
         {
             Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+            Debug.Log($"Call Stack : {e.CallStack}");
+            Debug.Log($"{e.Source}");
         }
 
         foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())

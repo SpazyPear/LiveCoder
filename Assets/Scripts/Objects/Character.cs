@@ -25,8 +25,11 @@ public abstract class Character : ControlledMonoBehavour
 
     private void Awake()
     {
-        codeContext.character = this;
-        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        if (ownerPlayer == 0)
+        {
+            codeContext.character = this;
+            GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        }
     }
 
 
@@ -45,18 +48,17 @@ public abstract class Character : ControlledMonoBehavour
     {
         base.OnStep();
         if (debugMove) moveUnit(1, 0);
+        energyRegen();
     }
 
     public void SetPath(List<Vector2Int> path)
     {
-        print("Setting path with length " + path.Count);
         moveIndex = 0;
         moveSet = path;
     }
 
     public void MoveToCharacter (Character character)
     {
-        print("Setting path to " + character.transform.name);
         SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
         MoveOnPathNext();
     }
@@ -88,19 +90,8 @@ public abstract class Character : ControlledMonoBehavour
 
     async void energyRegen()
     {
-        while (canRegen)
-        {
-            await Task.Delay(State.EnergyRegen * 1000);
-            currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
-        }
-    }
-
-    async void continuosMove()
-    {
-        isMoveThreadRunning = true;
-        moveUnit(1, 0);
-        await Task.Delay(1000);
-        isMoveThreadRunning = false;
+       currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
+     
     }
 
     [MoonSharp.Interpreter.MoonSharpHidden]

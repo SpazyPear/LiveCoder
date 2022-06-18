@@ -25,9 +25,14 @@ public class PlayerHandler : MonoBehaviour
                 if (hit.transform.parent != null && hit.transform.parent.GetComponent<Character>() != null)
                 {
                     print($"Player {hit.transform.parent.name} has been selected");
-                    this.selectedPlayer = hit.transform.parent.GetComponent<Character>();
 
-                    GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
+
+                    if (hit.transform.parent.GetComponent<Character>().ownerPlayer == 0)
+                    {
+                        this.selectedPlayer = hit.transform.parent.GetComponent<Character>();
+
+                        GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
+                    }
                 }
             }
         }
@@ -59,6 +64,23 @@ public class CharacterHandlerProxy
     public CharacterHandlerProxy(Character p)
     {
         this.target = p;
+    }
+
+    public bool isDead() { return (target == null || target.currentHealth <= 0); }
+    public Vector2Int position
+    {
+        get
+        {
+            return target.gridPos;
+        }
+    }
+
+    public double attackRange
+    {
+        get
+        {
+            return target.characterData.range;
+        }
     }
 
     public void MovePlayer(Vector2Int move) { if (target.ownerPlayer == 0) target.moveUnit(move.x, move.y); }

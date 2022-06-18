@@ -48,8 +48,7 @@ public class GridManager : MonoBehaviour
         {
             for (int y = 0; y < GridBreadth; y++)
             {
-                if (State.GridContents[x, y].Entity != null) costMap[x, y] = 0f;
-                else costMap[x, y] = 1f;
+                costMap[x, y] = 1f;
             }
         }
 
@@ -59,3 +58,46 @@ public class GridManager : MonoBehaviour
 
 
 }
+
+
+/*
+ * 
+ * function OnStart()
+	e = getEnemies()
+	
+	if len(e) > 0 then
+		closest = e[1]
+		
+		for i,v in e do
+			if dist(current.position, v) < dist(current.position, closest) then
+				closest = v
+			end
+		end
+	end
+end
+
+
+function OnStep()
+	current.MoveToCharacter(closest)
+end
+*/
+
+/*
+ * function OnStart()
+	e = getEnemies()
+	
+	if len(e) > 0 then
+		closest = e[1]
+		
+		for i,v in e do
+			if dist(current.position, v) < dist(current.position, closest) then
+				closest = v
+			end
+		end
+	end
+end
+
+
+function OnStep()
+	current.MoveToCharacter(closest)
+end*/

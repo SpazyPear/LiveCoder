@@ -18,6 +18,8 @@ class GlobalManager
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
         script.Globals["selected"] = handler.selectedPlayer;
+
+        // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
         script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
 
     }
@@ -43,7 +45,10 @@ class GlobalManager
         return val.Table.Length;
     }
 
-
+    public int dist (Vector2Int a, Vector2Int b)
+    {
+        return Mathf.RoundToInt(Mathf.Floor(Vector2Int.Distance(a, b)));
+    }
 
     public void printVec2(Vector2Int vec)
     {
@@ -79,6 +84,7 @@ class GlobalManager
 
 
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
+        script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
 
     }
 

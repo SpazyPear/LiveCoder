@@ -72,7 +72,6 @@ public class Pathfinder : ControlledMonoBehavour
 
     public List<Vector2Int> FindPath (Character from, Character to)
     {
-        print($"Finding path from {from.gridPos} => {to.gridPos}");
         return FindPath(from.gridPos, to.gridPos);
     }
 
