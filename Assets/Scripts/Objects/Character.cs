@@ -4,8 +4,12 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 
-public abstract class Character : MonoBehaviour
+
+public abstract class Character : ControlledMonoBehavour
 {
+
+    public CodeContext codeContext = new CodeContext();
+
     public CharacterData characterData;
     public Tweener tweener;
     public bool isMoveThreadRunning;
@@ -14,9 +18,16 @@ public abstract class Character : MonoBehaviour
     bool canRegen = true;
     public float currentHealth;
     public bool debugMove;
-
+    public int ownerPlayer;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
+
+
+    private void Awake()
+    {
+        codeContext.character = this;
+        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+    }
 
 
     // Update is called once per frame
@@ -24,17 +35,16 @@ public abstract class Character : MonoBehaviour
     {
         if (!isMoveThreadRunning && debugMove)
         {
-            continuosMove();
+            //continuosMove();
             await Task.Delay(100);
-            try
-            {
-
-                attack(checkForInRangeEnemies()[0]);
-            }
-            catch (ArgumentOutOfRangeException e)
-            { 
-            }
+           
         }
+    }
+
+    public override void OnStep()
+    {
+        base.OnStep();
+        if (debugMove) moveUnit(1, 0);
     }
 
     public void SetPath(List<Vector2Int> path)
@@ -43,6 +53,14 @@ public abstract class Character : MonoBehaviour
         moveIndex = 0;
         moveSet = path;
     }
+
+    public void MoveToCharacter (Character character)
+    {
+        print("Setting path to " + character.transform.name);
+        SetPath(GameObject.FindObjectOfType<Pathfinder>().FindPath(this, character));
+        MoveOnPathNext();
+    }
+
 
     public bool PathCompleted()
     {
@@ -53,9 +71,9 @@ public abstract class Character : MonoBehaviour
     public void MoveOnPathNext()
     {
 
-        if (moveIndex < moveSet.Count - 1)
+        if (moveIndex < moveSet.Count)
         {
-            movePlayer(moveSet[moveIndex].x, moveSet[moveIndex].y);
+            moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
             moveIndex += 1;
         }
         else
@@ -80,11 +98,12 @@ public abstract class Character : MonoBehaviour
     async void continuosMove()
     {
         isMoveThreadRunning = true;
-        movePlayer(0, 1);
+        moveUnit(1, 0);
         await Task.Delay(1000);
         isMoveThreadRunning = false;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public async void initializePlayer(string CharacterDataPath)
     {
         while (State.GridContents == null)
@@ -95,9 +114,19 @@ public abstract class Character : MonoBehaviour
         State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
         transform.position = State.GridContents[gridPos.x, gridPos.y].Object.transform.position;
         energyRegen();
+        addUnitToPlayer();
     }
 
-    public void movePlayer(int XDirection, int YDirecton)
+    public void addUnitToPlayer()
+    {
+        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            if (player.playerID == ownerPlayer)
+                player.units.Add(this);
+        }
+    }
+
+    public void moveUnit(int XDirection, int YDirecton)
     {
         if (currentEnergy > 0)
         {
@@ -145,11 +174,14 @@ public abstract class Character : MonoBehaviour
         return foundCharacters;
     }
 
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public void die()
     {
         Destroy(gameObject);
     }
 
+
+    [MoonSharp.Interpreter.MoonSharpHidden]
     public float takeDamage(float damage)
     {
         if (currentHealth - damage > 0)
@@ -157,5 +189,6 @@ public abstract class Character : MonoBehaviour
 
         return -1;
     }
+
     abstract public float attack(Character enemy);
 }

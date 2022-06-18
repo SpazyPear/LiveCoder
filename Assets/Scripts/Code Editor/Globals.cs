@@ -12,11 +12,13 @@ class GlobalManager
     private void SetupPlayerHandler(Script script)
     {
 
-        UserData.RegisterProxyType<PlayerHandlerProxy, PlayerHandler>(r => new PlayerHandlerProxy(r));
+        UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
-        script.Globals["currentPlayer"] = handler;
+        script.Globals["selected"] = handler.selectedPlayer;
+        script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
 
     }
 
@@ -40,6 +42,8 @@ class GlobalManager
     {
         return val.Table.Length;
     }
+
+
 
     public void printVec2(Vector2Int vec)
     {
@@ -78,18 +82,28 @@ class GlobalManager
 
     }
 
-    public void OnScriptStart(Script script)
+    public void OnScriptStart(Script script, Character target = null)
     {
 
         script.Globals["print"] = (System.Action<DynValue>)DebugLog;
         script.Globals["len"] = (System.Func<DynValue, int>)len;
         script.Globals["printVec2"] = (System.Action<Vector2Int>)printVec2;
 
+        
+
         SetupTypes(script);
 
         SetupPlayerHandler(script);
 
         SetupPathfinding(script);
+
+
+        script.Globals["current"] = target;
+    }
+
+    public void OnScriptPreStep (Script script)
+    {
+
     }
 
 }
