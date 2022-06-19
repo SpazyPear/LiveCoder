@@ -22,7 +22,7 @@ public class Rule
 public static class PatternIdentifier
 {
 
-    static Dictionary<int, GameObject> tileObjects = new Dictionary<int, GameObject>();
+    public static Dictionary<int, GameObject> tileObjects = new Dictionary<int, GameObject>();
     static readonly char[] trimCharacters = { '(', 'C', 'l', 'o', 'n', 'e', ')' };
 
     public static GameObject[,] objectArrayToGrid(GameObject[] gameObjects)
@@ -30,7 +30,6 @@ public static class PatternIdentifier
         GameObject[,] grid = new GameObject[5, 5]; //change
         for (int i = 0; i < gameObjects.Length; i++)
         {
-            Debug.Log(i / 5);
             grid[i / 5, i % 5] = gameObjects[i];
         }
         return grid;
@@ -44,10 +43,10 @@ public static class PatternIdentifier
         {
             for (int y = 0; y < tileMap.GetLength(1); y++)
             {
-                int ID = tileObjects.FirstOrDefault(pair => Regex.Match(pair.Value.name.TrimEnd(trimCharacters), @"^[^\d]+").Value == Regex.Match(tileMap[x, y].name.TrimEnd(trimCharacters), @"^[^\d]+").Value).Key;
-                if (ID == 0 && x + y == 0)
+                int ID = tileObjects.FirstOrDefault(pair => pair.Value.name.TrimEnd(trimCharacters) == tileMap[x, y].name.TrimEnd(trimCharacters)).Key;
+                if (ID == 0 || x + y == 0)
                 {
-                    tileObjects.Add(highestTileID++, tileMap[x, y]);
+                    tileObjects.Add(++highestTileID, tileMap[x, y]);
                     ID = highestTileID;
                 }
                 tileMapArray[x, y] = ID;
@@ -64,13 +63,13 @@ public static class PatternIdentifier
             for (int y = 0; y < inputTiles.GetLength(1); y++)
             {
                 // Loop Neighbours
-                for (int i = -x; i <= x; i++)
+                for (int i = x - 1; i <= x + 1; i++)
                 {
-                    for (int j = -y; j <= y; j++)
+                    for (int j = y - 1; j <= y + 1; j++)
                     {
-                        if (i > 0 && j > 0 && i < inputTiles.GetLength(0) && j < inputTiles.GetLength(1) && (i == 0 || j == 0)) // no diaganols
+                        if (i >= 0 && j >= 0 && i < inputTiles.GetLength(0) && j < inputTiles.GetLength(1) && (i == x || j == y) && !(i == x && j == y)) // no diaganols
                         {
-                            AddRule(ref rules, new Rule(inputTiles[x, y], inputTiles[i + x, j + y], new Vector2Int(i, j)));
+                            AddRule(ref rules, new Rule(inputTiles[x, y], inputTiles[i, j], new Vector2Int(i - x, j - y)));
                         }
                     }
                 }
@@ -82,6 +81,7 @@ public static class PatternIdentifier
 
     static void AddRule (ref List<Rule> rules, Rule newRule)
     {
+
         foreach (Rule rule in rules)
         {
             if (rule.Tile == newRule.Tile && rule.Adjacent == newRule.Adjacent && rule.Direction == newRule.Direction)
@@ -89,8 +89,8 @@ public static class PatternIdentifier
                 rule.weight++;
                 return;
             }
-            rules.Add(newRule);
         }
+        rules.Add(newRule);
 
     }
 

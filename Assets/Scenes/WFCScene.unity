@@ -353,7 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   input:
   - {fileID: 3113893959486586600, guid: 2549529e9c582364eb25bcb29fa0ace7, type: 3}
-  - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
+  - {fileID: 3113893959486586600, guid: 387a1d12e2c682143bef9de3453b18d2, type: 3}
   - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
   - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
   - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
@@ -422,12 +422,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1690f75426f484ec98c5fbacfcb0ddea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridWidth: 5
-  GridBreadth: 5
+  GridWidth: 100
+  GridBreadth: 100
   GridHeight: 2
   TileSize: 10
-  tilePrefabs: []
+  tilePrefabs:
+  - {fileID: 3113893959486586600, guid: 2549529e9c582364eb25bcb29fa0ace7, type: 3}
+  - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
   GridParent: {fileID: 2125389281}
+  wfcGenerator: {fileID: 979737869}
 --- !u!4 &2125389281
 Transform:
   m_ObjectHideFlags: 0

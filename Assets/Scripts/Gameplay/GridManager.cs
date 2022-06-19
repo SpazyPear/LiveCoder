@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     public float TileSize = 10;
     public GameObject[] tilePrefabs;
     public Transform GridParent;
+    public WFCGenerator wfcGenerator;
 
     // Start is called before the first frame update
     void Awake()
@@ -26,15 +27,21 @@ public class GridManager : MonoBehaviour
 
     public void generateGrid(object sender, EventArgs e)
     {
+        List<GameObject>[,] tiles = wfcGenerator.generateGrid(GridBreadth, GridWidth);
         State.GridContents = new Tile[GridWidth, GridBreadth];
 
         for (int height = 0; height < GridWidth; height++)
         {
             for (int width = 0; width < GridBreadth; width++)
             {
-                GameObject tile = Instantiate(tilePrefabs[UnityEngine.Random.Range(0, tilePrefabs.Length)], new Vector3(height * TileSize, 0, width * TileSize), Quaternion.identity, GridParent);
-                tile.transform.localScale = new Vector3(TileSize, 2, TileSize);
-                State.GridContents[height, width] = new Tile(tile);
+                try
+                {
+                    GameObject tile = Instantiate(tiles[height, width][0], new Vector3(height * TileSize, 0, width * TileSize), Quaternion.identity, GridParent);
+                    tile.transform.localScale = new Vector3(TileSize, 2, TileSize);
+                    State.GridContents[height, width] = new Tile(tile);
+                }
+                catch (ArgumentOutOfRangeException) { continue; }
+
             }
         }
 
