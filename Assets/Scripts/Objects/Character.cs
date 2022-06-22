@@ -171,7 +171,7 @@ public abstract class Character : Entity
         if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target))
         {
             currentEnergy--;
-            target.takeDamage(this, 1);
+            target.takeDamage(1, this);
         }
 
         else

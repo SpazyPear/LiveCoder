@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2193332081445677555}
   - component: {fileID: 4235004690097893123}
   - component: {fileID: 4843265160883262372}
-  - component: {fileID: 6862157358728390353}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6862157358728390353
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8210581441163708407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.99999994, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8548406550646563085
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +94,7 @@ GameObject:
   - component: {fileID: 987321476187720251}
   - component: {fileID: 6187588074854275754}
   - component: {fileID: 312020402}
+  - component: {fileID: 2293646364029502097}
   m_Layer: 0
   m_Name: SoldierPrefab
   m_TagString: Untagged
@@ -167,3 +154,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &2293646364029502097
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8548406550646563085}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 3.5902643, z: 1}
+  m_Center: {x: 0, y: 1.2951322, z: 0}

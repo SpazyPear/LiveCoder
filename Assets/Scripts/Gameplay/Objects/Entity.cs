@@ -32,7 +32,7 @@ public class Entity : ControlledMonoBehavour
 
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public virtual void takeDamage(Character sender, int damage)
+    public virtual void takeDamage(int damage, Character sender = null)
     {
         if (currentHealth - damage > 0)
         {
