@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 9189970928852716557}
   - component: {fileID: 2709660112825084963}
   m_Layer: 0
-  m_Name: GrassTile
-  m_TagString: Grass
+  m_Name: OceanTile
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 30c9f450bb0af4d9685f0c7f3db79e3a, type: 2}
+  - {fileID: 2100000, guid: fcafdf9f3abd2b742b46161b12f892b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

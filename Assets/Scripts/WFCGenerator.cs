@@ -5,31 +5,37 @@ using System.Linq;
 
 public class WFCGenerator : MonoBehaviour
 {
-    public GameObject[] input;
+    public GameObject[,] input;
+    public Transform inputContainer;
     List<Rule> rules;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        fillInput();
     }
 
-
-
-    List<GameObject> getUniqueTiles(GameObject[] input)
+    void fillInput()
     {
-        List<GameObject> uniqueTiles = new List<GameObject>();
-        foreach (GameObject tile in input)
+        input = new GameObject[(int)Mathf.Sqrt(inputContainer.childCount), (int)Mathf.Sqrt(inputContainer.childCount)];
+        int width = (int)Mathf.Sqrt(inputContainer.childCount);
+        for (int i = 0; i < inputContainer.childCount; i++)
+            input[i / width, i % width] = findObjAtPos(inputContainer.transform, i / width, i % width);
+    }
+
+    GameObject findObjAtPos(Transform parent, int x, int y)
+    {
+        for (int i = 0; i < parent.childCount; i++)
         {
-            if (!uniqueTiles.Contains(tile))
-                uniqueTiles.Add(tile);
+            if (parent.GetChild(i).transform.localPosition == new Vector3(x, 0, y))
+                return parent.GetChild(i).gameObject;
         }
-        return uniqueTiles;
+        return null;
     }
 
     List<GameObject>[,] fillGridEntropy(int width, int height)
     {
-        List<GameObject> uniqueTiles = getUniqueTiles(input);
+        List<GameObject> uniqueTiles = PatternIdentifier.tileObjects.Values.ToList().OrderByDescending(x => PatternIdentifier.objectWeights[x]).ToList();
         List<GameObject>[,] grid = new List<GameObject>[width, height];
         int maxEntropy = PatternIdentifier.tileObjects.Max(x => x.Key) + 1;
         for (int x = 0; x < width; x++)
@@ -59,14 +65,30 @@ public class WFCGenerator : MonoBehaviour
         }
     }
 
-    List<GameObject> assignRandomState(List<GameObject> tile)
+    List<GameObject> collapseState(List<GameObject> tile)
     {
         List<GameObject> newTileEntropy = new List<GameObject>(tile);
-        int index = Random.Range(0, newTileEntropy.Count);
-        for (int i = 0; i < newTileEntropy.Count; i++)
+        float result = Random.Range(0, 1f);
+        int index = 0;
+        while (index < newTileEntropy.Count && result > 0)
+        {
+            if (result - PatternIdentifier.objectWeights[newTileEntropy.ElementAt(index)] > 0)
+            {
+
+                result -= PatternIdentifier.objectWeights[newTileEntropy.ElementAt(index)];
+                index++;
+          
+            }
+            else
+                break;
+        }
+
+        for (int i = tile.Count - 1; i >= 0; i--)
         {
             if (i != index)
+            {
                 newTileEntropy.RemoveAt(i);
+            }
         }
         return newTileEntropy;
     }
@@ -74,7 +96,7 @@ public class WFCGenerator : MonoBehaviour
 
     public List<GameObject>[,] generateGrid(int width, int height)
     {
-        GameObject[,] objectGrid = PatternIdentifier.objectArrayToGrid(input);
+        GameObject[,] objectGrid = input;
         int[,] intGrid = PatternIdentifier.tileMapToArray(objectGrid);
         rules = PatternIdentifier.identifyRules(intGrid);
         List<GameObject>[,] generatedGrid = fillGridEntropy(width, height);
@@ -83,7 +105,7 @@ public class WFCGenerator : MonoBehaviour
         while (!isFullyCollapsed(generatedGrid))
         {
             getLowestEntropyTile(generatedGrid, ref lowestX, ref lowestY);
-            generatedGrid[lowestX, lowestY] = assignRandomState(generatedGrid[lowestX, lowestY]);
+            generatedGrid[lowestX, lowestY] = collapseState(generatedGrid[lowestX, lowestY]);
             // Loop Neighbours
             for (int i = lowestX - 1; i <= lowestX + 1; i++)
             {
@@ -93,10 +115,14 @@ public class WFCGenerator : MonoBehaviour
                     {
                         for (int e = generatedGrid[i, j].Count - 1; e >= 0; e--)
                         {
-                            List<Rule> matchingRules = rules.Where(x => x.Tile == PatternIdentifier.tileObjects.First(x => x.Value == generatedGrid[lowestX, lowestY][0]).Key && x.Adjacent == PatternIdentifier.tileObjects.First(x => x.Value == generatedGrid[i, j][e]).Key && x.Direction == new Vector2Int(i - lowestX, j - lowestY)).ToList();
-                            if (matchingRules.Count == 0)
+                            List<Rule> matchingRules = rules.Where(x => x.Tile == PatternIdentifier.tileObjects.First(x => x.Value.tag == generatedGrid[lowestX, lowestY][0].tag).Key && x.Adjacent == PatternIdentifier.tileObjects.First(x => x.Value.tag == generatedGrid[i, j][e].tag).Key && x.Direction == new Vector2Int(i - lowestX, j - lowestY)).ToList();
+                            if (matchingRules.Count == 0 && generatedGrid[i, j].Count != 1)
                             {
+                                //Debug.Log(generatedGrid[lowestX, lowestY][0].tag + " can't be next to " + generatedGrid[i, j][e].tag + " in direction " + new Vector2Int(i - lowestX, j - lowestY));
                                 generatedGrid[i, j].RemoveAt(e);
+                                if (generatedGrid[i, j].Count == 0)
+                                    Debug.Log("now empty");
+                                
                             }
                         }
                     }

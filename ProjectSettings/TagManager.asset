@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Entity
+  - Grass
+  - Dirt
+  - Yellow
+  - Sand
+  - Water
   layers:
   - Default
   - TransparentFX

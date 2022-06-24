@@ -23,7 +23,7 @@ public static class PatternIdentifier
 {
 
     public static Dictionary<int, GameObject> tileObjects = new Dictionary<int, GameObject>();
-    static readonly char[] trimCharacters = { '(', 'C', 'l', 'o', 'n', 'e', ')' };
+    public static Dictionary<GameObject, float> objectWeights = new Dictionary<GameObject, float>();
 
     public static GameObject[,] objectArrayToGrid(GameObject[] gameObjects)
     {
@@ -43,16 +43,32 @@ public static class PatternIdentifier
         {
             for (int y = 0; y < tileMap.GetLength(1); y++)
             {
-                int ID = tileObjects.FirstOrDefault(pair => pair.Value.name.TrimEnd(trimCharacters) == tileMap[x, y].name.TrimEnd(trimCharacters)).Key;
-                if (ID == 0 || x + y == 0)
+                int ID = containsTag(tileMap[x, y].tag);
+                if (ID == -1)
                 {
                     tileObjects.Add(++highestTileID, tileMap[x, y]);
+                    objectWeights.Add(tileMap[x, y], 0);
                     ID = highestTileID;
                 }
                 tileMapArray[x, y] = ID;
+                objectWeights[tileObjects[ID]]++;
             }
         }
+        float sum = objectWeights.Sum(x => x.Value);
+        List<GameObject> keys = objectWeights.Keys.ToList();
+        for (int x = objectWeights.Count - 1; x >= 0; x--)  
+            objectWeights[keys[x]] /= sum;
         return tileMapArray;
+    }
+
+    public static int containsTag(string tag)
+    {
+        foreach (KeyValuePair<int, GameObject> pair in tileObjects)
+        {
+            if (pair.Value.tag.Equals(tag))
+                return pair.Key;
+        }
+        return -1;
     }
 
     public static List<Rule> identifyRules(int[,] inputTiles)
@@ -67,7 +83,7 @@ public static class PatternIdentifier
                 {
                     for (int j = y - 1; j <= y + 1; j++)
                     {
-                        if (i >= 0 && j >= 0 && i < inputTiles.GetLength(0) && j < inputTiles.GetLength(1) && (i == x || j == y) && !(i == x && j == y)) // no diaganols
+                        if (i >= 0 && j >= 0 && i < inputTiles.GetLength(0) && j < inputTiles.GetLength(1) && (i == x || j == y) && !(i == x && j == y)) // no diaganals
                         {
                             AddRule(ref rules, new Rule(inputTiles[x, y], inputTiles[i, j], new Vector2Int(i - x, j - y)));
                         }

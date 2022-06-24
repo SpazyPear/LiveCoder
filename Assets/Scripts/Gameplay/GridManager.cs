@@ -12,6 +12,7 @@ public class GridManager : MonoBehaviour
     public GameObject[] tilePrefabs;
     public Transform GridParent;
     public WFCGenerator wfcGenerator;
+    public bool showInput;
 
     // Start is called before the first frame update
     void Awake()
@@ -44,6 +45,17 @@ public class GridManager : MonoBehaviour
 
             }
         }
+
+        /*if (showInput)
+        {
+            for (int height = 0; height < Mathf.Sqrt(wfcGenerator.input.Length); height++)
+            {
+                for (int width = 0; width < Mathf.Sqrt(wfcGenerator.input.Length); width++)
+                {
+                    
+                }
+            }
+        }*/
 
     }
 
