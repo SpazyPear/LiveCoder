@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using MoonSharp.Interpreter;
-
 public class EntityProxy
 {
     Entity target;
@@ -13,9 +12,6 @@ public class EntityProxy
     {
         this.target = p;
     }
-
-
-
 }
 
 public class Entity : ControlledMonoBehavour

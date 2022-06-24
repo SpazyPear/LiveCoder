@@ -19,13 +19,16 @@ public class SoldierProxy : CharacterHandlerProxy
 
 public class Soldier : Character
 {
+
+    public SoldierData soldierData;
     // Start is called before the first frame update
     void Start()
     {
-        initializePlayer("Soldier");  
+        initializePlayer("Soldier");
+        soldierData = initializeCharacterClass<SoldierData>(characterData);
     }
 
     // Update is called once per frame
-    
+
 
 }

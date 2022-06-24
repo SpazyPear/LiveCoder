@@ -6,4 +6,5 @@ using UnityEngine;
 public class SoldierData : CharacterData
 {
     public int lungeRange = 3;
+
 }

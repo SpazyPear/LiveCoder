@@ -14,6 +14,7 @@ public class Turret : Entity
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         barrel = transform.GetChild(0);
         target(GameObject.FindObjectOfType<Character>());
+        StartCoroutine(debugShoot());
     }
 
     public void target(Character enemy)
@@ -22,7 +23,6 @@ public class Turret : Entity
         currentTarget = enemy;
         rotatingBarrel = true;
         StartCoroutine(rotateBarrel());
-        StartCoroutine(debugShoot());
     }
 
     public void shoot()
@@ -38,20 +38,26 @@ public class Turret : Entity
             if (currentTarget)
             {
                 var lookPos = currentTarget.transform.position - barrel.position;
-                lookPos.y = 0;
+                lookPos += new Vector3(0, 2, 0);
                 var rotation = Quaternion.LookRotation(lookPos);
                 barrel.rotation = Quaternion.Slerp(barrel.rotation, rotation, Time.deltaTime * 2f);
             }
-            rotatingBarrel = false;
+            else 
+                rotatingBarrel = false;
+
             yield return null;
         }
     }
 
     IEnumerator debugShoot()
     {
+
         while (true)
         {
             yield return new WaitForSeconds(1);
+            if (!currentTarget)
+                target(GameObject.FindObjectOfType<Character>());
+
             shoot();
         }
     }

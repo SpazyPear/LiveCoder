@@ -4,6 +4,13 @@ using UnityEngine;
 using System;
 using System.Threading.Tasks;
 
+public enum CLASSTYPE
+{
+    Tank,
+    Brawler,
+    Scout
+}
+
 public abstract class Character : Entity
 {
 
@@ -17,7 +24,7 @@ public abstract class Character : Entity
     public bool debugMove;
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
-   
+    public bool startInScene;
 
 
     private void Awake()
@@ -95,12 +102,20 @@ public abstract class Character : Entity
         while (State.GridContents == null)
             await Task.Yield();
         characterData = Resources.Load("ScriptableObjects/" + CharacterDataPath + "ScriptableObject") as CharacterData;
-        currentEnergy = characterData.maxEnergy;
-        currentHealth = characterData.maxHealth;
-        State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
-        transform.position = State.GridContents[gridPos.x, gridPos.y].Object.transform.position;
+        
+
+        if (startInScene)
+            GameManager.placeOnGrid(gameObject, gridPos);
         energyRegen();
         addUnitToPlayer();
+    }
+
+    public T initializeCharacterClass<T>(CharacterData data) where T : CharacterData
+    {
+        T characterSpecificData = data as T;
+        currentEnergy = characterSpecificData.maxEnergy;
+        currentHealth = characterSpecificData.maxHealth;
+        return characterSpecificData;
     }
 
     public void addUnitToPlayer()
@@ -170,7 +185,6 @@ public abstract class Character : Entity
     {
         if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target))
         {
-            currentEnergy--;
             target.takeDamage(1, this);
         }
 
@@ -178,5 +192,7 @@ public abstract class Character : Entity
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
         }
+        currentEnergy--;
+
     }
 }

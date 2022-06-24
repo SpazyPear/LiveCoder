@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class Trap : Entity
 {
+    public CodeContext codeContext = new CodeContext();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider collider)
     {
-        
+        Character character = collider.GetComponent<Character>();
+        if (character)
+            character.codeContext = this.codeContext;
     }
 }

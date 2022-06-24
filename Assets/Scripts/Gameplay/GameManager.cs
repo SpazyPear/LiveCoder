@@ -43,15 +43,21 @@ public class GameManager : MonoBehaviour
     {
         if (State.validMovePosition(pos))
         {
-            GameObject instance = Instantiate(obj, State.gridToWorldPos(pos), Quaternion.identity);
-            Transform mesh = findTopLayerMesh(findTopLayerMesh(obj.transform));
-            float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
-            instance.transform.position += new Vector3(0, y, 0);
-            State.GridContents[pos.x, pos.y].Entity = instance;
-            instance.GetComponent<Entity>().gridPos = pos;
+            GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
+            placeOnGrid(instance, pos);
             return instance;
         }
         return null;
+    }
+
+    public static void placeOnGrid(GameObject obj, Vector2Int pos)
+    {
+        obj.transform.position = State.gridToWorldPos(pos);
+        Transform mesh = findTopLayerMesh(findTopLayerMesh(obj.transform));
+        float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
+        obj.transform.position += new Vector3(0, y, 0);
+        State.GridContents[pos.x, pos.y].Entity = obj;
+        obj.GetComponent<Entity>().gridPos = pos;
     }
 
     public static Transform findTopLayerMesh(Transform obj)
