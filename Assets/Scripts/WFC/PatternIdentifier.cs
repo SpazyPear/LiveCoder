@@ -54,6 +54,7 @@ public static class PatternIdentifier
                 objectWeights[tileObjects[ID]]++;
             }
         }
+        objectWeights[objectWeights.ElementAt(1).Key] += 3; 
         float sum = objectWeights.Sum(x => x.Value);
         List<GameObject> keys = objectWeights.Keys.ToList();
         for (int x = objectWeights.Count - 1; x >= 0; x--)  

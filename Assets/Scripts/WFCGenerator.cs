@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class WFCGenerator : MonoBehaviour
 {
@@ -15,8 +16,27 @@ public class WFCGenerator : MonoBehaviour
         fillInput();
     }
 
+    void destroyDuplicates()
+    {
+        List<Vector2Int> positions = new List<Vector2Int>();
+        for (int i = 0; i < inputContainer.childCount; i++)
+        {
+            Vector2Int gridPos = new Vector2Int((int)inputContainer.GetChild(i).localPosition.x, (int)inputContainer.GetChild(i).localPosition.z);
+            if (positions.Contains(gridPos))
+            {
+                GameObject obj = inputContainer.GetChild(i).gameObject;
+                obj.transform.parent = null;
+                Destroy(obj);
+            }
+            else
+                positions.Add(gridPos);  
+        }
+
+    }
+
     void fillInput()
     {
+        destroyDuplicates();
         input = new GameObject[(int)Mathf.Sqrt(inputContainer.childCount), (int)Mathf.Sqrt(inputContainer.childCount)];
         int width = (int)Mathf.Sqrt(inputContainer.childCount);
         for (int i = 0; i < inputContainer.childCount; i++)
@@ -70,7 +90,7 @@ public class WFCGenerator : MonoBehaviour
         List<GameObject> newTileEntropy = new List<GameObject>(tile);
         float result = Random.Range(0, 1f);
         int index = 0;
-        while (index < newTileEntropy.Count && result > 0)
+        while (index < newTileEntropy.Count - 1 && result > 0)
         {
             if (result - PatternIdentifier.objectWeights[newTileEntropy.ElementAt(index)] > 0)
             {
@@ -90,6 +110,7 @@ public class WFCGenerator : MonoBehaviour
                 newTileEntropy.RemoveAt(i);
             }
         }
+
         return newTileEntropy;
     }
 
@@ -115,6 +136,7 @@ public class WFCGenerator : MonoBehaviour
                     {
                         for (int e = generatedGrid[i, j].Count - 1; e >= 0; e--)
                         {
+                            Debug.Log(generatedGrid[lowestX, lowestY].Count);
                             List<Rule> matchingRules = rules.Where(x => x.Tile == PatternIdentifier.tileObjects.First(x => x.Value.tag == generatedGrid[lowestX, lowestY][0].tag).Key && x.Adjacent == PatternIdentifier.tileObjects.First(x => x.Value.tag == generatedGrid[i, j][e].tag).Key && x.Direction == new Vector2Int(i - lowestX, j - lowestY)).ToList();
                             if (matchingRules.Count == 0 && generatedGrid[i, j].Count != 1)
                             {
