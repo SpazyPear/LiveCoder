@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -180,6 +180,9 @@ MonoBehaviour:
   numOfOreToSpawn: 0
   orePrefab: {fileID: 4371683540530790515, guid: 0bdda41cccd2ada4390681905cf32f89,
     type: 3}
+  attackingPlayer: {fileID: 0}
+  defendingPlayer: {fileID: 0}
+  activePlayer: {fileID: 0}
 --- !u!4 &143205207
 Transform:
   m_ObjectHideFlags: 0
@@ -304,26 +307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
-  m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 0
-  m_Cameras: []
-  m_RendererIndex: -1
-  m_VolumeLayerMask:
-    m_Bits: 1
-  m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
-  m_AntialiasingQuality: 2
-  m_StopNaN: 0
-  m_Dithering: 0
-  m_ClearDepth: 1
-  m_AllowXRRendering: 1
-  m_RequiresDepthTexture: 0
-  m_RequiresColorTexture: 0
-  m_Version: 2
 --- !u!1 &362907437
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,14 +445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 1
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &427652262
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,8 +474,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695d8e228ae2d4583b08513d73e570ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameData: {fileID: 0}
+  goldLeft: 0
   playerID: 0
   units: []
+  isAttacking: 0
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0
@@ -545,15 +523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 0}
-  m_Colliders: []
-  m_PreviousLayer: 0
-  m_PreviousPriority: 0
-  m_InternalProfile: {fileID: 0}
 --- !u!4 &832575519
 Transform:
   m_ObjectHideFlags: 0
@@ -685,16 +654,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d31c49638c42543d8b746d5cc4986ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
+  canvas: {fileID: 1407332138}
   dragAndDropTypes:
   - isCharacter: 1
     characterType: Soldier
     nonCharacterEntityPrefab: {fileID: 0}
-  - isCharacter: 1
-    characterType: Turrent
+  - isCharacter: 0
+    characterType: Turret
     nonCharacterEntityPrefab: {fileID: 3153340977913221668, guid: a8ce40dbc2b70d34abb9bef96b236392,
       type: 3}
-  dragDropTransform: {fileID: 0}
+  dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
+    type: 3}
 --- !u!1 &1025263396
 GameObject:
   m_ObjectHideFlags: 0
