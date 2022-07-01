@@ -57,7 +57,15 @@ public class GameManager : MonoBehaviour
         float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
         obj.transform.position += new Vector3(0, y, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
-        obj.GetComponent<Entity>().gridPos = pos;
+
+        Entity e = obj.GetComponent<Entity>();
+
+        if (e == null)
+        {
+            e = obj.GetComponentInChildren<Entity>();
+        }
+
+       e.gridPos = pos;
     }
 
     public static Transform findTopLayerMesh(Transform obj)

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class DragAndDropUnit : MonoBehaviour
 {
     public Canvas canvas;
+    public GameObject entity;
     public string unitType;
+    public bool isCharacter;
     public Transform dragType; // Duplicates on drag
 
 
@@ -58,10 +61,19 @@ public class DragAndDropUnit : MonoBehaviour
             print("Transform " + hit.transform.name);
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
-                print("Spawning player");
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
-                print(pos);
-                GameObject.FindObjectOfType<UnitSpawner>().spawnUnit(unitType,pos);       
+                if (isCharacter)
+                {
+                    print("Spawning player");
+                   
+                    print(pos);
+                    GameObject.FindObjectOfType<UnitSpawner>().spawnUnit(unitType, pos);
+                }
+                else
+                {
+                    GameObject e = GameObject.Instantiate(entity);
+                    GameManager.placeOnGrid(e, pos);
+                }
             }
         }
         
