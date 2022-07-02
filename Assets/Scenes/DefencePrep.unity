@@ -184,6 +184,7 @@ MonoBehaviour:
   attackingPlayer: {fileID: 427652263}
   defendingPlayer: {fileID: 1586094916}
   activePlayer: {fileID: 0}
+  dragDropManager: {fileID: 360286193}
 --- !u!4 &143205207
 Transform:
   m_ObjectHideFlags: 0
@@ -507,10 +508,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1407332138}
-  dragAndDropTypes:
+  attackChoices:
   - isCharacter: 1
     characterType: Soldier
     nonCharacterEntityPrefab: {fileID: 0}
+  defenceChoices:
   - isCharacter: 0
     characterType: Turret
     nonCharacterEntityPrefab: {fileID: 3153340977913221668, guid: a8ce40dbc2b70d34abb9bef96b236392,

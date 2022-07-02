@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject orePrefab;
     public PlayerManager attackingPlayer;
     public PlayerManager defendingPlayer;
+    [HideInInspector]
     public PlayerManager activePlayer;
+    public DragDropManager dragDropManager;
     int currentPhase;
     int playersReadied;
 
@@ -46,7 +48,10 @@ public class GameManager : MonoBehaviour
     {
         playersReadied++;
         if (playersReadied >= 2)
+        {
+            dragDropManager.gameObject.SetActive(false);
             incrementPhase();
+        }
         else
             changeActivePlayers(1);
     }
@@ -55,10 +60,10 @@ public class GameManager : MonoBehaviour
     {
         if (turn == 0)
             activePlayer = defendingPlayer;
-        else
+        else 
             activePlayer = attackingPlayer;
 
-        //attacking player ui swap
+        dragDropManager.updateChoices(activePlayer.isAttacking);
     }
 
     void incrementPhase()
