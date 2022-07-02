@@ -47,11 +47,14 @@ public class PlayerManager : ControlledMonoBehavour
             {
                 if (prefab.GetComponent<Entity>().cost < goldLeft)
                 {
+                    goldLeft -= prefab.GetComponent<Entity>().cost;
                     Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponent<Entity>();
                     units.Add(entity);
 
                     return entity;
                 }
+                else
+                    ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Not enough credits"));
             }
             else
                 ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Can't spawn there"));

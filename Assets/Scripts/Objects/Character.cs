@@ -36,6 +36,10 @@ public abstract class Character : Entity
         }
     }
 
+    private void Start()
+    {
+        initializeUnit();
+    }
 
     // Update is called once per frame
 
@@ -90,32 +94,27 @@ public abstract class Character : Entity
         }
     }
 
-    async void energyRegen()
+    void energyRegen()
     {
-       currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
-     
+        currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
     }
+
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public async void initializePlayer(string CharacterDataPath)
+    public async virtual void initializeUnit()
     {
+        currentEnergy = characterData.maxEnergy;
+        currentHealth = characterData.maxHealth;
+
         while (State.GridContents == null)
             await Task.Yield();
-        characterData = Resources.Load("ScriptableObjects/" + CharacterDataPath + "ScriptableObject") as CharacterData;
-        
 
         if (startInScene)
+        {
+            addUnitToPlayer();
             GameManager.placeOnGrid(gameObject, gridPos);
+        }
         energyRegen();
-        addUnitToPlayer();
-    }
-
-    public T initializeCharacterClass<T>(CharacterData data) where T : CharacterData
-    {
-        T characterSpecificData = data as T;
-        currentEnergy = characterSpecificData.maxEnergy;
-        currentHealth = characterSpecificData.maxHealth;
-        return characterSpecificData;
     }
 
     public void addUnitToPlayer()
