@@ -18,7 +18,7 @@ public class Entity : ControlledMonoBehavour
 {
     public int currentHealth;
     public Vector2Int gridPos;
-    public int ownerPlayer;
+    public PlayerManager ownerPlayer;
     public int cost;
 
     [MoonSharp.Interpreter.MoonSharpHidden]

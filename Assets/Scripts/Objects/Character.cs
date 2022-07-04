@@ -15,7 +15,6 @@ public abstract class Character : Entity
 {
 
     public CodeContext codeContext = new CodeContext();
-
     public CharacterData characterData;
     public Tweener tweener;
     public bool isMoveThreadRunning;
@@ -26,23 +25,12 @@ public abstract class Character : Entity
     private int moveIndex = 0;
     public bool startInScene;
 
-
-    private void Awake()
+    public virtual void Start()
     {
-        if (ownerPlayer == 0)
-        {
-            codeContext.character = this;
-            GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
-        }
-    }
-
-    private void Start()
-    {
+        codeContext.character = this;
+        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         initializeUnit();
     }
-
-    // Update is called once per frame
-
 
     public override void OnStep()
     {
@@ -111,7 +99,6 @@ public abstract class Character : Entity
 
         if (startInScene)
         {
-            addUnitToPlayer();
             GameManager.placeOnGrid(gameObject, gridPos);
         }
         energyRegen();
@@ -121,7 +108,7 @@ public abstract class Character : Entity
     {
         foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
         {
-            if (player.playerID == ownerPlayer)
+            if (player.playerID == ownerPlayer.playerID)
                 player.units.Add(this);
         }
     }
@@ -142,7 +129,6 @@ public abstract class Character : Entity
             {
                 ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             }
-
         }
     }
 
@@ -192,6 +178,15 @@ public abstract class Character : Entity
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
         }
         currentEnergy--;
+
+    }
+
+     public override void die(Character sender = null)
+    {
+        ownerPlayer.units.Remove(this);
+        if (ownerPlayer.units.Count == 0)
+            GameManager.OnAttackUnitsCleared.Invoke();
+        base.die();
 
     }
 }

@@ -67,13 +67,14 @@ public class DragAndDropUnit : MonoBehaviour
                     print("Spawning player");
                    
                     print(pos);
-                    GameObject.FindObjectOfType<UnitSpawner>().spawnUnit(unitType, pos);
+                    GameManager.activePlayer.spawnUnit(unitType, pos);
                 }
                 else
                 {
                     GameObject e = GameObject.Instantiate(entity);
                     GameManager.placeOnGrid(e, pos);
                 }
+               
             }
         }
         

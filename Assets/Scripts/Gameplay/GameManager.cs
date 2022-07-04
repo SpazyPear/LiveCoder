@@ -8,40 +8,46 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public GridManager gridManager;
+    public GameData gameData;
+    public UIManager uiManager;
     public static Vector3 gridDimensions;
     public GameObject towerPrefab;
+    public GameObject coinStorePrefab;
     public int numOfOreToSpawn;
     public GameObject orePrefab;
     public PlayerManager attackingPlayer;
     public PlayerManager defendingPlayer;
     [HideInInspector]
-    public PlayerManager activePlayer;
+    public static PlayerManager activePlayer;
     public DragDropManager dragDropManager;
     int currentPhase;
     int playersReadied;
+    int round = 0;
 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
+    public static UnityEvent OnAttackUnitsCleared = new UnityEvent();
+
 
     // Start is called before the first frame update
     void Awake()
     {
-        State.gameManager = this;
+        State.gameManager = this; 
+    }
+
+    void Start()
+    {
+        State.onLevelLoad += initGameManager;
         State.initializeLevel();
     }
 
-    private async void Start()
+    public void initGameManager(object sender, EventArgs e)
     {
-        await Task.Delay(1000);
         gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
-        spawnTowers();
+        OnPhaseChange.AddListener(phaseEnter);
+        OnAttackUnitsCleared.AddListener(unitsCleared);
+        spawnStartingObjects();
         spawnOreDeposits();
-        changeActivePlayers(0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        OnPhaseChange.Invoke(0);
     }
 
     public void OnReadyUp()
@@ -50,10 +56,14 @@ public class GameManager : MonoBehaviour
         if (playersReadied >= 2)
         {
             dragDropManager.gameObject.SetActive(false);
+            activePlayer = defendingPlayer;
+            dragDropManager.updateChoices(false);
             incrementPhase();
         }
         else
+        {
             changeActivePlayers(1);
+        }
     }
 
     void changeActivePlayers(int turn)
@@ -66,17 +76,41 @@ public class GameManager : MonoBehaviour
         dragDropManager.updateChoices(activePlayer.isAttacking);
     }
 
-    void incrementPhase()
+    public void incrementPhase()
     {
-        OnPhaseChange.Invoke(++currentPhase);
+        currentPhase++;
+        if (currentPhase == 3)
+            currentPhase = 0;
+
+        OnPhaseChange.Invoke(currentPhase);
     }
 
-    void spawnTowers()
+    public void phaseEnter(int phase)
+    {
+        switch (phase)
+        {
+            case 0:
+                round++;
+                changeActivePlayers(0);
+                uiManager.togglePlayerUI();
+                defendingPlayer.goldLeft += gameData.defenceGoldIncrease[round - 1];
+                attackingPlayer.goldLeft += gameData.attackGoldIncrease[round - 1];
+                break;
+        }
+    }
+
+    void unitsCleared()
+    {
+        OnPhaseChange.Invoke(2);
+    }
+
+    void spawnStartingObjects()
     {
         GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
-        instance.GetComponent<Tower>().ownerPlayer = 0;
+        instance.GetComponentInChildren<Tower>().ownerPlayer = defendingPlayer;
+        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0));
     }
-
+    
     public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
     {
         if (State.validMovePosition(pos))
@@ -96,14 +130,7 @@ public class GameManager : MonoBehaviour
         obj.transform.position += new Vector3(0, y, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
 
-        Entity e = obj.GetComponent<Entity>();
-
-        if (e == null)
-        {
-            e = obj.GetComponentInChildren<Entity>();
-        }
-
-       e.gridPos = pos;
+        obj.GetComponentInChildren<Entity>().gridPos = pos;
     }
 
     public static Transform findTopLayerMesh(Transform obj)

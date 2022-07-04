@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
-    int health;
     int damage = 1;
     bool isColliding;
+
+    private void Start()
+    {
+        Destroy(gameObject, 4);
+    }
 
     private void OnTriggerEnter(Collider collision)
     {

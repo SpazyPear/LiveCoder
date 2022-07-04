@@ -26,7 +26,7 @@ public class PlayerHandler : MonoBehaviour
                     print($"Player {hit.transform.parent.name} has been selected");
 
 
-                    if (hit.transform.parent.GetComponent<Character>().ownerPlayer == 0)
+                    if (hit.transform.parent.GetComponent<Character>().ownerPlayer.playerID == 0)
                     {
                         this.selectedPlayer = hit.transform.parent.GetComponent<Character>();
 
@@ -42,7 +42,7 @@ public class PlayerHandler : MonoBehaviour
         List<Character> characters = new List<Character>();
         foreach (Character c in GameObject.FindObjectsOfType<Character>())
         {
-            if (c.ownerPlayer == 1)
+            if (c.ownerPlayer.playerID == 1)
             {
                 characters.Add(c);
             }
@@ -66,7 +66,7 @@ public class PlayerHandler : MonoBehaviour
         List<Entity> ores = new List<Entity>();
         foreach (Tower c in GameObject.FindObjectsOfType<Tower>())
         {
-            if (c.ownerPlayer == 1)
+            if (c.ownerPlayer.playerID == 1)
                 ores.Add(c);
         }
 

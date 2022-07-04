@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CharacterScriptableObject
   m_EditorClassIdentifier: 
   maxEnergy: 5
-  playerSpeed: 2
+  playerSpeed: 1
   range: 1
   maxHealth: 4
+  classType: 0

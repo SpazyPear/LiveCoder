@@ -10,7 +10,7 @@ using UnityEngine;
 public class PlayerManager : ControlledMonoBehavour
 {
     public GameData gameData;
-    public int goldLeft;
+    public int goldLeft { get { return goldLeft; } set { goldLeft = value; GameObject.FindObjectOfType<UIManager>().togglePlayerUI(); } }
     public int playerID;
     public List<Entity> units;
     public bool isAttacking;
@@ -45,10 +45,11 @@ public class PlayerManager : ControlledMonoBehavour
         {
             if (State.validMovePosition(spawnPos))
             {
-                if (prefab.GetComponent<Entity>().cost < goldLeft)
+                if (prefab.GetComponent<Entity>().cost <= goldLeft)
                 {
                     goldLeft -= prefab.GetComponent<Entity>().cost;
                     Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponent<Entity>();
+                    entity.ownerPlayer = this;
                     units.Add(entity);
 
                     return entity;
