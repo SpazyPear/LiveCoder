@@ -50,7 +50,6 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
-        hideTiles();
     }
 
     List<Material> findTilesToToggle(int PlayerID)

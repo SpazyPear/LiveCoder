@@ -13,6 +13,7 @@ class GlobalManager
     {
 
         UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        UserData.RegisterProxyType<TurretProxy, Turret>(r => new TurretProxy(r));
         UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
         UserData.RegisterProxyType<EntityProxy, Entity>(r => new EntityProxy(r));
         UserData.RegisterProxyType<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
@@ -26,6 +27,7 @@ class GlobalManager
         script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
         script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
+        script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
 
 
     }
@@ -94,7 +96,7 @@ class GlobalManager
 
     }
 
-    public void OnScriptStart(Script script, Character target = null)
+    public void OnScriptStart(Script script, Entity target = null)
     {
 
         script.Globals["print"] = (System.Action<DynValue>)DebugLog;

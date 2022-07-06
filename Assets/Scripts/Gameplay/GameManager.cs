@@ -8,70 +8,130 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public GridManager gridManager;
+    public CodeExecutor codeExecutor;
+    public GameData gameData;
+    public UIManager uiManager;
     public static Vector3 gridDimensions;
     public GameObject towerPrefab;
+    public GameObject coinStorePrefab;
     public int numOfOreToSpawn;
     public GameObject orePrefab;
     public PlayerManager attackingPlayer;
     public PlayerManager defendingPlayer;
-    public PlayerManager activePlayer;
+    [HideInInspector]
+    public static PlayerManager activePlayer;
+    public DragDropManager dragDropManager;
     int currentPhase;
     int playersReadied;
-
+    int round = 0;
+    public int counter = 0;
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
+    public static UnityEvent OnAttackUnitsCleared = new UnityEvent();
+
 
     // Start is called before the first frame update
     void Awake()
     {
-        State.gameManager = this;
+        State.gameManager = this; 
+    }
+
+    void Start()
+    {
+        State.onLevelLoad += initGameManager;
         State.initializeLevel();
     }
 
-    private async void Start()
+
+    public void SetIDs(int phase)
     {
-        await Task.Delay(1000);
-        gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
-        spawnTowers();
-        spawnOreDeposits();
-        changeActivePlayers(0);
+        if (phase == 1)
+        {
+            int counter = 0;
+            foreach (Entity e in GameObject.FindObjectsOfType<Entity>())
+            {
+                e.ID = counter++;
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void initGameManager(object sender, EventArgs e)
     {
-        
+        gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
+        OnPhaseChange.AddListener(SetIDs);
+        OnPhaseChange.AddListener(phaseEnter);
+        OnAttackUnitsCleared.AddListener(unitsCleared);
+        spawnStartingObjects();
+        spawnOreDeposits();
+        OnPhaseChange.Invoke(0);
     }
 
     public void OnReadyUp()
     {
         playersReadied++;
         if (playersReadied >= 2)
+        {
+            playersReadied = 0;
+            
+
             incrementPhase();
+        }
         else
+        {
             changeActivePlayers(1);
+            uiManager.togglePlayerUI();
+        }
     }
 
     void changeActivePlayers(int turn)
     {
         if (turn == 0)
             activePlayer = defendingPlayer;
-        else
+        else 
             activePlayer = attackingPlayer;
 
-        //attacking player ui swap
     }
 
-    void incrementPhase()
+    public void incrementPhase()
     {
-        OnPhaseChange.Invoke(++currentPhase);
+        currentPhase++;
+        if (currentPhase == 2)
+            currentPhase = 0;
+
+        OnPhaseChange.Invoke(currentPhase);
     }
 
-    void spawnTowers()
+    public void phaseEnter(int phase)
+    {
+        switch (phase)
+        {
+            case 0:
+                round++;
+                changeActivePlayers(0);
+                uiManager.togglePlayerUI();
+                defendingPlayer.creditsLeft.value += gameData.defenceGoldIncrease[round - 1];
+                attackingPlayer.creditsLeft.value += gameData.attackGoldIncrease[round - 1];
+                break;
+            case 1:
+                dragDropManager.gameObject.SetActive(false);
+                activePlayer = defendingPlayer;
+                uiManager.togglePlayerUI();
+                codeExecutor.RunCode();
+                break;
+        }
+    }
+
+    void unitsCleared()
+    {
+        OnPhaseChange.Invoke(2);
+    }
+
+    void spawnStartingObjects()
     {
         GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
-        instance.GetComponent<Tower>().ownerPlayer = 0;
+        instance.GetComponentInChildren<Tower>().ownerPlayer = defendingPlayer;
+        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0));
     }
-
+    
     public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
     {
         if (State.validMovePosition(pos))
@@ -86,28 +146,12 @@ public class GameManager : MonoBehaviour
     public static void placeOnGrid(GameObject obj, Vector2Int pos)
     {
         obj.transform.position = State.gridToWorldPos(pos);
-        Transform mesh = findTopLayerMesh(findTopLayerMesh(obj.transform));
-        float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); // needs to be recursive search for the first renderer
+        Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
+        float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); 
         obj.transform.position += new Vector3(0, y, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
 
-        Entity e = obj.GetComponent<Entity>();
-
-        if (e == null)
-        {
-            e = obj.GetComponentInChildren<Entity>();
-        }
-
-       e.gridPos = pos;
-    }
-
-    public static Transform findTopLayerMesh(Transform obj)
-    {
-        if (!obj.GetComponent<Renderer>() && obj.childCount > 0)
-        {
-            return findTopLayerMesh(obj.GetChild(0));
-        }
-        return obj;
+        obj.GetComponentInChildren<Entity>().gridPos = pos;
     }
 
     public static PlayerManager findPlayer(int playerID)

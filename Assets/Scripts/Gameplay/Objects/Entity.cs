@@ -12,19 +12,29 @@ public class EntityProxy
     {
         this.target = p;
     }
+
+    public string id => target.ID.ToString();
 }
 
 public class Entity : ControlledMonoBehavour
 {
     public int currentHealth;
     public Vector2Int gridPos;
-    public int ownerPlayer;
+    public PlayerManager ownerPlayer;
     public int cost;
+    public CodeContext codeContext;
+    public int ID;
 
     [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void die(Character sender = null)
     {
         Destroy(gameObject);
+    }
+
+    private void Awake()
+    {
+        codeContext.character = this;
+        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
     }
 
 
