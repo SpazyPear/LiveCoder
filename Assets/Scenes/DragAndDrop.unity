@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -217,6 +217,9 @@ MonoBehaviour:
   numOfOreToSpawn: 0
   orePrefab: {fileID: 4371683540530790515, guid: 0bdda41cccd2ada4390681905cf32f89,
     type: 3}
+  attackingPlayer: {fileID: 0}
+  defendingPlayer: {fileID: 0}
+  activePlayer: {fileID: 0}
 --- !u!4 &143205207
 Transform:
   m_ObjectHideFlags: 0
@@ -914,8 +917,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 695d8e228ae2d4583b08513d73e570ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameData: {fileID: 0}
+  goldLeft: 0
   playerID: 0
   units: []
+  isAttacking: 0
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0

@@ -133,17 +133,18 @@ MonoBehaviour:
   currentHealth: 0
   gridPos: {x: 0, y: 0}
   ownerPlayer: 0
+  cost: 20
   codeContext:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
-  characterData: {fileID: 0}
+  characterData: {fileID: 11400000, guid: 6bcf31af548875f49a071780932af155, type: 2}
   tweener: {fileID: 312020402}
   isMoveThreadRunning: 0
   currentEnergy: 0
   debugMove: 0
   startInScene: 0
-  soldierData: {fileID: 0}
+  soldierData: {fileID: 11400000, guid: 62139677eebee4346a90000007c84fff, type: 2}
 --- !u!114 &312020402
 MonoBehaviour:
   m_ObjectHideFlags: 0

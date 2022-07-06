@@ -19,6 +19,7 @@ public class Entity : ControlledMonoBehavour
     public int currentHealth;
     public Vector2Int gridPos;
     public int ownerPlayer;
+    public int cost;
 
     [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void die(Character sender = null)

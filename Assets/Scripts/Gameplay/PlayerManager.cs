@@ -9,34 +9,49 @@ using UnityEngine;
 
 public class PlayerManager : ControlledMonoBehavour
 {
+    public GameData gameData;
+    public int goldLeft;
     public int playerID;
-    public List<Character> units;
+    public List<Entity> units;
+    public bool isAttacking;
 
-    public void unitsOfType(string typeName)
+    private async void Start()
     {
-       
+        await Task.Delay(1000);
+        spawnUnit("Soldier", new Vector2Int(1, 1));
+        initPlayer();
     }
 
-    public async void Start()
+    void initPlayer()
     {
-        /*await Task.Delay(1000);
-        spawnUnit("Soldier", new Vector2Int(0, 0));*/
+        GameManager.OnPhaseChange.AddListener(changePhase);
+        gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
+        if (isAttacking)
+            goldLeft = gameData.attackGoldIncrease[0];
+        else
+            goldLeft = gameData.defenceGoldIncrease[0];
     }
 
-    public Character spawnUnit(string characterType, Vector2Int spawnPos)
+    void changePhase(int newPhase)
     {
-        GameObject prefab = Resources.Load("Prefabs/" + characterType + "Prefab") as GameObject;
+        
+    }
+
+    public Entity spawnUnit(string entityType, Vector2Int spawnPos)
+    {
+        GameObject prefab = Resources.Load("Prefabs/" + entityType + "Prefab") as GameObject;
+        
         if (prefab)
         {
             if (State.validMovePosition(spawnPos))
             {
-                GameObject obj = Instantiate(prefab, State.GridContents[spawnPos.x, spawnPos.y].Object.transform.position, Quaternion.identity);
-                Character character = obj.GetComponent(typeof(Character)) as Character;
-                character.gridPos = spawnPos;
-                character.ownerPlayer = playerID;
-                character.enabled = true;
-                character.initializePlayer(characterType);
-                return obj.GetComponent(typeof(Character)) as Character;
+                if (prefab.GetComponent<Entity>().cost < goldLeft)
+                {
+                    Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponent<Entity>();
+                    units.Add(entity);
+
+                    return entity;
+                }
             }
             else
                 ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Can't spawn there"));

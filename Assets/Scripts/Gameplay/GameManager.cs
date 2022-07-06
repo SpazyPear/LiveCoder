@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +12,14 @@ public class GameManager : MonoBehaviour
     public GameObject towerPrefab;
     public int numOfOreToSpawn;
     public GameObject orePrefab;
+    public PlayerManager attackingPlayer;
+    public PlayerManager defendingPlayer;
+    public PlayerManager activePlayer;
+    int currentPhase;
+    int playersReadied;
+
+    public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,6 +33,7 @@ public class GameManager : MonoBehaviour
         gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
         spawnTowers();
         spawnOreDeposits();
+        changeActivePlayers(0);
     }
 
     // Update is called once per frame
@@ -31,12 +42,34 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void OnReadyUp()
+    {
+        playersReadied++;
+        if (playersReadied >= 2)
+            incrementPhase();
+        else
+            changeActivePlayers(1);
+    }
+
+    void changeActivePlayers(int turn)
+    {
+        if (turn == 0)
+            activePlayer = defendingPlayer;
+        else
+            activePlayer = attackingPlayer;
+
+        //attacking player ui swap
+    }
+
+    void incrementPhase()
+    {
+        OnPhaseChange.Invoke(++currentPhase);
+    }
+
     void spawnTowers()
     {
         GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
         instance.GetComponent<Tower>().ownerPlayer = 0;
-        GameObject instance2 = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, State.GridContents.GetLength(1) - 1));
-        instance2.GetComponent<Tower>().ownerPlayer = 1;
     }
 
     public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
@@ -123,12 +156,12 @@ public class GameManager : MonoBehaviour
     {
         for (int x = 0; x < numOfOreToSpawn / 2; x++)
         {
-            spawnOnGrid(orePrefab, new Vector2Int(Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(0) / 2)), Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(0) / 2)), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
         }
 
         for (int x = 0; x < numOfOreToSpawn / 2; x++)
         {
-            spawnOnGrid(orePrefab, new Vector2Int(Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
         }
 
     }
