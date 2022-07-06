@@ -16,21 +16,22 @@ public class DragDropManager : MonoBehaviour
     public List<DragAndDropType> attackChoices = new List<DragAndDropType>();
     public List<DragAndDropType> defenceChoices = new List<DragAndDropType>();
     public Transform dragDropTransform;
+    public UIManager uiManager;
     bool attacking;
     public List<DragAndDropType> activeChoices { get { return attacking ? attackChoices : defenceChoices; } }
 
     private void Start() { 
-        updateChoices(false);
+        updateChoices();
     }
 
 
-    public void updateChoices(bool attacking)
+    public void updateChoices()
     {
         clearPanel();
-        this.attacking = attacking;
+        attacking = GameManager.activePlayer.isAttacking;
         foreach (DragAndDropType type in activeChoices)
         {
-            Transform t = Transform.Instantiate(dragDropTransform, this.transform);
+            Transform t = Transform.Instantiate(dragDropTransform, transform);
             t.GetComponent<DragAndDropUnit>().canvas = canvas;
             t.GetComponent<DragAndDropUnit>().entity = type.nonCharacterEntityPrefab;
             t.GetComponent<DragAndDropUnit>().unitType = type.characterType;
@@ -40,7 +41,7 @@ public class DragDropManager : MonoBehaviour
 
     void clearPanel()
     {
-        for (int x = transform.childCount - 1; x >=0; x--)
+        for (int x = transform.childCount - 1; x >= 0; x--)
         {
             Destroy(transform.GetChild(x).gameObject);  
         }

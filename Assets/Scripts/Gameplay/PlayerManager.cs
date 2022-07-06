@@ -10,15 +10,14 @@ using UnityEngine;
 public class PlayerManager : ControlledMonoBehavour
 {
     public GameData gameData;
-    public int goldLeft { get { return goldLeft; } set { goldLeft = value; GameObject.FindObjectOfType<UIManager>().togglePlayerUI(); } }
+    public BindableValue<int> creditsLeft;
     public int playerID;
     public List<Entity> units;
     public bool isAttacking;
 
-    private async void Start()
+    void Awake()
     {
-        await Task.Delay(1000);
-        spawnUnit("Soldier", new Vector2Int(1, 1));
+        creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();
     }
 
@@ -26,10 +25,10 @@ public class PlayerManager : ControlledMonoBehavour
     {
         GameManager.OnPhaseChange.AddListener(changePhase);
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
-        if (isAttacking)
-            goldLeft = gameData.attackGoldIncrease[0];
+        /*if (isAttacking)
+            creditsLeft.value += gameData.attackGoldIncrease[0];
         else
-            goldLeft = gameData.defenceGoldIncrease[0];
+            creditsLeft.value += gameData.defenceGoldIncrease[0];*/
     }
 
     void changePhase(int newPhase)
@@ -39,19 +38,17 @@ public class PlayerManager : ControlledMonoBehavour
 
     public Entity spawnUnit(string entityType, Vector2Int spawnPos)
     {
-        GameObject prefab = Resources.Load("Prefabs/" + entityType + "Prefab") as GameObject;
-        
+        GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;
         if (prefab)
         {
             if (State.validMovePosition(spawnPos))
             {
-                if (prefab.GetComponent<Entity>().cost <= goldLeft)
+                if (prefab.GetComponentInChildren<Entity>().cost <= creditsLeft.value)
                 {
-                    goldLeft -= prefab.GetComponent<Entity>().cost;
-                    Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponent<Entity>();
+                    creditsLeft.value -= prefab.GetComponentInChildren<Entity>().cost;
+                    Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponentInChildren<Entity>();
                     entity.ownerPlayer = this;
                     units.Add(entity);
-
                     return entity;
                 }
                 else

@@ -26,7 +26,7 @@ public class CodeContext
 
     ";
     public Script script = new Script();
-    public Character character;
+    public Entity character;
 }
 
 
@@ -71,7 +71,7 @@ public class CodeExecutor : MonoBehaviour
     {
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
-        headerText.text = context.character.GetType().ToString();
+        //headerText.text = context.character.GetType().ToString();
         editingContext = context;
         editingContext.script.DoString(context.source);
         globalManager.OnScriptStart(editingContext.script, target: context.character);

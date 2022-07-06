@@ -27,8 +27,8 @@ public abstract class Character : Entity
 
     public virtual void Start()
     {
-        codeContext.character = this;
-        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+       
+        
         initializeUnit();
     }
 

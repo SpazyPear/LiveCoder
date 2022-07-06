@@ -1,9 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoonSharp.Interpreter;
+
+public class TurretProxy : EntityProxy
+{
+    Turret target;
+
+    [MoonSharpHidden]
+    public TurretProxy(Turret p) : base(p)
+    {
+        this.target = p;
+    }
+
+    public void targetCharacter(Character enemy) => target.target(enemy);
+    public void shootCharacter() => target.shoot();
+
+}
 
 public class Turret : Entity
 {
+ 
+
     GameObject projectile;
     Character currentTarget;
     Transform barrel;
@@ -13,8 +31,8 @@ public class Turret : Entity
     {
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         barrel = transform.GetChild(0);
-        target(GameObject.FindObjectOfType<Character>());
-        StartCoroutine(debugShoot());
+        /*target(GameObject.FindObjectOfType<Character>());
+        StartCoroutine(debugShoot());*/
     }
 
     public void target(Character enemy)

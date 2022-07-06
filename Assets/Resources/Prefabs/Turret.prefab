@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 5322738992726748130}
   - component: {fileID: 3905882044297976493}
   - component: {fileID: 8292646372449413200}
+  - component: {fileID: 2353562355359398577}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -183,7 +184,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   gridPos: {x: 0, y: 0}
-  ownerPlayer: 0
+  ownerPlayer: {fileID: 0}
+  cost: 30
+  codeContext:
+    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
+      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    character: {fileID: 0}
+--- !u!65 &2353562355359398577
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2980409460851176347}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.9999999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3153340977913221668
 GameObject:
   m_ObjectHideFlags: 0

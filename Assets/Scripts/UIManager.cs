@@ -34,11 +34,17 @@ public class UIManager : MonoBehaviour
 
     public void togglePlayerUI()
     {
+        dragDropManager.updateChoices();
         if (GameManager.activePlayer.isAttacking)
             playerLabel.text = "Attacking Player";
         else
             playerLabel.text = "Defending Player";
-        creditCounter.text = GameManager.activePlayer.goldLeft.ToString();
+        creditCounter.text = GameManager.activePlayer.creditsLeft.value.ToString();
+    }
+
+    public void updateCreditUI(int value)
+    {
+        creditCounter.text = value.ToString();
     }
 
     void prepPhase()

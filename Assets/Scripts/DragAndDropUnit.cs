@@ -71,10 +71,10 @@ public class DragAndDropUnit : MonoBehaviour
                 }
                 else
                 {
-                    GameObject e = GameObject.Instantiate(entity);
-                    GameManager.placeOnGrid(e, pos);
+                    GameManager.activePlayer.spawnUnit(unitType, pos);
+
                 }
-               
+
             }
         }
         
