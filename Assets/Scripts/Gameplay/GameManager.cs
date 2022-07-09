@@ -147,7 +147,8 @@ public class GameManager : MonoBehaviour
     {
         obj.transform.position = State.gridToWorldPos(pos);
         Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
-        float y = mesh.GetComponent<Renderer>().localBounds.extents.y * mesh.localScale.y + (gridDimensions.y / 2); 
+        float y = (gridDimensions.y / 2);
+        Debug.Log(mesh.GetComponent<Renderer>().localBounds.extents.y);
         obj.transform.position += new Vector3(0, y, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
 

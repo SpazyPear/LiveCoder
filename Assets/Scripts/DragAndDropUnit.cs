@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class DragAndDropUnit : MonoBehaviour
 {
     public Canvas canvas;
-    public GameObject entity;
     public string unitType;
-    public bool isCharacter;
     public Transform dragType; // Duplicates on drag
 
 
@@ -62,18 +60,11 @@ public class DragAndDropUnit : MonoBehaviour
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
-                if (isCharacter)
-                {
-                    print("Spawning player");
-                   
-                    print(pos);
-                    GameManager.activePlayer.spawnUnit(unitType, pos);
-                }
-                else
-                {
+
+                if ((pos.y > GameManager.gridDimensions.z / 2 && GameManager.activePlayer.isAttacking) || (pos.y < GameManager.gridDimensions.z / 2 && !GameManager.activePlayer.isAttacking))
+
                     GameManager.activePlayer.spawnUnit(unitType, pos);
 
-                }
 
             }
         }

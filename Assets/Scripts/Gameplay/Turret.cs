@@ -25,14 +25,15 @@ public class Turret : Entity
     GameObject projectile;
     Character currentTarget;
     Transform barrel;
+    public Transform shootPoint;
     bool rotatingBarrel;
 
     private void Start()
     {
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         barrel = transform.GetChild(0);
-        /*target(GameObject.FindObjectOfType<Character>());
-        StartCoroutine(debugShoot());*/
+        target(GameObject.FindObjectOfType<Character>());
+        StartCoroutine(debugShoot());
     }
 
     public void target(Character enemy)
@@ -45,7 +46,7 @@ public class Turret : Entity
 
     public void shoot()
     {
-        GameObject obj = Instantiate(projectile, barrel.transform.GetChild(0).position, barrel.rotation);
+        GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
         obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 3000f);
     }
 
