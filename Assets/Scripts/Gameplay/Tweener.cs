@@ -30,7 +30,7 @@ public class Tweener : MonoBehaviour
                 tweenActive = true;
                 float timeFraction = (Time.time - activeTween.StartTime) / activeTween.Duration;
                 float newTime = Mathf.Pow(timeFraction, 2);
-                activeTween.Target.position = Vector3.Lerp(activeTween.Target.position, activeTween.EndPos, timeFraction);
+                activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, timeFraction);
             }
             else
             {

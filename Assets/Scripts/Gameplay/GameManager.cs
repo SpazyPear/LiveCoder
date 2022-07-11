@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
         Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
         float y = (gridDimensions.y / 2);
         Debug.Log(mesh.GetComponent<Renderer>().localBounds.extents.y);
-        obj.transform.position += new Vector3(0, y, 0);
+        obj.transform.position += new Vector3(0, 1, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
 
         obj.GetComponentInChildren<Entity>().gridPos = pos;
@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public static T findClosest<T>(Character sender, bool ignoreOwn) where T : Entity
+    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Entity
     {
         float min = Mathf.Infinity;
         T closest = null;

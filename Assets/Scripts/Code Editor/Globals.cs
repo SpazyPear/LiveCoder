@@ -17,6 +17,8 @@ class GlobalManager
         UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
         UserData.RegisterProxyType<EntityProxy, Entity>(r => new EntityProxy(r));
         UserData.RegisterProxyType<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
+        UserData.RegisterProxyType<WallProxy, Wall>(r => new WallProxy(r));
+        UserData.RegisterProxyType<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));
 
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
@@ -31,6 +33,9 @@ class GlobalManager
 
 
     }
+
+    //current.MoveToEntity(current.findClosestEntityOfType(current, "Wall"))
+      //current.Attack(current.findClosestEntityOfType(current, "Wall"))
 
     public void DebugLog(DynValue debug)
     {

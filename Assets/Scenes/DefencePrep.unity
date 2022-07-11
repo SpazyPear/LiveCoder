@@ -319,7 +319,7 @@ MonoBehaviour:
     type: 3}
   coinStorePrefab: {fileID: 3607322614874023483, guid: b33d077404b289d4696d81f3d27ebb10,
     type: 3}
-  numOfOreToSpawn: 3
+  numOfOreToSpawn: 0
   orePrefab: {fileID: 4371683540530790515, guid: 0bdda41cccd2ada4390681905cf32f89,
     type: 3}
   attackingPlayer: {fileID: 427652263}

@@ -14,6 +14,7 @@ public class EntityProxy
     }
 
     public string id => target.ID.ToString();
+    public int health => target.currentHealth;
 }
 
 public class Entity : ControlledMonoBehavour

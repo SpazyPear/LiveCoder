@@ -143,7 +143,7 @@ public class CharacterHandlerProxy
 
     public bool IsInRange(Entity entity) { return target.checkForInRangeEntities<Entity>().Contains(entity); } // make good
 
-    public void Attack(Character character) { target.attack(character); }
+    public void Attack(Entity entity) { target.attack(entity); }
 
     public void CollectOre(OreDeposit ore) { target.attack(ore); }
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
