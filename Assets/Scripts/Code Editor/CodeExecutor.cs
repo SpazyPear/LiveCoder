@@ -35,7 +35,7 @@ public class CodeExecutor : MonoBehaviour
 {
     
     [Header("Editor UI")]
-    public InputField input;
+    public TextMeshProUGUI input;
     public TextMeshProUGUI headerText;
     public Transform codeEditor;
 
