@@ -123,7 +123,7 @@ public abstract class Character : Entity
                 gridPos = new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton);
                 State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
                 tweener.AddTween(transform, transform.position, State.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);
-                currentEnergy -= XDirection + YDirecton;
+                currentEnergy -= 1;
             }
             else
             {
@@ -151,7 +151,7 @@ public abstract class Character : Entity
                     if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity != gameObject)
                     {
                         
-                        foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponent(typeof(T)) as T);
+                        foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
                     }
                 }
                 catch (IndexOutOfRangeException) { }
