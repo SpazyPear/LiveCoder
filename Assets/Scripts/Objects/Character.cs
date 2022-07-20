@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
+using TMPro;
+using UnityEngine.UI;
 
 public enum CLASSTYPE
 {
@@ -24,12 +26,19 @@ public abstract class Character : Entity
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
     public bool startInScene;
+    Slider healthBar;
 
     public virtual void Start()
     {
-       
-        
         initializeUnit();
+        healthBar = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponentInChildren<Slider>();
+    }
+
+    private void Update()
+    {
+        healthBar.transform.position = Camera.main.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y + 8f, transform.position.z));
+        
+        healthBar.value = (float)currentHealth / characterData.maxHealth;
     }
 
     public override void OnStep()
@@ -147,8 +156,8 @@ public abstract class Character : Entity
             for (int y = -characterData.range; y <= characterData.range; y++)
             {
                 try
-                 {
-                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity != gameObject)
+                {
+                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
                     {
                         
                         foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
@@ -182,11 +191,12 @@ public abstract class Character : Entity
     }
 
      public override void die(Character sender = null)
-    {
+     {
         ownerPlayer.units.Remove(this);
         if (ownerPlayer.units.Count == 0)
             GameManager.OnAttackUnitsCleared.Invoke();
         base.die();
+     }
 
-    }
+    
 }
