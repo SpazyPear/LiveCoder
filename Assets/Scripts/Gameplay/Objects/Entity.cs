@@ -35,6 +35,7 @@ public class Entity : ControlledMonoBehavour
     private void Awake()
     {
         codeContext.character = this;
+      
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
     }
 

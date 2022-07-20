@@ -134,11 +134,18 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64654510624191650, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
 --- !u!1 &5003976916028575791 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1920362540510326, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5005576099303947353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5005774706240751683 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,
     type: 3}
   m_PrefabInstance: {fileID: 5005576099303947353}
   m_PrefabAsset: {fileID: 0}
@@ -159,14 +166,23 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 30
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: 'function OnStart()
+
+      
+
+      end
+
+      
+
+      
+
+      function
+      OnStep()
+
+      
+
+      end'
     character: {fileID: 0}
+    ownerPlayer: 0
   ID: 0
   shootPoint: {fileID: 57653478284216887}
---- !u!4 &5005774706240751683 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,
-    type: 3}
-  m_PrefabInstance: {fileID: 5005576099303947353}
-  m_PrefabAsset: {fileID: 0}

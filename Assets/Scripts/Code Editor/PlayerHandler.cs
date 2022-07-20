@@ -21,6 +21,7 @@ public class PlayerHandler : MonoBehaviour
           
             if (Physics.Raycast(ray, out hit))
             {
+
                 //print(hit.transform.parent.name);
                 if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
                 {

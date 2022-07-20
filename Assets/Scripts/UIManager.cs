@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     public GameObject nextRoundButton;
     public TMP_Text playerLabel;
     public TMP_Text creditCounter;
+    public TMP_Text gridLabel;
+    
 
     void Start()
     {
@@ -29,6 +31,30 @@ public class UIManager : MonoBehaviour
             case 2:
                 resultsPhase();
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.GetComponentInChildren<GridTile>() != null)
+            {
+                gridLabel.gameObject.SetActive(true);
+                gridLabel.rectTransform.position = Camera.main.WorldToScreenPoint(hit.transform.position + Vector3.up * 1.5f);
+                gridLabel.text = hit.transform.GetComponentInChildren<GridTile>().gridTile.gridPosition.x.ToString() + "," + hit.transform.GetComponentInChildren<GridTile>().gridTile.gridPosition.y;
+            }
+            else
+            {
+                gridLabel.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            gridLabel.gameObject.SetActive(false);
         }
     }
 

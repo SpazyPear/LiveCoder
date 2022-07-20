@@ -508,6 +508,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6152433477488658247}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &6156293531169544547 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6152433477488658247}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &5793804312653130764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -538,19 +544,35 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 20
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: 'function OnStart()
+
+      
+
+      end
+
+      
+
+      
+
+      function
+      OnStep()
+
+      
+
+      end'
     character: {fileID: 0}
+    ownerPlayer: 0
   ID: 0
   codeContext:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
+    ownerPlayer: 0
   characterData: {fileID: 11400000, guid: 62139677eebee4346a90000007c84fff, type: 2}
   tweener: {fileID: 4408893608037920269}
   isMoveThreadRunning: 0
   currentEnergy: 0
-  debugMove: 1
+  debugMove: 0
   startInScene: 0
 --- !u!114 &4408893608037920269
 MonoBehaviour:
@@ -564,9 +586,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6156293531169544547 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5,
-    type: 3}
-  m_PrefabInstance: {fileID: 6152433477488658247}
-  m_PrefabAsset: {fileID: 0}

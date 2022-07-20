@@ -27,6 +27,7 @@ public class CodeContext
     ";
     public Script script = new Script();
     public Entity character;
+    public int ownerPlayer;
 }
 
 
@@ -34,7 +35,7 @@ public class CodeExecutor : MonoBehaviour
 {
     
     [Header("Editor UI")]
-    public InputField input;
+    public TMP_InputField input;
     public TextMeshProUGUI headerText;
     public Transform codeEditor;
 
