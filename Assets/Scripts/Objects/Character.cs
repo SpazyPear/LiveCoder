@@ -129,6 +129,7 @@ public abstract class Character : Entity
             if (checkPosOnGrid(new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton)))
             {
                 State.GridContents[gridPos.x, gridPos.y].Entity = null;
+              
                 gridPos = new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton);
                 State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
                 tweener.AddTween(transform, transform.position, State.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);

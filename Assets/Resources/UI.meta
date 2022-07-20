@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Resources/UI.meta
 guid: 5f2f6dff9bcf8e34189c9b8af4a7801b
 folderAsset: yes
+========
+guid: 5686e685d03cc4c4da7db7de7aecc1b6
+>>>>>>>> origin/feat/new-editor:Assets/InGameCodeEditor/CodeEditorExample.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
