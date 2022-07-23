@@ -2502,12 +2502,15 @@ MonoBehaviour:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
+    ownerPlayer: 0
   ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
   codeContext:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
-  characterData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
+    ownerPlayer: 0
   tweener: {fileID: 0}
   isMoveThreadRunning: 0
   currentEnergy: 0
@@ -2516,6 +2519,8 @@ MonoBehaviour:
   shield: {fileID: 7891210787500344020}
   shieldDownPoint: {fileID: 7854719270260663899}
   shieldUpPoint: {fileID: 6126807153367468742}
+  shieldState: 0
+  shieldHealth: 0
 --- !u!114 &6999732456707353362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2587,7 +2592,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
 --- !u!1 &7891210787500344020 stripped
 GameObject:

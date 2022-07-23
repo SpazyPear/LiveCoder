@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using MoonSharp.Interpreter;
+using System;
+
 public class EntityProxy
 {
     Entity target;
@@ -25,9 +27,12 @@ public class Entity : ControlledMonoBehavour
     public int cost;
     public CodeContext codeContext;
     public int ID;
+    public bool isDisabled;
+    public EntityData entityData;
+   
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public virtual void die(Character sender = null)
+    public virtual void die(object sender = null)
     {
         Destroy(gameObject);
     }
@@ -38,10 +43,10 @@ public class Entity : ControlledMonoBehavour
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
     }
-
+    
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public virtual void takeDamage(int damage, Character sender = null)
+    public virtual void takeDamage(int damage, object sender = null)
     {
         if (currentHealth - damage > 0)
         {
@@ -50,6 +55,22 @@ public class Entity : ControlledMonoBehavour
         }
             
         die(sender);
+    }
+
+    public async virtual void EMPRecover(float strength)
+    {
+        float timer = entityData.empResistance * strength;
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            await Task.Yield();
+        }
+    }
+
+    public virtual void OnEMPDisable(float strength)
+    {
+        isDisabled = true;
+        EMPRecover(strength);
     }
 
 }

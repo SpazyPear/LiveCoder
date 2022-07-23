@@ -17,10 +17,14 @@ public class CoinStoreProxy
 
 public class CoinStore : Entity
 {    
-    public override void takeDamage(int damage, Character sender = null)
+    public override void takeDamage(int damage, object sender = null)
     {
-        ownerPlayer.creditsLeft.value -= damage * 5;
-        sender.ownerPlayer.creditsLeft.value += damage * 5;
-        base.takeDamage(damage, sender);
+        Entity attacker = sender as Entity;
+        if (attacker)
+        {
+            ownerPlayer.creditsLeft.value -= damage * 5;
+            attacker.ownerPlayer.creditsLeft.value += damage * 5;
+            base.takeDamage(damage, sender);
+        }
     }
 }

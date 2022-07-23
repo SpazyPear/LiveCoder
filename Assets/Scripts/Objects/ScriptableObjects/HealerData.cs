@@ -6,4 +6,5 @@ using UnityEngine;
 public class HealerData : CharacterData
 {
     public int healRate = 1;
+    public float EMPStrength = 4f;
 }

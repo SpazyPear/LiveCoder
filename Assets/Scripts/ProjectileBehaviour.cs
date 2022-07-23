@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ProjectileLane
+{
+    Flat,
+    Above
+}
+
 public class ProjectileBehaviour : MonoBehaviour
 {
     public int damage = 1;
     bool isColliding;
+    public ProjectileLane lane;
 
     private void Start()
     {
@@ -20,7 +27,7 @@ public class ProjectileBehaviour : MonoBehaviour
             Character character = collision.gameObject.GetComponent<Character>();
             if (character)
             {
-                character.takeDamage(damage);
+                character.takeDamage(damage, this);
             }
         }
         Destroy(gameObject);

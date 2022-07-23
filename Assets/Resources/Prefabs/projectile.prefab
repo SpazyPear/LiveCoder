@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 9164028017319399033}
   - component: {fileID: 1805264228734584659}
   - component: {fileID: 8623146491683954981}
-  - component: {fileID: 1446955160001381528}
   - component: {fileID: 1006874235135644640}
   - component: {fileID: 1014654358423923293}
+  - component: {fileID: 5279189801197624491}
   m_Layer: 6
   m_Name: projectile
   m_TagString: Untagged
@@ -86,19 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1446955160001381528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1075664973175064500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1193fbb5c5daac24db38f6d0f5194266, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 2
 --- !u!65 &1006874235135644640
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128,3 +115,27 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &5279189801197624491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075664973175064500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce5d3f3614e6b94995bcb3cec268770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: {fileID: 0}
+  cost: 0
+  codeContext:
+    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
+      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    character: {fileID: 0}
+    ownerPlayer: 0
+  ID: 0
+  damage: 1
+  lane: 0
