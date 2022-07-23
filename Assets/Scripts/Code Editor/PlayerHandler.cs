@@ -155,3 +155,29 @@ public class CharacterHandlerProxy
 
 
 }
+
+public class GiantHandlerProxy : CharacterHandlerProxy
+{
+    Giant target;
+    
+    [MoonSharpHidden]
+    public GiantHandlerProxy(Giant p) : base(p)
+    {
+        this.target = p;
+    }
+
+    public void DeployShield(bool raised) { target.deployShield(raised); }
+}
+
+public class HealerHandlerProxy : CharacterHandlerProxy
+{
+    Healer target;
+
+    [MoonSharpHidden]
+    public HealerHandlerProxy(Healer p) : base(p)
+    {
+        this.target = p;
+    }
+
+    public void heal() { target.heal(); }
+}

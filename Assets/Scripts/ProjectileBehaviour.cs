@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
-    int damage = 1;
+    public int damage = 1;
     bool isColliding;
 
     private void Start()

@@ -13,8 +13,14 @@ class GlobalManager
     {
 
         UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        UserData.RegisterProxyType<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
+        UserData.RegisterProxyType<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
+
         UserData.RegisterProxyType<TurretProxy, Turret>(r => new TurretProxy(r));
         UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
+        UserData.RegisterProxyType<GiantProxy, Giant>(r => new GiantProxy(r));
+        UserData.RegisterProxyType<HealerProxy, Healer>(r => new HealerProxy(r));
+
         UserData.RegisterProxyType<EntityProxy, Entity>(r => new EntityProxy(r));
         UserData.RegisterProxyType<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
         UserData.RegisterProxyType<WallProxy, Wall>(r => new WallProxy(r));

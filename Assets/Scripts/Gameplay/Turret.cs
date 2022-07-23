@@ -32,6 +32,12 @@ public class Turret : Entity
     {
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         barrel = transform.GetChild(0);
+        
+    }
+
+    public override void OnStart()
+    {
+        base.OnStart();
         target(GameObject.FindObjectOfType<Character>());
         ///StartCoroutine(debugShoot());
     }

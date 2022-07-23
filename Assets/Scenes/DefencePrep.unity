@@ -860,6 +860,8 @@ MonoBehaviour:
   canvas: {fileID: 1407332138}
   attackChoices:
   - characterType: Soldier
+  - characterType: Giant
+  - characterType: Healer
   defenceChoices:
   - characterType: Turret
   - characterType: Wall
