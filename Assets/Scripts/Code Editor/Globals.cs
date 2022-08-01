@@ -1,7 +1,14 @@
 using UnityEngine;
 using MoonSharp.Interpreter;
+using System.Collections.Generic;
+using System.Reflection;
+
 class GlobalManager
 {
+
+    public static Dictionary<System.Type, System.Type> proxyMappings = new Dictionary<System.Type, System.Type>();
+    public static Dictionary<string, MethodInfo> globalFunctionMappings = new Dictionary<string, MethodInfo>();
+
 
     public Vector2Int vec2(int x, int y)
     {
@@ -9,34 +16,58 @@ class GlobalManager
 
     }
 
+
+    public void RegisterProxy<T, U>(System.Func<U, T> creator) where T : class where U : class
+    {
+        UserData.RegisterProxyType<T, U>(r => creator(r));
+
+
+        if (!GlobalManager.proxyMappings.ContainsKey(typeof(U)))
+            GlobalManager.proxyMappings.Add(typeof(U), typeof(T));
+    }
+
+    public void RegisterGlobalFunction<T> (Script script, string functionName, T value, MethodInfo info)
+    {
+        script.Globals[functionName] = (T)value;
+
+        if (!GlobalManager.globalFunctionMappings.ContainsKey(functionName))
+            GlobalManager.globalFunctionMappings.Add(functionName, info);
+    }
+
     private void SetupPlayerHandler(Script script)
     {
 
-        UserData.RegisterProxyType<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
-        UserData.RegisterProxyType<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
-        UserData.RegisterProxyType<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
+        RegisterProxy<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        RegisterProxy<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
+        RegisterProxy<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
 
-        UserData.RegisterProxyType<TurretProxy, Turret>(r => new TurretProxy(r));
-        UserData.RegisterProxyType<SoldierProxy, Soldier>(r => new SoldierProxy(r));
-        UserData.RegisterProxyType<GiantProxy, Giant>(r => new GiantProxy(r));
-        UserData.RegisterProxyType<HealerProxy, Healer>(r => new HealerProxy(r));
+        RegisterProxy<TurretProxy, Turret>(r => new TurretProxy(r));
+        RegisterProxy<SoldierProxy, Soldier>(r => new SoldierProxy(r));
+        RegisterProxy<GiantProxy, Giant>(r => new GiantProxy(r));
+        RegisterProxy<HealerProxy, Healer>(r => new HealerProxy(r));
 
-        UserData.RegisterProxyType<EntityProxy, Entity>(r => new EntityProxy(r));
-        UserData.RegisterProxyType<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
-        UserData.RegisterProxyType<WallProxy, Wall>(r => new WallProxy(r));
-        UserData.RegisterProxyType<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));
+        RegisterProxy<EntityProxy, Entity>(r => new EntityProxy(r));
+        RegisterProxy<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
+        RegisterProxy<WallProxy, Wall>(r => new WallProxy(r));
+        RegisterProxy<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));
 
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
 
-        script.Globals["selected"] = handler.selectedPlayer;
+        RegisterGlobalFunction<System.Func<System.Collections.Generic.List<Character>>>(script, "getEnemies", handler.getEnemies, ((System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies).Method);
+
+        RegisterGlobalFunction <System.Func<System.Collections.Generic.List<OreDeposit>>> (script, "getOreDeposits", handler.getOreDeposits, ((System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits).Method);
+
+        RegisterGlobalFunction<System.Func<Entity>>(script, "getEnemyTower", handler.getEnemyTower, ((System.Func<Entity>)handler.getEnemyTower).Method);
+
+        RegisterGlobalFunction<System.Func<Character, string, Entity>>(script, "findClosest", handler.findClosestEntityOfType, ((System.Func<Character, string, Entity>)handler.findClosestEntityOfType).Method);
 
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
-        script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
+        /*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
         script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
         script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
-
+*/
 
     }
 
@@ -101,20 +132,26 @@ class GlobalManager
             }
         );
 
-
+/*
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
+*/
+        RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2",vec2, ((System.Func<int, int, Vector2Int>)vec2).Method);
+/*
         script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
+*/
+        RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, int>>(script, "dist", dist, ((System.Func<Vector2Int, Vector2Int, int>)dist).Method);
 
     }
 
     public void OnScriptStart(Script script, Entity target = null)
     {
 
-        script.Globals["print"] = (System.Action<DynValue>)DebugLog;
-        script.Globals["len"] = (System.Func<DynValue, int>)len;
-        script.Globals["printVec2"] = (System.Action<Vector2Int>)printVec2;
+        RegisterGlobalFunction<System.Action<DynValue>>(script, "print", DebugLog, ((System.Action<DynValue>)DebugLog).Method);
 
-        
+        RegisterGlobalFunction<System.Func<DynValue, int>>(script, "len", len, ((System.Func<DynValue, int>)len).Method);
+
+        RegisterGlobalFunction<System.Action<Vector2Int>>(script, "printVec2", printVec2, ((System.Action<Vector2Int>)printVec2).Method);
+
 
         SetupTypes(script);
 

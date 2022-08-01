@@ -86,12 +86,13 @@ public class GridManager : MonoBehaviour
     {
         float[,] costMap = new float[GridWidth, GridBreadth];
 
+        if ( State.GridContents != null)
         for (int x = 0; x < GridWidth; x++)
         {
             for (int y = 0; y < GridBreadth; y++)
             {
 
-                if (State.GridContents[x, y].Entity != null && State.GridContents[x,y].Entity.GetComponentInChildren<Wall>() != null)
+                if (State.GridContents[x, y] != null && State.GridContents[x, y].Entity != null && State.GridContents[x,y].Entity.GetComponentInChildren<Wall>() != null)
                 {
                     costMap[x, y] = 0f;
                 }
