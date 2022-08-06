@@ -96,6 +96,7 @@ public class PlayerHandler : MonoBehaviour
         {
             if (c == sender)
                 continue;
+
             if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
             {
                 closest = c;

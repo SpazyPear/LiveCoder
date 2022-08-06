@@ -431,6 +431,8 @@ public class CodeExecutor : MonoBehaviour
         return keyValues;
     }
 
+    public ControlPanelManager controlPanelManager;
+
     private IEnumerator AwakeCoroutineLua()
     {
        
@@ -446,6 +448,9 @@ public class CodeExecutor : MonoBehaviour
         {
             foreach (CodeContext context in codeContexts)
             {
+
+                controlPanelManager.UpdateGlobals(context);
+
                 context.script.Call(context.script.Globals["OnStart"]);
 
                 print("Calling start for " + context.script);
@@ -470,6 +475,7 @@ public class CodeExecutor : MonoBehaviour
             {
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
                 {
+
                     o.OnStep();
                 }
 
@@ -479,6 +485,7 @@ public class CodeExecutor : MonoBehaviour
                 }
                 foreach (CodeContext context in codeContexts)
                 {
+                    controlPanelManager.UpdateGlobals(context);
                     context.script.Call(context.script.Globals["OnStep"]);
                 }
 

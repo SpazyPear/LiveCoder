@@ -153,6 +153,7 @@ class GlobalManager
         RegisterGlobalFunction<System.Action<Vector2Int>>(script, "printVec2", printVec2, ((System.Action<Vector2Int>)printVec2).Method);
 
 
+        
         SetupTypes(script);
 
         SetupPlayerHandler(script);
