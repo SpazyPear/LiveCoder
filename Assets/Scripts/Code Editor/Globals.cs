@@ -29,7 +29,7 @@ class GlobalManager
         script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
         script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
-        script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
+        script.Globals["findClosest"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
 
 
     }
@@ -109,7 +109,6 @@ class GlobalManager
         script.Globals["printVec2"] = (System.Action<Vector2Int>)printVec2;
 
         
-
         SetupTypes(script);
 
         SetupPlayerHandler(script);

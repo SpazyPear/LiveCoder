@@ -136,6 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64654510624191650, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
+    - {fileID: 64126893204444876, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
 --- !u!1 &5003976916028575791 stripped
 GameObject:
@@ -168,21 +169,33 @@ MonoBehaviour:
   codeContext:
     source: 'function OnStart()
 
-      
+
 
       end
 
-      
 
-      
 
-      function
-      OnStep()
 
-      
+
+      function OnStep()
+
+
 
       end'
     character: {fileID: 0}
     ownerPlayer: 0
   ID: 0
   shootPoint: {fileID: 57653478284216887}
+--- !u!135 &246514341823543897
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003976916028575791}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.6
+  m_Center: {x: 0, y: 1.78, z: 0}
