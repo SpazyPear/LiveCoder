@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/InGameCodeEditor/CodeEditorExample.unity.meta
+guid: 5686e685d03cc4c4da7db7de7aecc1b6
+========
+guid: 5f2f6dff9bcf8e34189c9b8af4a7801b
+folderAsset: yes
+>>>>>>>> feat/currency:Assets/Resources/UI.meta
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

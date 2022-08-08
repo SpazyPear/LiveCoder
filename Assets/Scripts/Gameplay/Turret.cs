@@ -20,8 +20,8 @@ public class TurretProxy : EntityProxy
 
 public class Turret : Entity
 {
- 
 
+    TurretData turretData;
     GameObject projectile;
     Character currentTarget;
     Transform barrel;
@@ -41,7 +41,7 @@ public class Turret : Entity
     {
         base.OnStart();
         target(GameObject.FindObjectOfType<Character>());
-        StartCoroutine(debugShoot());
+        ///StartCoroutine(debugShoot());
     }
 
     public void target(Character enemy)
@@ -57,21 +57,24 @@ public class Turret : Entity
         GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
         obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 4000f);
         shootPS.Play();
+        if (!isDisabled)
+        {
+            GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
+            obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 3000f);
+        }
     }
 
     IEnumerator rotateBarrel()
     {
-        while (rotatingBarrel)
+        while (rotatingBarrel && currentTarget)
         {
-            if (currentTarget)
+            if (!isDisabled)
             {
                 var lookPos = currentTarget.transform.position - barrel.position;
                 lookPos += new Vector3(0, 2, 0);
                 var rotation = Quaternion.LookRotation(lookPos);
                 barrel.rotation = Quaternion.Slerp(barrel.rotation, rotation, Time.deltaTime * 2f);
             }
-            else 
-                rotatingBarrel = false;
 
             yield return null;
         }

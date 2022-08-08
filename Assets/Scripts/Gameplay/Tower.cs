@@ -6,9 +6,9 @@ public class Tower : Entity
 {
     public int towerHealth = 5;
 
-    public override void die(Character sender = null)
+    public override void die(object sender = null)
     {
-        sender.ownerPlayer.win();
+        (sender as Entity).ownerPlayer.win();
         base.die(sender);
     }
 }

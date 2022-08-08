@@ -17,7 +17,8 @@ public abstract class Character : Entity
 {
 
     public CodeContext codeContext = new CodeContext();
-    public CharacterData characterData;
+    [HideInInspector]
+    public CharacterData characterData { get { return entityData as CharacterData; } }
     public Tweener tweener;
     public bool isMoveThreadRunning;
     public int currentEnergy;
@@ -78,19 +79,21 @@ public abstract class Character : Entity
 
     public void MoveOnPathNext()
     {
-
-        if (moveIndex < moveSet.Count)
+        if (!isDisabled)
         {
-            moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
-            moveIndex += 1;
-        }
-        else
-        {
-            ErrorManager.instance.PushError(new ErrorSource
+            if (moveIndex < moveSet.Count)
             {
-                function = "pathfindingMove",
-                playerId = transform.name
-            }, new Error("Pathfinding has completed but you're still trying to move"));
+                moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
+                moveIndex += 1;
+            }
+            else
+            {
+                ErrorManager.instance.PushError(new ErrorSource
+                {
+                    function = "pathfindingMove",
+                    playerId = transform.name
+                }, new Error("Pathfinding has completed but you're still trying to move"));
+            }
         }
     }
 
@@ -127,11 +130,12 @@ public abstract class Character : Entity
 
     public void moveUnit(int XDirection, int YDirecton)
     {
-        if (currentEnergy > 0)
+        if (currentEnergy > 0 && !isDisabled)
         {
             if (checkPosOnGrid(new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton)))
             {
                 State.GridContents[gridPos.x, gridPos.y].Entity = null;
+              
                 gridPos = new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton);
                 State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
                 tweener.AddTween(transform, transform.position, State.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);
@@ -180,7 +184,7 @@ public abstract class Character : Entity
 
     public virtual void attack<T> (T target) where T : Entity
     {
-        if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target))
+        if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target) && !isDisabled)
         {
             target.takeDamage(1, this);
         }
@@ -190,7 +194,7 @@ public abstract class Character : Entity
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
         }
         currentEnergy--;
-
+        
     }
 
     public override void takeDamage(int damage, Character sender = null)
@@ -230,5 +234,11 @@ public abstract class Character : Entity
         Destroy(healthBar.gameObject);
     }
 
+
+    public override void OnEMPDisable(float strength)
+    {
+        base.OnEMPDisable(strength);
+        
+    }
 
 }

@@ -44,6 +44,12 @@ public class Pathfinder : ControlledMonoBehavour
         // TODO Disallow overlap of pathfinding ...
         List<PathFind.Point> path = PathFind.Pathfinding.FindPath(pathGrid, _from, _to);
 
+        for (int i = 0; i < path.Count; i++)
+        {
+            if (i == 0) continue;
+            Debug.DrawLine(State.GridContents[path[i - 1].x, path[i - 1].y].Object.transform.position, State.GridContents[path[i].x, path[i].y].Object.transform.position, Color.red, 5);
+        }
+
         List<Vector2Int> moves = new List<Vector2Int>();
 
         if (path.Count > 0)

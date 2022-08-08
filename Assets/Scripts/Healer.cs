@@ -24,14 +24,32 @@ public class Healer : Character
 
     public void heal()
     {
-        List<Character> inRangeCharacters = checkForInRangeEntities<Character>();
-        foreach (Character c in inRangeCharacters)
+        if (!isDisabled)
         {
-            try
+            List<Character> inRangeCharacters = checkForInRangeEntities<Character>();
+            foreach (Character c in inRangeCharacters)
             {
-                c.currentHealth += healerData.healRate;
+                try
+                {
+                    c.currentHealth += healerData.healRate;
+                }
+                catch (System.Exception e) { }
             }
-            catch (System.Exception e) { }
+        }
+    }
+
+    public void EMP()
+    {
+        if (!isDisabled)
+        {
+            List<Entity> inRange = checkForInRangeEntities<Entity>();
+            foreach (Entity c in inRange)
+            {
+                if (c.ownerPlayer != ownerPlayer)
+                {
+                    c.OnEMPDisable(healerData.EMPStrength);
+                }
+            }
         }
     }
 

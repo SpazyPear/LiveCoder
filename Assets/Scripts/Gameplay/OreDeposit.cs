@@ -24,9 +24,10 @@ public class OreDeposit : Entity
         currentHealth = data.health;
     }
 
-    public override void die(Character sender = null)
+    public override void die(object sender = null)
     {
-        sender.recieveOre(data);
+       
+        //sender.recieveOre(data);
         base.die();
     }
 }
