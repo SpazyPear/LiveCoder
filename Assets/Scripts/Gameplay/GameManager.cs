@@ -132,15 +132,15 @@ public class GameManager : MonoBehaviour
         spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0));
     }
     
-    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos)
+    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false)
     {
-        if (State.validMovePosition(pos))
+        if (!State.validMovePosition(pos) && !ignorePosClash)
         {
-            GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
-            placeOnGrid(instance, pos);
-            return instance;
+            return null;
         }
-        return null;
+        GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
+        placeOnGrid(instance, pos);
+        return instance;
     }
 
     public static void placeOnGrid(GameObject obj, Vector2Int pos)
@@ -208,6 +208,5 @@ public class GameManager : MonoBehaviour
         {
             spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
         }
-
     }
 }

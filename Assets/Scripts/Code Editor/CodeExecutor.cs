@@ -158,7 +158,11 @@ public class CodeExecutor : MonoBehaviour
                 }
                 foreach (CodeContext context in codeContexts)
                 {
-                    context.script.Call(context.script.Globals["OnStep"]);
+                    try
+                    {
+                        context.script.Call(context.script.Globals["OnStep"]);
+                    }
+                    catch (ScriptRuntimeException e) { if (context.character) { context.character.selfDestruct(); } }
                 }
 
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
@@ -173,6 +177,11 @@ public class CodeExecutor : MonoBehaviour
 
             yield return new WaitForSeconds(1);
         }
+
+    }
+
+    void CatchContextError(CodeContext context)
+    {
 
     }
 

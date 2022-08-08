@@ -17,7 +17,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (!isColliding)
         {
             isColliding = true;
-            Character character = collision.gameObject.GetComponent<Character>();
+            Character character = collision.gameObject.GetComponentInChildren<Character>();
             if (character)
             {
                 character.takeDamage(damage);

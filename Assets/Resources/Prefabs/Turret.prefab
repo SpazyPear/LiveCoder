@@ -55,14 +55,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3510752761906845668}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.2, z: 4.58}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.006241381, z: 4.560209}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2639225237272548770}
-  m_Father: {fileID: 5005774706240751683}
-  m_RootOrder: 1
+  m_Father: {fileID: 5006257662905158341}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2643470837536312670
 PrefabInstance:
@@ -359,7 +359,28 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 64126893204444876, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 64654510624191650, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64766159915426610, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64909441861225526, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 64126893204444876, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bc50d48682b2fd44d8d973f26b97e0b3, type: 3}
 --- !u!1 &5003976916028575791 stripped
 GameObject:
@@ -380,6 +401,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
   gridPos: {x: 0, y: 0}
   ownerPlayer: {fileID: 0}
   cost: 30
@@ -389,9 +412,28 @@ MonoBehaviour:
     character: {fileID: 0}
   ID: 0
   shootPoint: {fileID: 57653478284216887}
+--- !u!65 &8699381272313143209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003976916028575791}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.02, y: 4.43, z: 5.91}
+  m_Center: {x: 0, y: 1.97, z: 1.07}
 --- !u!4 &5005774706240751683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5005576099303947353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5006257662905158341 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4129907352827548, guid: bc50d48682b2fd44d8d973f26b97e0b3,
     type: 3}
   m_PrefabInstance: {fileID: 5005576099303947353}
   m_PrefabAsset: {fileID: 0}

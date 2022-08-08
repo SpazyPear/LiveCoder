@@ -203,19 +203,18 @@ public abstract class Character : Entity
 
     IEnumerator shakeHealthBar()
     {
-            Vector3 orignalPosition = healthBar.transform.position;
-            float elapsed = 0f;
+        Vector3 orignalPosition = healthBar.transform.position;
+        float elapsed = 0f;
 
-            while (elapsed < shakeDuration)
-            {
-                float x = orignalPosition.x + UnityEngine.Random.Range(-1f, 1f) * shakeMagnitude;
-                float y = orignalPosition.y + UnityEngine.Random.Range(-1f, 1f) * shakeMagnitude;
-
-                healthBar.transform.position = new Vector3(x, y, healthBar.transform.position.z);
-                elapsed += Time.deltaTime;
-                yield return 0;
-            }
-            healthBar.transform.position = orignalPosition;
+        while (elapsed < shakeDuration)
+        {
+            float x = orignalPosition.x + UnityEngine.Random.Range(-1f, 1f) * shakeMagnitude;
+            float y = orignalPosition.y + UnityEngine.Random.Range(-1f, 1f) * shakeMagnitude;
+            healthBar.transform.position = new Vector3(x, y, healthBar.transform.position.z);
+            elapsed += Time.deltaTime;
+            yield return 0;
+        }
+        healthBar.transform.position = orignalPosition;
     }
 
     public override void die(Character sender = null)

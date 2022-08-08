@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using MoonSharp.Interpreter;
+using System;
+
 public class EntityProxy
 {
     Entity target;
@@ -20,6 +22,8 @@ public class EntityProxy
 public class Entity : ControlledMonoBehavour
 {
     public int currentHealth;
+    public int selfDestructRange = 2;
+    public int selfDestructDamage = 2;
     public Vector2Int gridPos;
     public PlayerManager ownerPlayer;
     public int cost;
@@ -49,6 +53,29 @@ public class Entity : ControlledMonoBehavour
         }
             
         die(sender);
+    }
+
+    [MoonSharp.Interpreter.MoonSharpHidden]
+    public virtual void selfDestruct()
+    {
+        for (int x = -selfDestructRange; x <= selfDestructRange; x++)
+        {
+            for (int y = -selfDestructRange; y <= selfDestructRange; y++)
+            {
+                try
+                {
+                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
+                    {
+
+                        State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
+        Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
 }

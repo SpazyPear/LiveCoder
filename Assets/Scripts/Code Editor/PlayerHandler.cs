@@ -21,7 +21,6 @@ public class PlayerHandler : MonoBehaviour
           
             if (Physics.Raycast(ray, out hit))
             {
-                //print(hit.transform.parent.name);
                 if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
                 {
                     print($"Player {hit.transform.parent} has been selected");
@@ -102,7 +101,6 @@ public class PlayerHandler : MonoBehaviour
             }
         }
 
-        print(closest);
         return closest;
     }
 

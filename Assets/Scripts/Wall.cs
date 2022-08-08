@@ -18,33 +18,63 @@ public class WallProxy
 
 public class Wall : Entity
 {
+    bool rotChecked;
+    
     async void Start()
     {
-        await Task.Delay(100);
-
-        CheckWallRotation();
+        await Task.Yield();
+        CheckWallRotation(true);
             
     }
     
-    public void CheckWallRotation()
+    public void CheckWallRotation(bool initiator)
     {
-        if (isCorner())
+
+            
+        if (wallAt(gridPos.x, gridPos.y + 1) || wallAt(gridPos.x, gridPos.y - 1))
         {
-            GetComponent<MeshFilter>().mesh = (Resources.Load("Prefabs/CornerWall") as GameObject).GetComponentInChildren<MeshFilter>().mesh;
-            GetComponent<MeshRenderer>().material = (Resources.Load("Prefabs/CornerWall") as GameObject).GetComponentInChildren<MeshRenderer>().material;
-            return;
+            transform.parent.eulerAngles = new Vector3(0, 90, 0);  
         }
 
-        if (State.GridContents[gridPos.x, gridPos.y + 1].Entity && State.GridContents[gridPos.x, gridPos.y + 1].Entity.GetComponentInChildren<Wall>() || State.GridContents[gridPos.x, gridPos.y - 1].Entity && State.GridContents[gridPos.x, gridPos.y - 1].Entity.GetComponentInChildren<Wall>())
+        if (initiator)
+            CheckSurroundingWallRotations();
+
+        resetChecked();
+
+        if (isCorner())
         {
-            
-            transform.parent.eulerAngles = new Vector3(0, 90, 0);
-            if (State.GridContents[gridPos.x, gridPos.y + 1].Entity)
-                State.GridContents[gridPos.x, gridPos.y + 1].Entity.SendMessage("CheckWallRotation");
-            if (State.GridContents[gridPos.x, gridPos.y - 1].Entity)
-                State.GridContents[gridPos.x, gridPos.y - 1].Entity.SendMessage("CheckWallRotation");
+            ReplaceWithCorner();
+        }
+        
+    }
 
+    void CheckSurroundingWallRotations()
+    {
+        if (wallAt(gridPos.x, gridPos.y + 1))
+            wallAt(gridPos.x, gridPos.y + 1).CheckWallRotation(false);
+        if (wallAt(gridPos.x, gridPos.y - 1))
+            wallAt(gridPos.x, gridPos.y - 1).CheckWallRotation(false);
+        if (wallAt(gridPos.x + 1, gridPos.y))
+            wallAt(gridPos.x + 1, gridPos.y).CheckWallRotation(false);
+        if (wallAt(gridPos.x - 1, gridPos.y))
+            wallAt(gridPos.x - 1, gridPos.y).CheckWallRotation(false);
+    }
 
+    void ReplaceWithCorner()
+    {
+        GameManager.spawnOnGrid(Resources.Load("Prefabs/CornerWall") as GameObject, gridPos, true);
+        Destroy(transform.parent.gameObject);
+    }
+
+    void resetChecked()
+    {
+        for (int x = gridPos.x - 1; x < gridPos.x + 1; x++)
+        {
+            for (int y = gridPos.y - 1; y < gridPos.y + 1; y++)
+            {
+                if (wallAt(x, y))
+                    wallAt(x, y).rotChecked = false;
+            }
         }
     }
 
@@ -52,23 +82,25 @@ public class Wall : Entity
     {
         bool verticalFound = false;
         bool horizontalFound = false;
-        if (containsWall(gridPos.x + 1, gridPos.y) || containsWall(gridPos.x - 1, gridPos.y))
+        if (wallAt(gridPos.x + 1, gridPos.y) || wallAt(gridPos.x - 1, gridPos.y))
             verticalFound = true;
 
-        if (containsWall(gridPos.x, gridPos.y + 1) || containsWall(gridPos.x, gridPos.y - 1))
+        if (wallAt(gridPos.x, gridPos.y + 1) || wallAt(gridPos.x, gridPos.y - 1))
             horizontalFound = true;
 
         return verticalFound && horizontalFound;
     }
 
-    bool containsWall(int x, int y)
+    Wall wallAt(int x, int y)
     {
+        if (x < 0 || x >= State.GridContents.GetLength(0) || y < 0 || y >= State.GridContents.GetLength(1))
+            return null;
+        
         if (State.GridContents[x, y].Entity && State.GridContents[x, y].Entity.GetComponentInChildren<Wall>())
         {
-            return true;
+            return State.GridContents[x, y].Entity.GetComponentInChildren<Wall>();
         }
-        return false;
+        return null;
     }
 
-    
 }

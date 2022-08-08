@@ -19,6 +19,7 @@ namespace MoonSharp.Interpreter.Tree
 
 		protected static Token UnexpectedTokenType(Token t)
 		{
+			//hear somewhere for syntax error explosion
 			throw new SyntaxErrorException(t, "unexpected symbol near '{0}'", t.Text)
 			{
 				IsPrematureStreamTermination = (t.Type == TokenType.Eof)
