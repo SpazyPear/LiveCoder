@@ -25,6 +25,7 @@ public class Turret : Entity
     GameObject projectile;
     Character currentTarget;
     Transform barrel;
+    ParticleSystem shootPS;
     public Transform shootPoint;
     bool rotatingBarrel;
 
@@ -32,6 +33,7 @@ public class Turret : Entity
     {
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         barrel = transform.GetChild(0);
+        shootPS = GetComponentInChildren<ParticleSystem>();
         
     }
 
@@ -53,7 +55,8 @@ public class Turret : Entity
     public void shoot()
     {
         GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
-        obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 3000f);
+        obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 4000f);
+        shootPS.Play();
     }
 
     IEnumerator rotateBarrel()
