@@ -54,13 +54,11 @@ public class Turret : Entity
 
     public void shoot()
     {
-        GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
-        obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 4000f);
-        shootPS.Play();
         if (!isDisabled)
         {
             GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
             obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 3000f);
+            shootPS.Play();
         }
     }
 

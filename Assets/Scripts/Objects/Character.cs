@@ -197,7 +197,7 @@ public abstract class Character : Entity
         
     }
 
-    public override void takeDamage(int damage, Character sender = null)
+    public override void takeDamage(int damage, object sender = null)
     {
         base.takeDamage(damage, sender);
         StopCoroutine(shakeHealthBar());
@@ -221,7 +221,7 @@ public abstract class Character : Entity
         healthBar.transform.position = orignalPosition;
     }
 
-    public override void die(Character sender = null)
+    public override void die(object sender = null)
     {
         ownerPlayer.units.Remove(this);
         if (ownerPlayer.units.Count == 0)
