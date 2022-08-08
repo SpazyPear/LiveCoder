@@ -93,10 +93,23 @@ public class CodeExecutor : MonoBehaviour
     GlobalManager globalManager = new GlobalManager();
 
     CodeContext editingContext;
+
+    List<CodeContext> otherEditingContexts = new List<CodeContext>();
+
     Dictionary<string, DynValue> currentGlobalsMap = new Dictionary<string, DynValue>();
 
     string loadedSuggestion = "";
     string lastWord = "";
+
+    public void AddEditingContext (CodeContext newContext)
+    {
+        otherEditingContexts.Add(newContext);
+    }
+
+    public void ClearOtherContexts ()
+    {
+        otherEditingContexts.Clear();
+    }
 
     public void OpenEditor (CodeContext context)
     {
@@ -119,6 +132,12 @@ public class CodeExecutor : MonoBehaviour
     void OnValueChanged(string value)
     {
         editingContext.source = value;
+
+        for (int i = 0; i < otherEditingContexts.Count; i++)
+        {
+            otherEditingContexts[i].source = value;
+        }
+
         string lastWord = getLastWord(input.text);
 
         if (lastWord.Trim() != "")

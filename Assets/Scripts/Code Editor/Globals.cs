@@ -10,7 +10,13 @@ class GlobalManager
     public static Dictionary<string, MethodInfo> globalFunctionMappings = new Dictionary<string, MethodInfo>();
 
 
-    public Vector2Int vec2(int x, int y)
+    public Vector2 vec2(float x, float y)
+    {
+        return new Vector2(x, y);
+
+    }
+
+    public Vector2Int vec2Int(int x, int y)
     {
         return new Vector2Int(x, y);
 
@@ -38,6 +44,7 @@ class GlobalManager
     {
 
         RegisterProxy<CharacterHandlerProxy, Character>(r => new CharacterHandlerProxy(r));
+        RegisterProxy<VectorMathProxy, VectorMath>(r => new VectorMathProxy());
         RegisterProxy<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
         RegisterProxy<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
 
@@ -108,7 +115,9 @@ class GlobalManager
     private void SetupPathfinding(Script script)
     {
         Pathfinder pathfinder = GameObject.FindObjectOfType<Pathfinder>();
-        script.Globals["FindPath"] = (System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath;
+/*        script.Globals["FindPath"] = (System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath;
+*/
+        RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>>(script, "FindPath", pathfinder.FindPath, ((System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath).Method);
     }
 
     private void SetupTypes(Script script)
@@ -135,10 +144,11 @@ class GlobalManager
 /*
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
 */
-        RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2",vec2, ((System.Func<int, int, Vector2Int>)vec2).Method);
-/*
-        script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
-*/
+        RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2Int",vec2Int, ((System.Func<int, int, Vector2Int>)vec2Int).Method);
+        RegisterGlobalFunction<System.Func<float, float, Vector2>>(script, "vec2", vec2, ((System.Func<float, float, Vector2>)vec2).Method);
+        /*
+                script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
+        */
         RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, int>>(script, "dist", dist, ((System.Func<Vector2Int, Vector2Int, int>)dist).Method);
 
     }
@@ -162,6 +172,7 @@ class GlobalManager
 
 
         script.Globals["current"] = target;
+        script.Globals["vector2"] = new VectorMath();
     }
 
     public void OnScriptPreStep (Script script)

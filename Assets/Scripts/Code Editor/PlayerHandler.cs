@@ -12,9 +12,11 @@ public class PlayerHandler : MonoBehaviour
 {
     public Entity selectedPlayer;
 
+    public List<Entity> multipleSelectedPlayers;
+
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Input.GetKeyDown(KeyCode.LeftShift) == false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -30,9 +32,36 @@ public class PlayerHandler : MonoBehaviour
 
                     if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                     {
+                        this.multipleSelectedPlayers.Clear();
                         this.selectedPlayer = hit.transform.GetComponentInChildren<Entity>();
 
+
+                        GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
                         GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
+                    }
+                }
+            }
+        }
+
+        if (selectedPlayer != null)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+
+                    //print(hit.transform.parent.name);
+                    if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
+                    {
+                        
+                        if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
+                        {
+                            this.multipleSelectedPlayers.Add(hit.transform.GetComponentInChildren<Entity>());
+                            GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
+                        }
                     }
                 }
             }
