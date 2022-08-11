@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
+  lane: 0
 --- !u!65 &1006874235135644640
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -199,7 +200,7 @@ PrefabInstance:
     - target: {fileID: 96135733568133142, guid: 7edd68dcba794883aaebddede126740e,
         type: 3}
       propertyPath: m_Time
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 96135733568133142, guid: 7edd68dcba794883aaebddede126740e,
         type: 3}

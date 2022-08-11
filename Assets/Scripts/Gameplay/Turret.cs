@@ -41,7 +41,7 @@ public class Turret : Entity
     {
         base.OnStart();
         target(GameObject.FindObjectOfType<Character>());
-        ///StartCoroutine(debugShoot());
+        StartCoroutine(debugShoot());
     }
 
     public void target(Character enemy)

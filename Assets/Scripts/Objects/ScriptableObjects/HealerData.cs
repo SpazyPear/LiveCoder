@@ -7,4 +7,6 @@ public class HealerData : CharacterData
 {
     public int healRate = 1;
     public float EMPStrength = 4f;
+    public int healRange = 3;
+    public int EMPRange = 2;
 }

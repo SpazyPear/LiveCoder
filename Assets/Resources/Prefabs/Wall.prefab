@@ -54,7 +54,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b6d898ce7e9b12246a4cd720eedbdac4, type: 2}
+  - {fileID: 2100000, guid: 55ce8a3b5a66efc4195e34019198cfba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 4
+  selfDestructRange: 2
+  selfDestructDamage: 2
   gridPos: {x: 0, y: 0}
   ownerPlayer: {fileID: 0}
   cost: 10
@@ -104,7 +106,10 @@ MonoBehaviour:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
+    ownerPlayer: 0
   ID: 0
+  isDisabled: 0
+  entityData: {fileID: 0}
 --- !u!1 &7651880821118448460
 GameObject:
   m_ObjectHideFlags: 0

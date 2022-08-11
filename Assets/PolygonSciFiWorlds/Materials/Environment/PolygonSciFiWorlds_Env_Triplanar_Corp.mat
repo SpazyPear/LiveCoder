@@ -4,17 +4,19 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: PolygonSciFiWorlds_Env_Triplanar_Corp
-  m_Shader: {fileID: 4800000, guid: 8e3a7be9db42981418988bc59e1916cb, type: 3}
+  m_Shader: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - ALWAYS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -242,20 +244,33 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _BlendOp: 0
     - _BumpScale: 1
+    - _CameraFadingEnabled: 0
+    - _CameraFarFadeDistance: 2
+    - _CameraNearFadeDistance: 1
     - _Cliff_Defail_Power: 1
     - _Cliff_Detail_Power: 0.299
     - _Cliff_Detail_Scale: 0.0063
+    - _ColorMode: 0
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DetailTilingLarge: 0.0202
     - _DetailTilingRocks: 0.0234
     - _DetailTilingSmall: 0.043
     - _DirtBreakup: 0.0238
+    - _DistortionBlend: 0.5
+    - _DistortionEnabled: 0
+    - _DistortionStrength: 1
+    - _DistortionStrengthScaled: 0
     - _DstBlend: 0
+    - _EmissionEnabled: 0
     - _FallOff: 100
     - _FallOff1: 100
+    - _FlipbookMode: 0
     - _Float4: 0.296
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -265,6 +280,7 @@ Material:
     - _Ground_Falloff: 65
     - _Ground_Noise_Scale: 0
     - _Ground_Pebble_Scale: 0.0361
+    - _LightingEnabled: 0
     - _MEtallic: 0.421
     - _Metallic: 0
     - _Mode: 0
@@ -274,6 +290,9 @@ Material:
     - _RimPower1: 3.01
     - _SmoothnessTextureChannel: 0
     - _Snow: 0
+    - _SoftParticlesEnabled: 0
+    - _SoftParticlesFarFadeDistance: 1
+    - _SoftParticlesNearFadeDistance: 0
     - _Spec_Metallic: 0.01
     - _Spec_Smoothness: 0.068
     - _SpecularHighlights: 1
@@ -291,10 +310,12 @@ Material:
     - _smoothness: 0.175
     - _translkucency: 0.443
     m_Colors:
+    - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _CliffColour: {r: 0, g: 0.110750526, b: 0.17647058, a: 0}
     - _Cliff_Colour: {r: 0.61764705, g: 0.20891005, b: 0.20891005, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color2: {r: 0.38235295, g: 0.35319176, b: 0.33737025, a: 0}
+    - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissiveColor1: {r: 1, g: 1, b: 1, a: 0}
@@ -308,3 +329,5 @@ Material:
     - _Rock_Colour: {r: 0.056228366, g: 0.05482265, b: 0.09558821, a: 1}
     - _Rock_Colour_Primary: {r: 0.17766005, g: 0.24931695, b: 0.3897059, a: 0}
     - _Rock_Colour_Secondary: {r: 1, g: 0.16911763, b: 0.16911763, a: 0}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
