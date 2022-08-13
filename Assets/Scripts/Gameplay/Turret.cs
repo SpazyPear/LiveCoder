@@ -95,7 +95,7 @@ public class Turret : Entity
     public override void OnEMPDisable(float strength)
     {
         base.OnEMPDisable(strength);
-        barrel.GetComponent<MeshRenderer>().material.SetFloat("_EMPFactor", 5.5f);
+        barrel.GetComponent<MeshRenderer>().material.SetFloat("_EMPFactor", 5f);
     }
 
     public override void EMPRecover()
