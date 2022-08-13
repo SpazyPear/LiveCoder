@@ -398,6 +398,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5005576099303947353}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5005774706240751683 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5005576099303947353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5006257662905158341 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4129907352827548, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 5005576099303947353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!65 &8699381272313143209
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -430,8 +442,7 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 30
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: "function OnStart()\r\n\r\nend\r\n\r\nfunction OnStep()\r\n\r\nend\r"
     character: {fileID: 0}
     ownerPlayer: 0
   ID: 0
@@ -439,15 +450,3 @@ MonoBehaviour:
   entityData: {fileID: 11400000, guid: db0dca859f4ef9d4c920e695252c7678, type: 2}
   barrel: {fileID: 5006257662905158341}
   shootPoint: {fileID: 57653478284216887}
---- !u!4 &5005774706240751683 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,
-    type: 3}
-  m_PrefabInstance: {fileID: 5005576099303947353}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5006257662905158341 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4129907352827548, guid: bc50d48682b2fd44d8d973f26b97e0b3,
-    type: 3}
-  m_PrefabInstance: {fileID: 5005576099303947353}
-  m_PrefabAsset: {fileID: 0}

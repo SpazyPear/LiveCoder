@@ -2495,12 +2495,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
   gridPos: {x: 0, y: 0}
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: 'function OnStart()
+
+      
+
+      end
+
+      
+
+      function OnStep()
+
+      
+
+      end'
     character: {fileID: 0}
     ownerPlayer: 0
   ID: 0
@@ -2520,6 +2533,7 @@ MonoBehaviour:
   shieldDownPoint: {fileID: 7854719270260663899}
   shieldUpPoint: {fileID: 6126807153367468742}
   shieldState: 0
+  prevShieldState: 0
   shieldHealth: 0
 --- !u!114 &6999732456707353362
 MonoBehaviour:

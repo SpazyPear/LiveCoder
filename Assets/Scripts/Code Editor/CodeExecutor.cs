@@ -127,6 +127,11 @@ public class CodeExecutor : MonoBehaviour
         
     }
 
+    public void CopyCodeContext (CodeContext context)
+    {
+
+    }
+
     List<CodeSuggestion> currentSuggestions = new List<CodeSuggestion>();
 
     void OnValueChanged(string value)
