@@ -82,20 +82,32 @@ public class Entity : ControlledMonoBehavour
         Destroy(gameObject);
     }
     
-    public async virtual void EMPRecover(float strength)
+    async void EMPTimer(float strength)
     {
+        if (!entityData) return;
+
         float timer = entityData.empResistance * strength;
         while (timer > 0)
         {
             timer -= Time.deltaTime;
             await Task.Yield();
         }
+        EMPRecover();
+    }
+
+    public virtual void EMPRecover()
+    {
+        isDisabled = false;
     }
 
     public virtual void OnEMPDisable(float strength)
     {
+        if (isDisabled)
+        {
+            return;
+        }
         isDisabled = true;
-        EMPRecover(strength);
+        EMPTimer(strength);
     }
 
 }

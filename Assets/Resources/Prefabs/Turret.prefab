@@ -359,6 +359,16 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23341434531889508, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 31f1c337dd324a08b90d2567f40d4bcf, type: 2}
+    - target: {fileID: 23634432434741664, guid: bc50d48682b2fd44d8d973f26b97e0b3,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 04e71246c75bcad4bb526ab1430652ce, type: 2}
     - target: {fileID: 64126893204444876, guid: bc50d48682b2fd44d8d973f26b97e0b3,
         type: 3}
       propertyPath: m_Enabled
@@ -388,6 +398,19 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5005576099303947353}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &8699381272313143209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003976916028575791}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.02, y: 4.43, z: 5.91}
+  m_Center: {x: 0, y: 1.97, z: 1.07}
 --- !u!114 &430098131544200150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,21 +433,12 @@ MonoBehaviour:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
     character: {fileID: 0}
+    ownerPlayer: 0
   ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: db0dca859f4ef9d4c920e695252c7678, type: 2}
+  barrel: {fileID: 5006257662905158341}
   shootPoint: {fileID: 57653478284216887}
---- !u!65 &8699381272313143209
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5003976916028575791}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.02, y: 4.43, z: 5.91}
-  m_Center: {x: 0, y: 1.97, z: 1.07}
 --- !u!4 &5005774706240751683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4351196339893274, guid: bc50d48682b2fd44d8d973f26b97e0b3,

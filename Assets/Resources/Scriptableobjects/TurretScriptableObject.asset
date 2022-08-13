@@ -9,17 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 013249d4f8dadde4baec387bdf7ba14e, type: 3}
-  m_Name: HealerScriptableObject
+  m_Script: {fileID: 11500000, guid: d70f14de5d4ad3745b7071549ea26f38, type: 3}
+  m_Name: TurretScriptableObject
   m_EditorClassIdentifier: 
-  cost: 10
+  cost: 0
   empResistance: 1
-  maxEnergy: 5
-  playerSpeed: 2
-  range: 1
-  maxHealth: 3
-  classType: 2
-  healRate: 1
-  EMPStrength: 4
-  healRange: 3
-  EMPRange: 10

@@ -182,6 +182,29 @@ public class GameManager : MonoBehaviour
         }
         return closest;
     }
+
+    public static List<T> checkForInRangeEntities<T>(Vector2Int pos, int range, Entity sender, bool ignoreOwnTeam) where T : Entity
+    {
+        List<T> foundEntities = new List<T>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = -range; y <= range; y++)
+            {
+                try
+                {
+                    if (State.GridContents[pos.x + x, pos.y + y].Entity && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>() != sender)
+                    {
+                        if (ignoreOwnTeam && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>().ownerPlayer == sender.ownerPlayer) continue;
+
+                        foundEntities.Add(State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        return foundEntities;
+    }
+
     public static Character findClosestEnemy(Character sender)
     {
         float min = Mathf.Infinity;

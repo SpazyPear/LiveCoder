@@ -177,4 +177,6 @@ public class HealerHandlerProxy : CharacterHandlerProxy
     }
 
     public void heal() { target.heal(); }
+
+    public void emp() { target.EMP(); }
 }

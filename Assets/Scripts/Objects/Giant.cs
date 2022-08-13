@@ -97,9 +97,9 @@ public class Giant : Character
         
     }
 
-    public override void EMPRecover(float strength)
+    public override void EMPRecover()
     {
-        base.EMPRecover(strength);
+        base.EMPRecover();
         if (prevShieldState != ShieldState.InActive)
         {
             deployShield(prevShieldState == ShieldState.Raised ? true : false);

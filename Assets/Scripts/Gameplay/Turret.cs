@@ -24,7 +24,8 @@ public class Turret : Entity
     TurretData turretData;
     GameObject projectile;
     Character currentTarget;
-    Transform barrel;
+    Transform pivot;
+    [SerializeField] Transform barrel;
     ParticleSystem shootPS;
     public Transform shootPoint;
     bool rotatingBarrel;
@@ -32,7 +33,7 @@ public class Turret : Entity
     private void Start()
     {
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
-        barrel = transform.GetChild(0);
+        pivot = transform.GetChild(0);
         shootPS = GetComponentInChildren<ParticleSystem>();
         
     }
@@ -56,8 +57,8 @@ public class Turret : Entity
     {
         if (!isDisabled)
         {
-            GameObject obj = Instantiate(projectile, shootPoint.position, barrel.rotation);
-            obj.GetComponent<Rigidbody>().AddForce(barrel.forward * 3000f);
+            GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
+            obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
             shootPS.Play();
         }
     }
@@ -68,10 +69,10 @@ public class Turret : Entity
         {
             if (!isDisabled)
             {
-                var lookPos = currentTarget.transform.position - barrel.position;
+                var lookPos = currentTarget.transform.position - pivot.position;
                 lookPos += new Vector3(0, 2, 0);
                 var rotation = Quaternion.LookRotation(lookPos);
-                barrel.rotation = Quaternion.Slerp(barrel.rotation, rotation, Time.deltaTime * 2f);
+                pivot.rotation = Quaternion.Slerp(pivot.rotation, rotation, Time.deltaTime * 2f);
             }
 
             yield return null;
@@ -89,5 +90,17 @@ public class Turret : Entity
 
             shoot();
         }
+    }
+
+    public override void OnEMPDisable(float strength)
+    {
+        base.OnEMPDisable(strength);
+        barrel.GetComponent<MeshRenderer>().material.SetFloat("_EMPFactor", 5.5f);
+    }
+
+    public override void EMPRecover()
+    {
+        base.EMPRecover();
+        barrel.GetComponent<MeshRenderer>().material.SetFloat("_EMPFactor", 0);
     }
 }

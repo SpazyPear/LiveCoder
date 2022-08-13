@@ -57,7 +57,7 @@ public class Healer : Character
     {
         if (!isDisabled)
         {
-            List<Entity> inRange = checkForInRangeEntities<Entity>();
+            List<Entity> inRange = GameManager.checkForInRangeEntities<Entity>(gridPos, healerData.EMPRange, this, true);
             foreach (Entity c in inRange)
             {
                 if (c.ownerPlayer != ownerPlayer)

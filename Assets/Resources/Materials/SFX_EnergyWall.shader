@@ -4,6 +4,8 @@ Shader "QFX/SFX/EnergyWall"
 {
 	Properties
 	{
+		_EMPFactor("EMP Factor", Float) = 0.0
+		_BaseTex("Base Texture", 2D) = "white" {}
 		_SphereCenter("Sphere Center", Vector) = (0.5,0.5,0,0)
 		_SphereRadius("Sphere Radius", Range( 0 , 1)) = 0.3105874
 		_SphereHardness("Sphere Hardness", Range( 0 , 1)) = 0.3796069
@@ -85,6 +87,8 @@ Shader "QFX/SFX/EnergyWall"
 		uniform float _SphereHardness;
 		uniform sampler2D _GrabTexture;
 		uniform float _OpacityPower;
+		sampler2D _BaseTex;
+		float _EMPFactor;
 
 
 		inline float4 ASE_ComputeGrabScreenPos( float4 pos )
@@ -150,7 +154,7 @@ Shader "QFX/SFX/EnergyWall"
 			float smoothstepResult175 = smoothstep( 0.5 , 1.0 , ( 1.0 - clampResult174 ));
 			float4 tint_color182 = _TintColor;
 			float4 appear_mask185 = ( temp_output_116_0 * smoothstepResult175 * tint_color182 );
-			o.Emission = lerp(( temp_output_36_0 + temp_output_151_0 ),( lerp(temp_output_22_0,( temp_output_22_0 * temp_output_116_0 ),_BlendGrid) + screenColor19 + appear_mask185 ),_NoiseDistortion).rgb;
+			o.Emission = (_EMPFactor * lerp((temp_output_36_0 + temp_output_151_0), (lerp(temp_output_22_0, (temp_output_22_0 * temp_output_116_0), _BlendGrid) + screenColor19 + appear_mask185), _NoiseDistortion).rgb) + tex2D(_BaseTex, i.uv_texcoord).rgb;
 			o.Alpha = saturate( ( _OpacityPower * i.vertexColor.a * lerp((temp_output_151_0).a,1.0,_NoiseDistortion) ) );
 		}
 
