@@ -459,13 +459,25 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
-            context.script.DoString(context.source);
-            globalManager.OnScriptStart(context.script, target: context.character);
+            try
+            {
+                context.script.DoString(context.source);
+                globalManager.OnScriptStart(context.script, target: context.character);
+            }
+            catch (MoonSharp.Interpreter.InterpreterException e)
+            {
+                context.character.selfDestruct();
+                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                Debug.Log($"Call Stack : {e.CallStack}");
+                Debug.Log($"{e.Source}");
+                ErrorBubbleManager.spawnBubble(context.character.gridPos, e.DecoratedMessage);
+            }
         }
         
-        try
+
+        foreach (CodeContext context in codeContexts)
         {
-            foreach (CodeContext context in codeContexts)
+            try
             {
 
                 controlPanelManager.UpdateGlobals(context);
@@ -474,13 +486,17 @@ public class CodeExecutor : MonoBehaviour
 
                 print("Calling start for " + context.script);
             }
+
+            catch (MoonSharp.Interpreter.InterpreterException e)
+            {
+                context.character.selfDestruct();
+                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                Debug.Log($"Call Stack : {e.CallStack}");
+                Debug.Log($"{e.Source}");
+            }
+
         }
-        catch (ScriptRuntimeException e)
-        {
-            Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-            Debug.Log($"Call Stack : {e.CallStack}");
-            Debug.Log($"{e.Source}");
-        }
+
 
         foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
         {
@@ -504,8 +520,18 @@ public class CodeExecutor : MonoBehaviour
                 }
                 foreach (CodeContext context in codeContexts)
                 {
-                    controlPanelManager.UpdateGlobals(context);
-                    context.script.Call(context.script.Globals["OnStep"]);
+                    try
+                    {
+                        controlPanelManager.UpdateGlobals(context);
+                        context.script.Call(context.script.Globals["OnStep"]);
+                    }
+                    catch (MoonSharp.Interpreter.InterpreterException e)
+                    {
+                        context.character.selfDestruct();
+                        Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                        Debug.Log($"Call Stack : {e.CallStack}");
+                        Debug.Log($"{e.Source}");
+                    }
                 }
 
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
