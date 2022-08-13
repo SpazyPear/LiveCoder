@@ -93,10 +93,23 @@ public class CodeExecutor : MonoBehaviour
     GlobalManager globalManager = new GlobalManager();
 
     CodeContext editingContext;
+
+    List<CodeContext> otherEditingContexts = new List<CodeContext>();
+
     Dictionary<string, DynValue> currentGlobalsMap = new Dictionary<string, DynValue>();
 
     string loadedSuggestion = "";
     string lastWord = "";
+
+    public void AddEditingContext (CodeContext newContext)
+    {
+        otherEditingContexts.Add(newContext);
+    }
+
+    public void ClearOtherContexts ()
+    {
+        otherEditingContexts.Clear();
+    }
 
     public void OpenEditor (CodeContext context)
     {
@@ -119,6 +132,12 @@ public class CodeExecutor : MonoBehaviour
     void OnValueChanged(string value)
     {
         editingContext.source = value;
+
+        for (int i = 0; i < otherEditingContexts.Count; i++)
+        {
+            otherEditingContexts[i].source = value;
+        }
+
         string lastWord = getLastWord(input.text);
 
         if (lastWord.Trim() != "")
@@ -431,6 +450,8 @@ public class CodeExecutor : MonoBehaviour
         return keyValues;
     }
 
+    public ControlPanelManager controlPanelManager;
+
     private IEnumerator AwakeCoroutineLua()
     {
        
@@ -446,6 +467,9 @@ public class CodeExecutor : MonoBehaviour
         {
             foreach (CodeContext context in codeContexts)
             {
+
+                controlPanelManager.UpdateGlobals(context);
+
                 context.script.Call(context.script.Globals["OnStart"]);
 
                 print("Calling start for " + context.script);
@@ -470,6 +494,7 @@ public class CodeExecutor : MonoBehaviour
             {
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
                 {
+
                     o.OnStep();
                 }
 
@@ -479,11 +504,8 @@ public class CodeExecutor : MonoBehaviour
                 }
                 foreach (CodeContext context in codeContexts)
                 {
-                    try
-                    {
-                        context.script.Call(context.script.Globals["OnStep"]);
-                    }
-                    catch (ScriptRuntimeException e) { if (context.character) { context.character.selfDestruct(); } }
+                    controlPanelManager.UpdateGlobals(context);
+                    context.script.Call(context.script.Globals["OnStep"]);
                 }
 
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
@@ -498,11 +520,6 @@ public class CodeExecutor : MonoBehaviour
 
             yield return new WaitForSeconds(1);
         }
-
-    }
-
-    void CatchContextError(CodeContext context)
-    {
 
     }
 
