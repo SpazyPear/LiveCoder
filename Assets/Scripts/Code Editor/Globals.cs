@@ -10,9 +10,9 @@ class GlobalManager
     public static Dictionary<string, MethodInfo> globalFunctionMappings = new Dictionary<string, MethodInfo>();
 
 
-    public Vector2 vec2(float x, float y)
+    public Vector2Float vec2(float x, float y)
     {
-        return new Vector2(x, y);
+        return new Vector2Float(x, y);
 
     }
 
@@ -57,6 +57,8 @@ class GlobalManager
         RegisterProxy<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
         RegisterProxy<WallProxy, Wall>(r => new WallProxy(r));
         RegisterProxy<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));
+
+        RegisterProxy<Vector2Proxy, Vector2Float>(r => new Vector2Proxy(r));
 
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
@@ -112,12 +114,18 @@ class GlobalManager
         Debug.Log($"Vec2: {vec.x},{vec.y}");
     }
 
+
     private void SetupPathfinding(Script script)
     {
         Pathfinder pathfinder = GameObject.FindObjectOfType<Pathfinder>();
 /*        script.Globals["FindPath"] = (System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath;
 */
         RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>>(script, "FindPath", pathfinder.FindPath, ((System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath).Method);
+    }
+
+    public Vector2Float gridPos (int x, int y)
+    {
+        return Vector2Float.fromVec2(new Vector2(State.GridContents[x, y].Object.transform.position.x, State.GridContents[x, y].Object.transform.position.z));
     }
 
     private void SetupTypes(Script script)
@@ -145,7 +153,7 @@ class GlobalManager
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
 */
         RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2Int",vec2Int, ((System.Func<int, int, Vector2Int>)vec2Int).Method);
-        RegisterGlobalFunction<System.Func<float, float, Vector2>>(script, "vec2", vec2, ((System.Func<float, float, Vector2>)vec2).Method);
+        RegisterGlobalFunction<System.Func<float, float, Vector2Float>>(script, "vec2", vec2, ((System.Func<float, float, Vector2Float>)vec2).Method);
         /*
                 script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
         */
@@ -162,6 +170,7 @@ class GlobalManager
 
         RegisterGlobalFunction<System.Action<Vector2Int>>(script, "printVec2", printVec2, ((System.Action<Vector2Int>)printVec2).Method);
 
+        RegisterGlobalFunction<System.Func<int, int, Vector2Float>>(script, "gridPos", gridPos, ((System.Func<int, int, Vector2Float>)gridPos).Method);
 
         
         SetupTypes(script);

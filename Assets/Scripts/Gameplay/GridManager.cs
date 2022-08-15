@@ -43,7 +43,6 @@ public class GridManager : MonoBehaviour
 
                 State.GridContents[height, width] = new Tile(tile, new Vector2Int(height, width));
 
-
                 if (tile.transform.GetComponentInChildren<GridTile>() != null)
                 {
                     tile.transform.GetComponentInChildren<GridTile>().gridTile = State.GridContents[height, width];

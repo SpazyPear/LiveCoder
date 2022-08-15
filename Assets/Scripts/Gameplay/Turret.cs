@@ -16,6 +16,8 @@ public class TurretProxy : EntityProxy
     public void targetCharacter(Character enemy) => target.target(enemy);
     public void shootCharacter() => target.shoot();
 
+    public void lookAt(Vector2Float pos) => target.lookAt(pos);
+
 }
 
 public class Turret : Entity
@@ -41,13 +43,14 @@ public class Turret : Entity
     public override void OnStart()
     {
         base.OnStart();
-        target(GameObject.FindObjectOfType<Character>());
-        StartCoroutine(debugShoot());
+        //target(GameObject.FindObjectOfType<Character>());
+        //StartCoroutine(debugShoot());
     }
 
     public void target(Character enemy)
     {
         rotatingBarrel = false;
+        this.StopAllCoroutines();
         currentTarget = enemy;
         rotatingBarrel = true;
         StartCoroutine(rotateBarrel());
@@ -65,11 +68,29 @@ public class Turret : Entity
 
     IEnumerator rotateBarrel()
     {
+
         while (rotatingBarrel && currentTarget)
         {
             if (!isDisabled)
             {
                 var lookPos = currentTarget.transform.position - pivot.position;
+                lookPos += new Vector3(0, 2, 0);
+                var rotation = Quaternion.LookRotation(lookPos);
+                pivot.rotation = Quaternion.Slerp(pivot.rotation, rotation, Time.deltaTime * 2f);
+            }
+
+            yield return null;
+        }
+    }
+
+    IEnumerator rotateBarrelTowards(Vector2Float point)
+    {
+
+        while (rotatingBarrel )
+        {
+            if (!isDisabled)
+            {
+                var lookPos = new Vector3(point.x, transform.position.y, point.y)  - pivot.position;
                 lookPos += new Vector3(0, 2, 0);
                 var rotation = Quaternion.LookRotation(lookPos);
                 pivot.rotation = Quaternion.Slerp(pivot.rotation, rotation, Time.deltaTime * 2f);
@@ -90,6 +111,19 @@ public class Turret : Entity
 
             shoot();
         }
+    }
+
+    private Vector3 lookatPoint = Vector3.zero;
+
+    public void lookAt (Vector2Float lookAt)
+
+    {
+        this.StopAllCoroutines();
+        rotatingBarrel = false;
+        currentTarget = null;
+        
+        rotatingBarrel = true;
+        StartCoroutine(rotateBarrelTowards(lookAt));
     }
 
     public override void OnEMPDisable(float strength)

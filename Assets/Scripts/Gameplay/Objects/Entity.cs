@@ -17,6 +17,11 @@ public class EntityProxy
 
     public string id => target.ID.ToString();
     public int health => target.currentHealth;
+
+    public Vector2Float pos ()
+    {
+        return Vector2Float.fromVec2(new Vector2(target.transform.position.x, target.transform.position.z));
+    }
 }
 
 public class Entity : ControlledMonoBehavour
