@@ -8,7 +8,6 @@ public class CharacterData : EntityData
     public int maxEnergy = 5;
     public float playerSpeed = 2;
     public int range = 1;
-    public int maxHealth = 4;
     public CLASSTYPE classType;
 }
 

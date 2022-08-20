@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d70f14de5d4ad3745b7071549ea26f38, type: 3}
   m_Name: TurretScriptableObject
   m_EditorClassIdentifier: 
-  cost: 0
+  maxHealth: 4
+  cost: 20
   empResistance: 1

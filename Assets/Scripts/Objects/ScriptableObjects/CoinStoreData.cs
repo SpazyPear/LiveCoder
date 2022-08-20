@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinStoreData : ScriptableObject
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/CoinStoreScriptableObject", order = 1)]
+public class CoinStoreData : EntityData
 {
     public int capacity = 200;
 }

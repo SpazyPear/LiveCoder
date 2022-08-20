@@ -508,7 +508,7 @@ public class CodeExecutor : MonoBehaviour
                 Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
                 Debug.Log($"Call Stack : {e.CallStack}");
                 Debug.Log($"{e.Source}");
-                ErrorBubbleManager.spawnBubble(context.character.gridPos, e.DecoratedMessage);
+                ErrorBubbleManager.spawnBubble(context.character.gridPos, context.character.name + " threw: " + e.DecoratedMessage);
             }
         }
         

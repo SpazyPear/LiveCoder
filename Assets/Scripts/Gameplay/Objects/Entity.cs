@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using MoonSharp.Interpreter;
 using System;
+using UnityEngine.UI;
 
 public class EntityProxy
 {
@@ -36,11 +37,21 @@ public class Entity : ControlledMonoBehavour
     public int ID;
     public bool isDisabled;
     public EntityData entityData;
+    RectTransform CanvasRect;
+    RectTransform healthBarObj;
+    protected Slider healthBar;
    
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public virtual void die(object sender = null)
+    public virtual async void die(object sender = null)
     {
+        float timer = 0;
+        while (timer < 2)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, timer / 2);
+            timer += Time.deltaTime;
+            await Task.Yield();
+        }
         Destroy(gameObject);
     }
 
@@ -49,15 +60,57 @@ public class Entity : ControlledMonoBehavour
         codeContext.character = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
+        healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
+        currentHealth = entityData.maxHealth;
+        healthBar = healthBarObj.GetComponentInChildren<Slider>();
+       // healthBar.value = currentHealth;
     }
-    
+
+    private void Start()
+    {
+        
+    }
+
+    private void Update()
+    {
+       
+        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(transform.position + new Vector3(0, 13f, 0));
+        Vector2 WorldObject_ScreenPosition = new Vector2(
+        ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
+        ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
+        healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
+
+    }
+
+    IEnumerator shakeHealthBar()
+    {
+        Vector3 orignalPosition = healthBar.transform.position;
+        float elapsed = 0f;
+
+        while (elapsed < 0.3)
+        {
+            float x = orignalPosition.x + UnityEngine.Random.Range(-1f, 1f);
+            float y = orignalPosition.y + UnityEngine.Random.Range(-1f, 1f);
+            healthBar.transform.position = new Vector3(x, y, healthBar.transform.position.z);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        healthBar.transform.position = orignalPosition;
+    }
 
     [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void takeDamage(int damage, object sender = null)
     {
         if (currentHealth - damage > 0)
         {
+            if (!healthBarObj.gameObject.activeInHierarchy)
+                healthBarObj.gameObject.SetActive(true);
+
             currentHealth -= damage;
+            StopCoroutine(shakeHealthBar());
+            StartCoroutine(shakeHealthBar());
+            healthBar.value = (float)currentHealth / entityData.maxHealth;
             return;
         }
             
@@ -115,4 +168,8 @@ public class Entity : ControlledMonoBehavour
         EMPTimer(strength);
     }
 
+    private void OnDestroy()
+    {
+        Destroy(healthBar.gameObject);
+    }
 }

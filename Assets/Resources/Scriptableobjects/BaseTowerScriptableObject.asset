@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b2e7abc3438fc4fae39420b2b5db92, type: 3}
-  m_Name: GameScriptableObject
+  m_Script: {fileID: 11500000, guid: 66f72e69f0bf8ea41b0cba5d0d9805d7, type: 3}
+  m_Name: BaseTowerScriptableObject
   m_EditorClassIdentifier: 
-  defenceGoldIncrease: c8000000c8000000c8000000c8000000
-  attackGoldIncrease: c8000000c8000000c8000000c8000000
+  maxHealth: 5
+  cost: 0
+  empResistance: 1
