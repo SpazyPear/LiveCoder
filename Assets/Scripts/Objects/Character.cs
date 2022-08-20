@@ -16,7 +16,6 @@ public enum CLASSTYPE
 public abstract class Character : Entity
 {
 
-    public CodeContext codeContext = new CodeContext();
     [HideInInspector]
     public CharacterData characterData { get { return entityData as CharacterData; } }
     public Tweener tweener;
@@ -150,7 +149,7 @@ public abstract class Character : Entity
 
     public bool checkPosOnGrid(Vector2Int pos)
     {
-        try { return State.GridContents[pos.x, pos.y].Entity == null; }
+        try { return State.GridContents[pos.x, pos.y].Entity == null || (State.GridContents[pos.x, pos.y].Entity != null && State.GridContents[pos.x, pos.y].Entity.GetComponentInChildren<Trap>() != null); }
         catch(IndexOutOfRangeException) { return false; }
     }
 

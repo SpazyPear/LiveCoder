@@ -52,6 +52,8 @@ public class CodeContext
     public Script script = new Script();
     public Entity character;
     public int ownerPlayer;
+
+    public bool shouldExecute = true;
 }
 
 
@@ -81,10 +83,17 @@ public class CodeExecutor : MonoBehaviour
     public void OnExecuteCode()
     {
         editingContext.source = input.text;
+        for (int i = 0; i < otherEditingContexts.Count; i++)
+        {
+            otherEditingContexts[i].source = input.text;
+        }
+        GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
+        input.onValueChanged.RemoveAllListeners();
     }
 
     public void CloseEditor()
     {
+        
         codeEditor.gameObject.SetActive(false);
         GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
         input.onValueChanged.RemoveAllListeners();
@@ -92,7 +101,7 @@ public class CodeExecutor : MonoBehaviour
 
     GlobalManager globalManager = new GlobalManager();
 
-    CodeContext editingContext;
+    public CodeContext editingContext;
 
     List<CodeContext> otherEditingContexts = new List<CodeContext>();
 
@@ -113,6 +122,7 @@ public class CodeExecutor : MonoBehaviour
 
     public void OpenEditor (CodeContext context)
     {
+        print("Editor for " + context.character.name);
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
         //headerText.text = context.character.GetType().ToString();
@@ -134,15 +144,11 @@ public class CodeExecutor : MonoBehaviour
 
     List<CodeSuggestion> currentSuggestions = new List<CodeSuggestion>();
 
+    
+
     void OnValueChanged(string value)
     {
-        editingContext.source = value;
-
-        for (int i = 0; i < otherEditingContexts.Count; i++)
-        {
-            otherEditingContexts[i].source = value;
-        }
-
+      
         string lastWord = getLastWord(input.text);
 
         if (lastWord.Trim() != "")
@@ -457,6 +463,33 @@ public class CodeExecutor : MonoBehaviour
 
     public ControlPanelManager controlPanelManager;
 
+
+    public IEnumerator ResetScript (string newSource, Entity sender)
+    {
+        
+        for (int i = 0; i < codeContexts.Count; i++)
+        {
+            if (codeContexts[i].character == sender)
+            {
+
+                codeContexts[i].source = newSource;
+                codeContexts[i].script = new Script();
+                codeContexts[i].script.DoString(newSource);
+                globalManager.OnScriptStart(codeContexts[i].script, target: codeContexts[i].character);
+                controlPanelManager.UpdateGlobals(codeContexts[i]);
+
+                print("Calling start on " + i. ToString() + " ::: " + newSource);
+                codeContexts[i].script.Call(codeContexts[i].script.Globals["OnStart"]);
+
+            }
+        }
+
+        yield break;
+     
+    }
+
+    
+
     private IEnumerator AwakeCoroutineLua()
     {
        
@@ -482,22 +515,26 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
-            try
+            if (context.shouldExecute)
             {
+                try
+                {
 
-                controlPanelManager.UpdateGlobals(context);
 
-                context.script.Call(context.script.Globals["OnStart"]);
+                    controlPanelManager.UpdateGlobals(context);
 
-                print("Calling start for " + context.script);
-            }
+                    context.script.Call(context.script.Globals["OnStart"]);
 
-            catch (MoonSharp.Interpreter.InterpreterException e)
-            {
-                context.character.selfDestruct();
-                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-                Debug.Log($"Call Stack : {e.CallStack}");
-                Debug.Log($"{e.Source}");
+                    print("Calling start for " + context.script);
+                }
+
+                catch (MoonSharp.Interpreter.InterpreterException e)
+                {
+                    context.character.selfDestruct();
+                    Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                    Debug.Log($"Call Stack : {e.CallStack}");
+                    Debug.Log($"{e.Source}");
+                }
             }
 
         }
@@ -525,17 +562,21 @@ public class CodeExecutor : MonoBehaviour
                 }
                 foreach (CodeContext context in codeContexts)
                 {
-                    try
+
+                    if (context.shouldExecute)
                     {
-                        controlPanelManager.UpdateGlobals(context);
-                        context.script.Call(context.script.Globals["OnStep"]);
-                    }
-                    catch (MoonSharp.Interpreter.InterpreterException e)
-                    {
-                        context.character.selfDestruct();
-                        Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-                        Debug.Log($"Call Stack : {e.CallStack}");
-                        Debug.Log($"{e.Source}");
+                        try
+                        {
+                            controlPanelManager.UpdateGlobals(context);
+                            context.script.Call(context.script.Globals["OnStep"]);
+                        }
+                        catch (MoonSharp.Interpreter.InterpreterException e)
+                        {
+                            context.character.selfDestruct();
+                            Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                            Debug.Log($"Call Stack : {e.CallStack}");
+                            Debug.Log($"{e.Source}");
+                        }
                     }
                 }
 

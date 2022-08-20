@@ -54,6 +54,8 @@ class GlobalManager
         RegisterProxy<HealerProxy, Healer>(r => new HealerProxy(r));
 
         RegisterProxy<EntityProxy, Entity>(r => new EntityProxy(r));
+
+        RegisterProxy<TrapProxy, Trap>(r => new TrapProxy(r));
         RegisterProxy<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
         RegisterProxy<WallProxy, Wall>(r => new WallProxy(r));
         RegisterProxy<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));

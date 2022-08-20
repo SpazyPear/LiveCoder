@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5988576408198824966}
   - component: {fileID: 4321660132270248800}
   - component: {fileID: 63329851068393882}
+  - component: {fileID: 1720912357681984975}
   m_Layer: 0
   m_Name: Trap
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 2418305196770594416}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.26543, z: 1}
+  m_LocalScale: {x: 7, y: 0.26543, z: 7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -93,11 +94,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2418305196770594416}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 47.22369, z: 1}
+  m_Center: {x: 0, y: 23.111843, z: 0}
 --- !u!114 &63329851068393882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,9 +112,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
   gridPos: {x: 0, y: 0}
-  ownerPlayer: 0
+  ownerPlayer: {fileID: 0}
+  cost: 0
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: 'function OnStart()
+
+
+      end
+
+
+      function OnStep()
+
+
+      end'
     character: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 0
+  ID: 0
+  isDisabled: 0
+  entityData: {fileID: 0}
+--- !u!54 &1720912357681984975
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2418305196770594416}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

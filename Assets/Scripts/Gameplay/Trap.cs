@@ -4,13 +4,29 @@ using UnityEngine;
 
 public class Trap : Entity
 {
-    public CodeContext codeContext = new CodeContext();
-
+    
 
     private void OnTriggerEnter(Collider collider)
     {
-        Character character = collider.GetComponent<Character>();
+        print(collider.name);
+        Character character = collider.GetComponentInChildren<Character>();
         if (character)
-            character.codeContext = this.codeContext;
+        {
+            //character.codeContext.script = this.codeContext.script;
+            GameObject.FindObjectOfType<CodeExecutor>().StartCoroutine(GameObject.FindObjectOfType<CodeExecutor>().ResetScript(codeContext.source, character));
+            print("Recieved character hit -- resetting to \n " + this.codeContext.script);
+        }
     }
+}
+
+public class TrapProxy : EntityProxy
+{
+    Trap target;
+
+    [MoonSharp.Interpreter.MoonSharpHidden]
+    public TrapProxy(Trap p) : base(p)
+    {
+        this.target = p;
+    }
+
 }
