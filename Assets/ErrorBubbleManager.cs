@@ -25,10 +25,9 @@ public class ErrorBubbleManager : MonoBehaviour
 
     public static void spawnBubble(Vector2Int pos, string error)
     {
-        print(State.gridToWorldPos(pos));
         GameObject text = Instantiate(errorBubble, State.gridToWorldPos(pos) + new Vector3(0, 7f, 0), Quaternion.identity, FindObjectOfType<Canvas>().transform);
         text.GetComponentInChildren<TMPro.TMP_Text>().text = error;
-        //text.transform.LookAt(Camera.main.transform.position);
+        Destroy(text, 5f);
         instance.animateBubble(text.transform);
     }
     
@@ -40,12 +39,14 @@ public class ErrorBubbleManager : MonoBehaviour
     IEnumerator moveBubble(Transform bubble)
     {
         float timer = 0;
+        Vector3 targetPosition = new Vector3(lerpTarget.transform.localPosition.x, lerpTarget.localPosition.y, 0);
+        bubble.localRotation = Quaternion.Euler(0, 0, 0);
         while (timer < lerpDuration)
         {
-            bubble.position = Vector3.Lerp(bubble.position, Camera.main.ScreenToWorldPoint(new Vector3(lerpTarget.position.x, lerpTarget.position.y, 10f)), timer / lerpDuration);
+            bubble.localPosition = Vector3.Lerp(bubble.localPosition, targetPosition, timer / lerpDuration);
             timer += Time.deltaTime;
             yield return null;
         }
-        bubble.position = lerpTarget.position;
+        bubble.localPosition = targetPosition;
     }
 }
