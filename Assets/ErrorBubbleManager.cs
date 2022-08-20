@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class ErrorBubbleManager : MonoBehaviour
 {
+    public float lerpDuration = 3f;
+    public Transform lerpTarget;
     static GameObject errorBubble;
+
+    public static ErrorBubbleManager instance;
+    
 
     private void Awake()
     {
+        instance = this;
         errorBubble = Resources.Load("UI/ErrorBubble") as GameObject;
     }
 
@@ -20,7 +26,26 @@ public class ErrorBubbleManager : MonoBehaviour
     public static void spawnBubble(Vector2Int pos, string error)
     {
         print(State.gridToWorldPos(pos));
-        TMPro.TMP_Text text = Instantiate(errorBubble, Camera.main.WorldToScreenPoint(State.gridToWorldPos(pos)), Quaternion.identity).GetComponentInChildren<TMPro.TMP_Text>();
-        text.text = error;
+        GameObject text = Instantiate(errorBubble, State.gridToWorldPos(pos) + new Vector3(0, 7f, 0), Quaternion.identity, FindObjectOfType<Canvas>().transform);
+        text.GetComponentInChildren<TMPro.TMP_Text>().text = error;
+        //text.transform.LookAt(Camera.main.transform.position);
+        instance.animateBubble(text.transform);
+    }
+    
+    void animateBubble(Transform bubble)
+    {
+        StartCoroutine(moveBubble(bubble)); 
+    }
+
+    IEnumerator moveBubble(Transform bubble)
+    {
+        float timer = 0;
+        while (timer < lerpDuration)
+        {
+            bubble.position = Vector3.Lerp(bubble.position, Camera.main.ScreenToWorldPoint(new Vector3(lerpTarget.position.x, lerpTarget.position.y, 10f)), timer / lerpDuration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        bubble.position = lerpTarget.position;
     }
 }
