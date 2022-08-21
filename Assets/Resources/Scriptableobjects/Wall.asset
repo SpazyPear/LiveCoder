@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Wall
   m_EditorClassIdentifier: 
   maxHealth: 5
-  cost: 0
+  cost: 20
   empResistance: 1

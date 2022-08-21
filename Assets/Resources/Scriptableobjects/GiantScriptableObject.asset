@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16a9b0737c0b5744b6c5487d239fc14, type: 3}
   m_Name: GiantScriptableObject
   m_EditorClassIdentifier: 
-  maxEnergy: 5
-  playerSpeed: 2
-  range: 1
   maxHealth: 10
+  cost: 0
+  empResistance: 1
+  maxEnergy: 5
+  playerSpeed: 1
+  range: 1
   classType: 0
+  maxShieldHealth: 10
+  shieldRegenRate: 1

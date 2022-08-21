@@ -137,7 +137,7 @@ public class Entity : ControlledMonoBehavour
                 {
                     if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
                     {
-
+                        if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity)
                         State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
                     }
                 }
