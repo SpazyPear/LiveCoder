@@ -55,11 +55,21 @@ public class Entity : ControlledMonoBehavour
     public virtual async void die(object sender = null)
     {
         float timer = 0;
-        while (timer < 2)
+
+
+
+        if (healthBar != null)
+            Destroy(healthBar.gameObject);
+
+        while (timer < 1)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, timer / 2);
-            timer += Time.deltaTime;
-            await Task.Yield();
+
+            if (gameObject != null)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, timer / 1);
+                timer += Time.deltaTime;
+                await Task.Yield();
+            }
         }
         Destroy(gameObject);
     }
@@ -88,6 +98,8 @@ public class Entity : ControlledMonoBehavour
         Vector2 WorldObject_ScreenPosition = new Vector2(
         ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
         ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
+
+        if (healthBarObj)
         healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
 
     }
@@ -120,6 +132,8 @@ public class Entity : ControlledMonoBehavour
             StopCoroutine(shakeHealthBar());
             StartCoroutine(shakeHealthBar());
             healthBar.value = (float)currentHealth / entityData.maxHealth;
+
+
             return;
         }
             
@@ -137,8 +151,8 @@ public class Entity : ControlledMonoBehavour
                 {
                     if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
                     {
-                        if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity)
-                        State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
+                        if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
+                            State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
                     }
                 }
                 catch (IndexOutOfRangeException) { }
@@ -179,7 +193,6 @@ public class Entity : ControlledMonoBehavour
 
     private void OnDestroy()
     {
-        if (healthBar && healthBar.gameObject)
-        Destroy(healthBar.gameObject);
+        
     }
 }
