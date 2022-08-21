@@ -16,6 +16,15 @@ public class EntityProxy
         this.target = p;
     }
 
+    public Vector2Int position
+    {
+        get
+        {
+            return target.gridPos;
+        }
+    }
+
+
     public string id => target.ID.ToString();
     public int health => target.currentHealth;
 
@@ -170,6 +179,7 @@ public class Entity : ControlledMonoBehavour
 
     private void OnDestroy()
     {
+        if (healthBar && healthBar.gameObject)
         Destroy(healthBar.gameObject);
     }
 }

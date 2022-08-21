@@ -137,26 +137,19 @@ public class PlayerHandler : MonoBehaviour
 }
 
 
-public class CharacterHandlerProxy 
+public class CharacterHandlerProxy : EntityProxy
 {
     Character target;
 
     [MoonSharpHidden]
-    public CharacterHandlerProxy(Character p)
+    public CharacterHandlerProxy(Character p) : base(p)
     {
         this.target = p;
     }
 
     public bool isDead() { return (target == null || target.currentHealth <= 0); }
-    public Vector2Int position
-    {
-        get
-        {
-            return target.gridPos;
-        }
-    }
-
-    public double attackRange
+  
+    public float attackRange
     {
         get
         {

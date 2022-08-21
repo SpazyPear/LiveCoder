@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealerProxy
+public class HealerProxy : CharacterHandlerProxy
 {
     Healer target;
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public HealerProxy(Healer p)
+    public HealerProxy(Healer p) : base(p)
     {
         this.target = p;
     }

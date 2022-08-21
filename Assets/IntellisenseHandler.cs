@@ -38,24 +38,32 @@ public class IntellisenseHandler : MonoBehaviour
         if (lastSuggestions.Count > 0 && lastSuggestions.Count != lastSuggestionCount)
         {
             intellisenseParent.gameObject.SetActive(true);
-            
+
         }
         else
         {
             intellisenseParent.gameObject.SetActive(false);
         }
-
+/*
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             intellisenseParent.gameObject.SetActive(false);
             lastSuggestionCount = lastSuggestions.Count;
         }
+*/
+        if (inputField.caretPosition < intellisenseInputField.textInfo.characterInfo.Length)
+        {
+            Vector3 bottomLeft = intellisenseInputField.transform.TransformPoint(intellisenseInputField.textInfo.characterInfo[inputField.caretPosition].bottomLeft);
 
-        Vector3 bottomLeft = intellisenseInputField.transform.TransformPoint(intellisenseInputField.textInfo.characterInfo[inputField.caretPosition].bottomLeft);
 
+            Vector3 buttonSpacePos = intellisenseParent.transform.parent.InverseTransformPoint(bottomLeft);
+            intellisenseParent.transform.localPosition = new Vector3(buttonSpacePos.x, buttonSpacePos.y, 0) + offset;
+        }
+        else
+        {
+            intellisenseParent.gameObject.SetActive(false);
 
-        Vector3 buttonSpacePos = intellisenseParent.transform.parent.InverseTransformPoint(bottomLeft);
-        intellisenseParent.transform.localPosition = new Vector3(buttonSpacePos.x, buttonSpacePos.y, 0) + offset;
+        }
 
     }
 

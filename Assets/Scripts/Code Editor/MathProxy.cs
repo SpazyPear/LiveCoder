@@ -7,6 +7,19 @@ public class VectorMath
 
 }
 
+public class MathHelpers
+{
+
+}
+
+public class MathProxy { 
+
+    public int round (float val)
+    {
+        return Mathf.RoundToInt(val);
+    }
+
+}
 public class VectorMathProxy
 {
     public Vector2Float add (Vector2Float a, Vector2Float b)

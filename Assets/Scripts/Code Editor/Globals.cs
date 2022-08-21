@@ -60,6 +60,9 @@ class GlobalManager
         RegisterProxy<WallProxy, Wall>(r => new WallProxy(r));
         RegisterProxy<CoinStoreProxy, CoinStore>(r => new CoinStoreProxy(r));
 
+
+        RegisterProxy<MathProxy, MathHelpers>(r => new MathProxy());
+
         RegisterProxy<Vector2Proxy, Vector2Float>(r => new Vector2Proxy(r));
 
 
@@ -106,9 +109,9 @@ class GlobalManager
         return val.Table.Length;
     }
 
-    public int dist (Vector2Int a, Vector2Int b)
+    public float dist (Vector2Int a, Vector2Int b)
     {
-        return Mathf.RoundToInt(Mathf.Floor(Vector2Int.Distance(a, b)));
+        return Mathf.Floor(Vector2Int.Distance(a, b));
     }
 
     public void printVec2(Vector2Int vec)
@@ -159,7 +162,7 @@ class GlobalManager
         /*
                 script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
         */
-        RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, int>>(script, "dist", dist, ((System.Func<Vector2Int, Vector2Int, int>)dist).Method);
+        RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, float>>(script, "dist", dist, ((System.Func<Vector2Int, Vector2Int, float>)dist).Method);
 
     }
 
@@ -184,6 +187,7 @@ class GlobalManager
 
         script.Globals["current"] = target;
         script.Globals["vector2"] = new VectorMath();
+        script.Globals["math"] = new MathHelpers();
     }
 
     public void OnScriptPreStep (Script script)

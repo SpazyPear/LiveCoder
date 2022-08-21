@@ -5,12 +5,12 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 
-public class WallProxy
+public class WallProxy : EntityProxy
 {
     Entity target;
 
     [MoonSharpHidden]
-    public WallProxy(Wall p)
+    public WallProxy(Wall p) : base(p)
     {
         this.target = p;
     }

@@ -234,21 +234,29 @@ public class CodeExecutor : MonoBehaviour
 
     void printListCS(List<CodeSuggestion> strings)
     {
-        if (strings == null) return;
-
-        string b = "[";
-        foreach (CodeSuggestion s in strings)
+        try
         {
-            if (s.type == CodeSuggestionType.Function)
-            b += "(" + s.returnType.ToString() + ")" + s.name + " => " + giveList(s.parameters.Select((a) => "{" + a.name + ":" + a.type + "}").ToList()) + " " + ",";
-            else
-                b += "(" + s.returnType.ToString() + ")" + s.name + " " + ",";
 
+            if (strings == null) return;
+
+            string b = "[";
+            foreach (CodeSuggestion s in strings)
+            {
+                if (s.type == CodeSuggestionType.Function)
+                    b += "(" + s.returnType.ToString() + ")" + s.name + " => " + giveList(s.parameters.Select((a) => "{" + a.name + ":" + a.type + "}").ToList()) + " " + ",";
+                else
+                    b += "(" + s.returnType.ToString() + ")" + s.name + " " + ",";
+
+            }
+
+            b += "]";
+            print(b);
 
         }
+        catch (System.Exception e)
+        {
 
-        b += "]";
-        print(b);
+        }
     }
 
 
@@ -359,26 +367,33 @@ public class CodeExecutor : MonoBehaviour
 
     string getLastWord(string value)
     {
-        string sub = value.Substring(0, input.caretPosition + 1).Trim();
-
-        int lastIndex = sub.LastIndexOf(' ');
-        int lastNewLineIndex = sub.LastIndexOf('\n');
-        int lastBracketIndex = sub.LastIndexOf('(');
-
-
-        if (lastIndex == -1) lastIndex = lastNewLineIndex;
-        if (lastIndex < lastNewLineIndex && lastNewLineIndex != -1) lastIndex = lastNewLineIndex;
-
-        if (lastBracketIndex > lastIndex) lastIndex = lastBracketIndex + 1;
-
-
-        if (lastIndex != -1)
+        try
         {
-            try
+            string sub = value.Substring(0, input.caretPosition + 1).Trim();
+
+            int lastIndex = sub.LastIndexOf(' ');
+            int lastNewLineIndex = sub.LastIndexOf('\n');
+            int lastBracketIndex = sub.LastIndexOf('(');
+
+
+            if (lastIndex == -1) lastIndex = lastNewLineIndex;
+            if (lastIndex < lastNewLineIndex && lastNewLineIndex != -1) lastIndex = lastNewLineIndex;
+
+            if (lastBracketIndex > lastIndex) lastIndex = lastBracketIndex + 1;
+
+
+            if (lastIndex != -1)
             {
-                return sub.Substring(lastIndex, (input.caretPosition - lastIndex));
+                try
+                {
+                    return sub.Substring(lastIndex, (input.caretPosition - lastIndex));
+                }
+                catch (System.Exception e) { return ""; }
             }
-            catch (System.Exception e) { return ""; }
+        }
+        catch (System.Exception e)
+        {
+            return "";
         }
 
         return "";

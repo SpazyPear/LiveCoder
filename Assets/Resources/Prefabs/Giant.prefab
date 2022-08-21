@@ -2433,8 +2433,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9168144760825188083}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalPosition: {x: 0, y: -0.43, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.4698862, z: 1.4698862}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1382328150431661639}
@@ -2503,28 +2503,24 @@ MonoBehaviour:
   codeContext:
     source: 'function OnStart()
 
-      
+
 
       end
 
-      
+
 
       function OnStep()
 
-      
+
 
       end'
     character: {fileID: 0}
     ownerPlayer: 0
+    shouldExecute: 1
   ID: 0
   isDisabled: 0
   entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
-  codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
-    character: {fileID: 0}
-    ownerPlayer: 0
-  tweener: {fileID: 0}
+  tweener: {fileID: 6999732456707353362}
   isMoveThreadRunning: 0
   currentEnergy: 0
   debugMove: 0

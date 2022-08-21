@@ -134,7 +134,7 @@ MonoBehaviour:
     shouldExecute: 0
   ID: 0
   isDisabled: 0
-  entityData: {fileID: 0}
+  entityData: {fileID: 11400000, guid: 9d2d2d53641051c47a44af52588e5a47, type: 2}
 --- !u!54 &1720912357681984975
 Rigidbody:
   m_ObjectHideFlags: 0

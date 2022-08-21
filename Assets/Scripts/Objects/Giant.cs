@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 
-public class GiantProxy
+public class GiantProxy : CharacterHandlerProxy
 {
     Giant target;
 
     [MoonSharp.Interpreter.MoonSharpHidden]
-    public GiantProxy(Giant p)
+    public GiantProxy(Giant p) : base(p)
     {
         this.target = p;
     }
