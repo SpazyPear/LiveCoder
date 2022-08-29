@@ -16,8 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject coinStorePrefab;
     public int numOfOreToSpawn;
     public GameObject orePrefab;
-    public PlayerManager attackingPlayer;
-    public PlayerManager defendingPlayer;
+    public List<PlayerManager> players;
     [HideInInspector]
     public static PlayerManager activePlayer;
     public DragDropManager dragDropManager;
@@ -85,9 +84,9 @@ public class GameManager : MonoBehaviour
     void changeActivePlayers(int turn)
     {
         if (turn == 0)
-            activePlayer = defendingPlayer;
+            activePlayer = players[0];
         else 
-            activePlayer = attackingPlayer;
+            activePlayer = players[1];
 
     }
 
@@ -108,12 +107,11 @@ public class GameManager : MonoBehaviour
                 round++;
                 changeActivePlayers(0);
                 uiManager.togglePlayerUI();
-                defendingPlayer.creditsLeft.value += gameData.defenceGoldIncrease[round - 1];
-                attackingPlayer.creditsLeft.value += gameData.attackGoldIncrease[round - 1];
+                players.ForEach((PlayerManager player) => player.creditsLeft.value += gameData.baseGoldIncrease[round - 1]);
                 break;
             case 1:
                 dragDropManager.gameObject.SetActive(false);
-                activePlayer = defendingPlayer;
+                activePlayer = players[1];
                 uiManager.togglePlayerUI();
                 codeExecutor.RunCode();
                 break;
@@ -127,12 +125,15 @@ public class GameManager : MonoBehaviour
 
     void spawnStartingObjects()
     {
-        GameObject instance = spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
-        instance.GetComponentInChildren<Tower>().ownerPlayer = defendingPlayer;
-        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0));
+        spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0), 0);
+        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0), 0);
+
+        spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0), 1);
+        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0), 1);
+
     }
     
-    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false)
+    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, int? ownerPlayer = null, bool ignorePosClash = false)
     {
         if (!State.validMovePosition(pos) && !ignorePosClash)
         {
@@ -140,6 +141,10 @@ public class GameManager : MonoBehaviour
         }
         GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
         placeOnGrid(instance, pos);
+        
+        if (ownerPlayer != null)
+            instance.GetComponentInChildren<Entity>().ownerPlayer = State.gameManager.players[(int)ownerPlayer];
+        
         return instance;
     }
 

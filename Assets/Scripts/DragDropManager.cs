@@ -11,12 +11,9 @@ public class DragAndDropType
 public class DragDropManager : MonoBehaviour
 {
     public Canvas canvas;
-    public List<DragAndDropType> attackChoices = new List<DragAndDropType>();
-    public List<DragAndDropType> defenceChoices = new List<DragAndDropType>();
+    public List<DragAndDropType> unitChoices = new List<DragAndDropType>();
     public Transform dragDropTransform;
     public UIManager uiManager;
-    bool attacking;
-    public List<DragAndDropType> activeChoices { get { return attacking ? attackChoices : defenceChoices; } }
 
     private void Start() { 
         updateChoices();
@@ -26,8 +23,7 @@ public class DragDropManager : MonoBehaviour
     public void updateChoices()
     {
         clearPanel();
-        attacking = GameManager.activePlayer.isAttacking;
-        foreach (DragAndDropType type in activeChoices)
+        foreach (DragAndDropType type in unitChoices)
         {
             Transform t = Transform.Instantiate(dragDropTransform, transform);
             t.GetComponent<DragAndDropUnit>().canvas = canvas;

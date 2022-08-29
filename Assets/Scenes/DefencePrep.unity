@@ -478,8 +478,9 @@ MonoBehaviour:
   numOfOreToSpawn: 0
   orePrefab: {fileID: 4371683540530790515, guid: 0bdda41cccd2ada4390681905cf32f89,
     type: 3}
-  attackingPlayer: {fileID: 427652263}
-  defendingPlayer: {fileID: 1586094916}
+  players:
+  - {fileID: 427652263}
+  - {fileID: 1586094916}
   dragDropManager: {fileID: 360286193}
   counter: 0
 --- !u!4 &143205207
@@ -495,7 +496,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &143205208
 MonoBehaviour:
@@ -1169,7 +1170,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
@@ -1566,17 +1567,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1407332138}
-  attackChoices:
+  unitChoices:
+  - characterType: Wall
+  - characterType: Turret
   - characterType: Soldier
   - characterType: Giant
   - characterType: Healer
-  defenceChoices:
-  - characterType: Turret
-  - characterType: Wall
   - characterType: Trap
   dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
     type: 3}
-  uiManager: {fileID: 0}
+  uiManager: {fileID: 143205210}
 --- !u!114 &360286195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1684,7 +1684,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
@@ -1779,7 +1779,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
@@ -1825,7 +1825,7 @@ MonoBehaviour:
   gameData: {fileID: 0}
   playerID: 0
   units: []
-  isAttacking: 1
+  isAttacking: 0
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0
@@ -1839,7 +1839,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &429152101
 GameObject:
@@ -2228,7 +2228,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &653181594
 GameObject:
@@ -3206,7 +3206,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1025263396
 GameObject:
@@ -3273,7 +3273,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1039840448
 GameObject:
@@ -4286,7 +4286,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1341797143
 MonoBehaviour:
@@ -4488,7 +4488,7 @@ RectTransform:
   - {fileID: 158202351}
   - {fileID: 801559663}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5621,7 +5621,7 @@ MonoBehaviour:
   gameData: {fileID: 0}
   playerID: 1
   units: []
-  isAttacking: 0
+  isAttacking: 1
 --- !u!4 &1586094917
 Transform:
   m_ObjectHideFlags: 0
@@ -5635,7 +5635,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1595046650
 GameObject:
@@ -6852,5 +6852,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -25,10 +25,6 @@ public class PlayerManager : ControlledMonoBehavour
     {
         GameManager.OnPhaseChange.AddListener(changePhase);
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
-        /*if (isAttacking)
-            creditsLeft.value += gameData.attackGoldIncrease[0];
-        else
-            creditsLeft.value += gameData.defenceGoldIncrease[0];*/
     }
 
     void changePhase(int newPhase)

@@ -32,10 +32,7 @@ public abstract class Character : Entity
     public virtual void Start()
     {
         initializeUnit();
-        
     }
-
-    
 
     public override void OnStep()
     {
