@@ -15,10 +15,10 @@ public class DragDropManager : MonoBehaviour
     public Transform dragDropTransform;
     public UIManager uiManager;
 
-    private void Start() { 
+    private void Start() 
+    { 
         updateChoices();
     }
-
 
     public void updateChoices()
     {

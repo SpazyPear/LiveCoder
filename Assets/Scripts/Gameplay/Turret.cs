@@ -14,7 +14,7 @@ public class TurretProxy : EntityProxy
     }
 
     public void targetCharacter(Character enemy) => target.target(enemy);
-    public void shootCharacter() => target.shoot();
+    public void shoot() => target.shoot();
 
     public void lookAt(Vector2Float pos) => target.lookAt(pos);
 

@@ -70,8 +70,6 @@ public class GameManager : MonoBehaviour
         if (playersReadied >= 2)
         {
             playersReadied = 0;
-            
-
             incrementPhase();
         }
         else

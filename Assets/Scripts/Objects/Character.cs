@@ -186,15 +186,6 @@ public abstract class Character : Entity
         
     }
 
-    public override void die(object sender = null)
-    {
-        ownerPlayer.units.Remove(this);
-        if (ownerPlayer.units.Count == 0)
-            GameManager.OnAttackUnitsCleared.Invoke();
-        base.die();
-    }
-
-
     public override void OnEMPDisable(float strength)
     {
         base.OnEMPDisable(strength);

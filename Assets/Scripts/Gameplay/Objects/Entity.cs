@@ -54,6 +54,11 @@ public class Entity : ControlledMonoBehavour
     [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual async void die(object sender = null)
     {
+
+        ownerPlayer.units.Remove(this);
+        if (ownerPlayer.units.Count == 0)
+            GameManager.OnAttackUnitsCleared.Invoke();
+        
         float timer = 0;
 
 
