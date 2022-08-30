@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     public GameData gameData;
     public UIManager uiManager;
     public static Vector3 gridDimensions;
-    public GameObject towerPrefab;
-    public GameObject coinStorePrefab;
     public int numOfOreToSpawn;
     public GameObject orePrefab;
     public List<PlayerManager> players;
@@ -59,7 +57,6 @@ public class GameManager : MonoBehaviour
         OnPhaseChange.AddListener(SetIDs);
         OnPhaseChange.AddListener(phaseEnter);
         OnAttackUnitsCleared.AddListener(unitsCleared);
-        spawnStartingObjects();
         spawnOreDeposits();
         OnPhaseChange.Invoke(0);
     }
@@ -120,18 +117,8 @@ public class GameManager : MonoBehaviour
     {
         OnPhaseChange.Invoke(2);
     }
-
-    void spawnStartingObjects()
-    {
-        spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0), 0);
-        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0), 0);
-
-        spawnOnGrid(towerPrefab, new Vector2Int(State.GridContents.GetLength(0) / 2, 0), 1);
-        spawnOnGrid(coinStorePrefab, new Vector2Int((State.GridContents.GetLength(0) / 2) + 1, 0), 1);
-
-    }
     
-    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, int? ownerPlayer = null, bool ignorePosClash = false)
+    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false, bool isLeftSide = false)
     {
         if (!State.validMovePosition(pos) && !ignorePosClash)
         {
@@ -139,10 +126,9 @@ public class GameManager : MonoBehaviour
         }
         GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
         placeOnGrid(instance, pos);
-        
-        if (ownerPlayer != null)
-            instance.GetComponentInChildren<Entity>().ownerPlayer = State.gameManager.players[(int)ownerPlayer];
-        
+        if (isLeftSide) instance.transform.Rotate(0, 180, 0);
+
+
         return instance;
     }
 

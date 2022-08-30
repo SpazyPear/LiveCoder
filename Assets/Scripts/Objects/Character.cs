@@ -29,8 +29,9 @@ public abstract class Character : Entity
     const float shakeDuration = 0.3f;
     const float shakeMagnitude = 1f;
 
-    public virtual void Start()
+    public override void Start()
     {
+        base.Start();
         initializeUnit();
     }
 

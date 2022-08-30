@@ -1825,7 +1825,7 @@ MonoBehaviour:
   gameData: {fileID: 0}
   playerID: 0
   units: []
-  isAttacking: 0
+  isLeftSide: 1
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0
@@ -5621,7 +5621,7 @@ MonoBehaviour:
   gameData: {fileID: 0}
   playerID: 1
   units: []
-  isAttacking: 1
+  isLeftSide: 0
 --- !u!4 &1586094917
 Transform:
   m_ObjectHideFlags: 0

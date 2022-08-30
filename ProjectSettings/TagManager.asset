@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Entity
   - Tower
+  - Shield
   layers:
   - Default
   - TransparentFX

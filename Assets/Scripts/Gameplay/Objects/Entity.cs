@@ -79,9 +79,14 @@ public class Entity : ControlledMonoBehavour
         Destroy(gameObject);
     }
 
-    private void Awake()
+    public virtual void Start()
     {
-        codeContext.character = this;
+
+    }
+
+    public virtual void Awake()
+    {
+        codeContext.entity = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
@@ -91,12 +96,7 @@ public class Entity : ControlledMonoBehavour
        // healthBar.value = currentHealth;
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
+    public virtual void Update()
     {
        
         Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(transform.position + new Vector3(0, 13f, 0));

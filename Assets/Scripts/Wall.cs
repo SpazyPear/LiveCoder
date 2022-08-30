@@ -62,7 +62,7 @@ public class Wall : Entity
 
     void ReplaceWithCorner()
     {
-        GameManager.spawnOnGrid(Resources.Load("Prefabs/CornerWall") as GameObject, gridPos, null, true);
+        GameManager.spawnOnGrid(Resources.Load("Prefabs/CornerWall") as GameObject, gridPos, true);
         Destroy(transform.parent.gameObject);
     }
 

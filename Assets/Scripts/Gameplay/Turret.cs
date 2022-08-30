@@ -23,7 +23,7 @@ public class TurretProxy : EntityProxy
 public class Turret : Entity
 {
 
-    TurretData turretData;
+    TurretData turretData { get { return entityData as TurretData; } }
     GameObject projectile;
     Character currentTarget;
     Transform pivot;
@@ -32,12 +32,12 @@ public class Turret : Entity
     public Transform shootPoint;
     bool rotatingBarrel;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         pivot = transform.GetChild(0);
         shootPS = GetComponentInChildren<ParticleSystem>();
-        
     }
 
     public override void OnStart()
@@ -61,6 +61,8 @@ public class Turret : Entity
         if (!isDisabled)
         {
             GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
+            obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = ownerPlayer;
+            obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.prpjectileAliveTime;
             obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
             shootPS.Play();
         }
