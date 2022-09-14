@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ public class Tweener : MonoBehaviour
         {
             if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.04f)
             {
+                print(activeTween.Target.position + " " + activeTween.Target.name);
                 tweenActive = true;
                 float timeFraction = (Time.time - activeTween.StartTime) / activeTween.Duration;
                 float newTime = Mathf.Pow(timeFraction, 2);
@@ -37,7 +39,6 @@ public class Tweener : MonoBehaviour
                 activeTween.Target.position = activeTween.EndPos;
                 tweenActive = false;
                 activeTween = null;
-
             }
         }
            
@@ -47,7 +48,6 @@ public class Tweener : MonoBehaviour
     {
         await waitForComplete();
         activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration);
-        
     }
 
     public async Task waitForComplete()

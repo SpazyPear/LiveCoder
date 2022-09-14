@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon.StructWrapping;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -23,15 +24,15 @@ public class PlayerHandler : MonoBehaviour
           
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
+                if (hit.transform != null && hit.transform.GetComponentInParent<Entity>() != null)
                 {
                     print($"Player {hit.transform.parent} has been selected");
 
 
-                    if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
+                    if (hit.transform.GetComponentInParent<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                     {
                         this.multipleSelectedPlayers.Clear();
-                        this.selectedPlayer = hit.transform.GetComponentInChildren<Entity>();
+                        this.selectedPlayer = hit.transform.GetComponentInParent<Entity>();
 
 
                         GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
@@ -157,22 +158,20 @@ public class CharacterHandlerProxy : EntityProxy
         }
     }
 
-    public void MovePlayer(Vector2Int move) { target.moveUnit(move.x, move.y); }
+    public void MovePlayer(Vector2Int move) { target.replicatedMove(move.x, move.y); }
     public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
     public bool PathCompleted() { return target.PathCompleted(); }
     public void MoveOnPathNext() { target.MoveOnPathNext(); }
 
     public bool IsInRange(Entity entity) { return target.checkForInRangeEntities<Entity>().Contains(entity); } // make good
 
-    public void Attack(Entity entity) { target.attack(entity); }
+    public void Attack(Entity entity) { target.photonView.RPC("attack", Photon.Pun.RpcTarget.All, entity.GetInstanceID()); }
 
-    public void CollectOre(OreDeposit ore) { target.attack(ore); }
+    //public void CollectOre(OreDeposit ore) { target.attack(ore); }
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
     public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
 
     public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
-
-
 
 }
 

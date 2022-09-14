@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MoonSharp.Interpreter;
 using System;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class EntityProxy
 {
@@ -49,6 +50,7 @@ public class Entity : ControlledMonoBehavour
     RectTransform CanvasRect;
     RectTransform healthBarObj;
     protected Slider healthBar;
+    public PhotonView photonView;
    
 
     [MoonSharp.Interpreter.MoonSharpHidden]
@@ -81,7 +83,7 @@ public class Entity : ControlledMonoBehavour
 
     public virtual void Start()
     {
-
+        GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
     }
 
     public virtual void Awake()
@@ -93,6 +95,7 @@ public class Entity : ControlledMonoBehavour
         healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
         currentHealth = entityData.maxHealth;
         healthBar = healthBarObj.GetComponentInChildren<Slider>();
+        photonView = GetComponentInParent<PhotonView>();
        // healthBar.value = currentHealth;
     }
 
@@ -194,6 +197,15 @@ public class Entity : ControlledMonoBehavour
         }
         isDisabled = true;
         EMPTimer(strength);
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedTeleport(float x, float y, float z, float pitch, float yaw, float roll, int gridX, int gridY)
+    {
+        transform.position = new Vector3(x, y, z);
+        transform.rotation = Quaternion.Euler(pitch, yaw, roll);
+        gridPos = new Vector2Int(gridX, gridY);
+        yield return null;
     }
 
     private void OnDestroy()

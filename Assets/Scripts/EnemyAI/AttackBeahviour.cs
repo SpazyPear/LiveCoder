@@ -18,11 +18,11 @@ public class AttackBeahviour : StateMachineBehaviour
 
     void OnStep()
     {
-        if (attacking != null)
+       /* if (attacking != null)
             unit.attack(attacking);
         else
             animator.SetBool("Attack", false);
-
+*/
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public enum CLASSTYPE
 {
@@ -13,7 +14,7 @@ public enum CLASSTYPE
     Scout
 }
 
-public abstract class Character : Entity
+public abstract class Character : Entity, ICommandHandler
 {
 
     [HideInInspector]
@@ -73,7 +74,7 @@ public abstract class Character : Entity
         {
             if (moveIndex < moveSet.Count)
             {
-                moveUnit(moveSet[moveIndex].x, moveSet[moveIndex].y);
+                replicatedMove(moveSet[moveIndex].x, moveSet[moveIndex].y);
                 moveIndex += 1;
             }
             else
@@ -118,9 +119,15 @@ public abstract class Character : Entity
         }
     }
 
-    public void moveUnit(int XDirection, int YDirecton)
+    public void replicatedMove(int x, int y)
     {
-        if (currentEnergy > 0 && !isDisabled)
+        photonView.RPC("moveUnit", RpcTarget.All, x, y);
+    }
+
+    [PunRPC]
+    public IEnumerator moveUnit(int XDirection, int YDirecton)
+    {
+        if (!isDisabled)
         {
             if (checkPosOnGrid(new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton)))
             {
@@ -136,6 +143,7 @@ public abstract class Character : Entity
                 ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
             }
         }
+        yield return null;
     }
 
     public bool checkPosOnGrid(Vector2Int pos)
@@ -170,27 +178,38 @@ public abstract class Character : Entity
     {
         currentEnergy += data.value;
     }
-    
 
-    public virtual void attack<T> (T target) where T : Entity
+    [PunRPC]
+    public virtual IEnumerator attack (int targetInstance)
     {
-        if (target != null && currentEnergy > 0 && checkForInRangeEntities<T>().Contains(target) && !isDisabled)
+        Entity target = GameManager.unitInstances[targetInstance];
+        if (target != null && currentEnergy > 0 && checkForInRangeEntities<Entity>().Contains(target) && !isDisabled)
         {
             target.takeDamage(1, this);
         }
-
         else
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
         }
         currentEnergy--;
-        
+        yield return null;
     }
 
     public override void OnEMPDisable(float strength)
     {
         base.OnEMPDisable(strength);
-        
+    }
+
+    public void HandleCommand(Command command)
+    {
+        /*if (command is MoveCommand)
+        {
+            MoveTo(new Vector2Int((command as MoveCommand).x, (command as MoveCommand).y));
+        }
+        else if (command is AttackCommand)
+        {
+            attack((command as AttackCommand).toAttack);
+        }*/
     }
 
 }

@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
+    public static PhotonView photonView;
     public GridManager gridManager;
     public CodeExecutor codeExecutor;
     public GameData gameData;
@@ -22,6 +25,7 @@ public class GameManager : MonoBehaviour
     int playersReadied;
     int round = 0;
     public int counter = 0;
+    public static Dictionary<int, Entity> unitInstances = new Dictionary<int, Entity>(); 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
     public static UnityEvent OnAttackUnitsCleared = new UnityEvent();
 
@@ -29,7 +33,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        State.gameManager = this; 
+        State.gameManager = this;
+        photonView = GetComponent<PhotonView>();
     }
 
     void Start()
@@ -124,7 +129,8 @@ public class GameManager : MonoBehaviour
         {
             return null;
         }
-        GameObject instance = Instantiate(obj, Vector3.zero, Quaternion.identity);
+        
+        GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
         placeOnGrid(instance, pos);
         if (isLeftSide) instance.transform.Rotate(0, 180, 0);
 
@@ -141,6 +147,7 @@ public class GameManager : MonoBehaviour
         State.GridContents[pos.x, pos.y].Entity = obj;
 
         obj.GetComponentInChildren<Entity>().gridPos = pos;
+        obj.GetComponentInChildren<Entity>().photonView.RPC("replicatedTeleport", RpcTarget.Others, obj.transform.position.x, obj.transform.position.y, obj.transform.position.z, obj.transform.rotation.x, obj.transform.rotation.y, obj.transform.rotation.z, pos.x, pos.y);
     }
 
     public static PlayerManager findPlayer(int playerID)
@@ -220,4 +227,5 @@ public class GameManager : MonoBehaviour
             spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
         }
     }
+
 }

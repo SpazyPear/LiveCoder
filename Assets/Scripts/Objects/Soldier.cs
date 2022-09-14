@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using MoonSharp.Interpreter;
+using Photon.Pun;
+using static UnityEngine.EventSystems.EventTrigger;
+using static UnityEngine.GraphicsBuffer;
 
 public class SoldierProxy : CharacterHandlerProxy
 {
@@ -28,12 +31,10 @@ public class Soldier : Character
         }
     }
     // Start is called before the first frame update
-    new void Start()
+   /* new void Start()
     {
         base.Start();
-    }
-
-    // Update is called once per frame
-
+        photonView.RPC("attack", Photon.Pun.RpcTarget.All, new Entity());
+    }*/
 
 }
