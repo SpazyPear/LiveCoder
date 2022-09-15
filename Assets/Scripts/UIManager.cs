@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
@@ -20,6 +21,12 @@ public class UIManager : MonoBehaviour
 
     void phaseUIChange(int phase)
     {
+        GameManager.photonView.RPC("replicatedPhaseUIChange", RpcTarget.All, phase);
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedPhaseUIChange(int phase)
+    {
         switch (phase)
         {
             case 0:
@@ -32,6 +39,7 @@ public class UIManager : MonoBehaviour
                 resultsPhase();
                 break;
         }
+        yield return null;
     }
 
     private void Update()
@@ -58,14 +66,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void togglePlayerUI()
+    [PunRPC]
+    public IEnumerator playerReady(string player)
     {
-        dragDropManager.updateChoices();
-        if (GameManager.activePlayer.isLeftSide)
-            playerLabel.text = "Player 1";
-        else
-            playerLabel.text = "Player 2";
-        creditCounter.text = GameManager.activePlayer.creditsLeft.value.ToString();
+        playerLabel.text = player == PhotonNetwork.LocalPlayer.UserId ? "Waiting for other player" : "Other Player Has Readied";
+        yield return null;
     }
 
     public void updateCreditUI(int value)

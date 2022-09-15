@@ -52,6 +52,10 @@ MonoBehaviour:
   - replicatedDeployShield
   - replicatedPositionShield
   - replicatedAttack
+  - playerReady
+  - replicatedPhaseUIChange
+  - replicatedRunCode
+  - replicatedShoot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

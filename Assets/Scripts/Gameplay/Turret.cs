@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoonSharp.Interpreter;
+using Photon.Pun;
 
 public class TurretProxy : EntityProxy
 {
@@ -56,15 +57,22 @@ public class Turret : Entity
         StartCoroutine(rotateBarrel());
     }
 
-    public void shoot()
+    [PunRPC]
+    IEnumerator replicatedShoot()
+    {
+        GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
+        obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = ownerPlayer;
+        obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.prpjectileAliveTime;
+        obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
+        shootPS.Play();
+        yield return null;
+    }
+
+    public void shoot() //todo action function type that checks if disabled, has energy and depletes energy
     {
         if (!isDisabled)
         {
-            GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
-            obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = ownerPlayer;
-            obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.prpjectileAliveTime;
-            obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
-            shootPS.Play();
+            photonView.RPC("replicatedShoot", RpcTarget.All);
         }
     }
 

@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b2e7abc3438fc4fae39420b2b5db92, type: 3}
   m_Name: GameScriptableObject
   m_EditorClassIdentifier: 
-  baseGoldIncrease: c8000000c8000000c8000000c8000000c8000000
+  initialGold: 200
+  tankKillReward: 30
+  brawlerKillReward: 30
+  supportKillReward: 30

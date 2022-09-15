@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using System.Threading.Tasks;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -33,6 +34,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         print("room joined");
+        //PhotonNetwork.LoadLevel("Multiplayer");
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -46,7 +48,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Application.Quit();
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("Menu");
     }
 
     public void JoinRoom(string room)

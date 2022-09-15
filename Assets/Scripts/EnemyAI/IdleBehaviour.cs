@@ -16,7 +16,7 @@ public class IdleBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log("updated");
-        if (GameManager.findClosestEnemy(unit) != null && Vector2Int.Distance(GameManager.findClosestEnemy(unit).gridPos, unit.gridPos) < pursueRange)
+        if (GridManager.findClosestEnemy(unit) != null && Vector2Int.Distance(GridManager.findClosestEnemy(unit).gridPos, unit.gridPos) < pursueRange)
         {
             animator.SetTrigger("Pursue");
         }

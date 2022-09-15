@@ -75,7 +75,7 @@ public class CodeExecutor : MonoBehaviour
     public void RunCode ()
     {
         StopAllCoroutines();
-        StartCoroutine("AwakeCoroutineLua");
+        StartCoroutine(AwakeCoroutineLua());
     }
 
 
@@ -512,6 +512,7 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
+           // if (!context.entity.GetComponent<Photon.Pun.PhotonView>().IsMine) { continue; }
             try
             {
                 context.script.DoString(context.source);
@@ -530,6 +531,8 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
+            //if (!context.entity.GetComponent<Photon.Pun.PhotonView>().IsMine) { continue; }
+
             if (context.shouldExecute)
             {
                 try

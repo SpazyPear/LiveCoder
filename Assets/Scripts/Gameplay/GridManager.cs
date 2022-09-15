@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Linq;
+using Photon.Pun;
 
 public class GridManager : MonoBehaviour
 {
@@ -14,11 +15,12 @@ public class GridManager : MonoBehaviour
     public GameObject[] tilePrefabs;
     public Transform GridParent;
     public static Material[,] tileMaterials;
-
+    public static PhotonView photonView;
 
     // Start is called before the first frame update
     void Awake()
     {
+        photonView = GetComponent<PhotonView>();
         State.onLevelLoad += generateGrid;
     }
 
@@ -105,6 +107,113 @@ public class GridManager : MonoBehaviour
 
         return costMap;
 
+    }
+
+    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false, bool isLeftSide = false)
+    {
+        if (!State.validMovePosition(pos) && !ignorePosClash)
+        {
+            return null;
+        }
+
+        GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
+        photonView.RPC("placeOnGrid", RpcTarget.AllViaServer, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
+
+        return instance;
+    }
+
+    [PunRPC]
+    public IEnumerator placeOnGrid(int viewID, int x, int y, bool isLeftSide)
+    {
+        GameObject obj = PhotonView.Find(viewID).gameObject;
+        Vector2Int pos = new Vector2Int(x, y);
+        obj.transform.position = State.gridToWorldPos(pos);
+        Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
+        float hieght = (GridHeight / 2);
+        obj.transform.position += new Vector3(0, 1, 0);
+        State.GridContents[pos.x, pos.y].Entity = obj;
+        if (isLeftSide) obj.transform.Rotate(0, 180, 0);
+
+        obj.GetComponentInChildren<Entity>().gridPos = pos;
+        yield return null;
+    }
+
+    public static PlayerManager findPlayer(int playerID)
+    {
+        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
+        {
+            if (player.playerID == playerID)
+                return player;
+        }
+        return null;
+    }
+
+    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Entity
+    {
+        float min = Mathf.Infinity;
+        T closest = null;
+        foreach (T entity in GameObject.FindObjectsOfType<T>())
+        {
+            if (Vector2Int.Distance(sender.gridPos, entity.gridPos) < min)
+            {
+                if (ignoreOwn && entity.ownerPlayer != sender.ownerPlayer)
+                    continue;
+
+                min = Vector2Int.Distance(sender.gridPos, entity.gridPos);
+                closest = entity;
+            }
+        }
+        return closest;
+    }
+
+    public static List<T> checkForInRangeEntities<T>(Vector2Int pos, int range, Entity sender, bool ignoreOwnTeam) where T : Entity
+    {
+        List<T> foundEntities = new List<T>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = -range; y <= range; y++)
+            {
+                try
+                {
+                    if (State.GridContents[pos.x + x, pos.y + y].Entity && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>() != sender)
+                    {
+                        if (ignoreOwnTeam && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>().ownerPlayer == sender.ownerPlayer) continue;
+
+                        foundEntities.Add(State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        return foundEntities;
+    }
+
+    public static Character findClosestEnemy(Character sender)
+    {
+        float min = Mathf.Infinity;
+        Character closest = null;
+        foreach (Character character in GameObject.FindObjectsOfType<Character>())
+        {
+            if (Vector2Int.Distance(sender.gridPos, character.gridPos) < min && character.ownerPlayer != sender.ownerPlayer)
+            {
+                min = Vector2Int.Distance(sender.gridPos, character.gridPos);
+                closest = character;
+            }
+        }
+        return closest;
+    }
+
+    public void spawnOreDeposits()
+    {
+        /*for (int x = 0; x < numOfOreToSpawn / 2; x++)
+        {
+            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(0) / 2)), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+        }
+
+        for (int x = 0; x < numOfOreToSpawn / 2; x++)
+        {
+            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+        }*/
     }
 
 }

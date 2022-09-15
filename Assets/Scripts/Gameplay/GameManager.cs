@@ -6,8 +6,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
 using Unity.VisualScripting;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IOnEventCallback
 {
     public static PhotonView photonView;
     public GridManager gridManager;
@@ -23,19 +25,17 @@ public class GameManager : MonoBehaviour
     public DragDropManager dragDropManager;
     int currentPhase;
     int playersReadied;
-    int round = 0;
     public int counter = 0;
     public static Dictionary<int, Entity> unitInstances = new Dictionary<int, Entity>(); 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
-    public static UnityEvent OnAttackUnitsCleared = new UnityEvent();
-
 
     // Start is called before the first frame update
     void Awake()
     {
+        OnPhaseChange.AddListener(phaseEnter);
         State.gameManager = this;
         photonView = GetComponent<PhotonView>();
-        //photonView.TransferOwnership(PhotonNetwork.MasterClient);
+        activePlayer = FindObjectOfType<PlayerManager>();
     }
 
     void Start()
@@ -60,15 +60,15 @@ public class GameManager : MonoBehaviour
     public void initGameManager(object sender, EventArgs e)
     {
         gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
-       
-        OnPhaseChange.AddListener(SetIDs);
-        OnPhaseChange.AddListener(phaseEnter);
-        OnAttackUnitsCleared.AddListener(unitsCleared);
-        spawnOreDeposits();
-        OnPhaseChange.Invoke(0);
     }
 
     public void OnReadyUp()
+    {
+        if (PhotonNetwork.IsMasterClient) { OnReadyUpRecieved(PhotonNetwork.LocalPlayer.UserId); }
+        else { PhotonNetwork.RaiseEvent(0, PhotonNetwork.LocalPlayer.UserId, new RaiseEventOptions(), new SendOptions()); }
+    }
+
+    public void OnReadyUpRecieved(string player)
     {
         playersReadied++;
         if (playersReadied >= 2)
@@ -78,18 +78,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            changeActivePlayers(1);
-            uiManager.togglePlayerUI();
+            photonView.RPC("playerReady", RpcTarget.All, player);
         }
-    }
-
-    void changeActivePlayers(int turn)
-    {
-        if (turn == 0)
-            activePlayer = players[0];
-        else 
-            activePlayer = players[1];
-
     }
 
     public void incrementPhase()
@@ -101,135 +91,35 @@ public class GameManager : MonoBehaviour
         OnPhaseChange.Invoke(currentPhase);
     }
 
+    [PunRPC]
+    IEnumerator replicatedRunCode()
+    {
+        codeExecutor.RunCode();
+        yield return null;
+    }
+
     public void phaseEnter(int phase)
     {
         switch (phase)
         {
             case 0:
-                round++;
-                changeActivePlayers(0);
-                uiManager.togglePlayerUI();
-                players.ForEach((PlayerManager player) => player.creditsLeft.value += gameData.baseGoldIncrease[round - 1]);
                 break;
             case 1:
-                dragDropManager.gameObject.SetActive(false);
-                activePlayer = players[1];
-                uiManager.togglePlayerUI();
-                codeExecutor.RunCode();
+                photonView.RPC("replicatedRunCode", RpcTarget.All);
                 break;
         }
     }
 
-    void unitsCleared()
+    public void OnEvent(EventData photonEvent)
     {
-        OnPhaseChange.Invoke(2);
-    }
-    
-    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false, bool isLeftSide = false)
-    {
-        if (!State.validMovePosition(pos) && !ignorePosClash)
+        if (photonEvent.Code == 0)
         {
-            return null;
-        }
-        
-        GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
-        photonView.RPC("placeOnGrid", RpcTarget.AllViaServer, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
-
-        return instance;
-    }
-
-    [PunRPC]
-    public IEnumerator placeOnGrid(int viewID, int x, int y, bool isLeftSide)
-    {
-        GameObject obj = PhotonView.Find(viewID).gameObject;
-        Vector2Int pos = new Vector2Int(x, y);
-        obj.transform.position = State.gridToWorldPos(pos);
-        Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
-        float hieght = (gridDimensions.y / 2);
-        obj.transform.position += new Vector3(0, 1, 0);
-        State.GridContents[pos.x, pos.y].Entity = obj;
-        if (isLeftSide) obj.transform.Rotate(0, 180, 0);
-
-        obj.GetComponentInChildren<Entity>().gridPos = pos;
-        yield return null;
-    }
-    
-    public static PlayerManager findPlayer(int playerID)
-    {
-        foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())
-        {
-            if (player.playerID == playerID)
-                return player;
-        }
-        return null;
-    }
-
-    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Entity
-    {
-        float min = Mathf.Infinity;
-        T closest = null;
-        foreach (T entity in GameObject.FindObjectsOfType<T>())
-        {
-            if (Vector2Int.Distance(sender.gridPos, entity.gridPos) < min)
-            {
-                if (ignoreOwn && entity.ownerPlayer != sender.ownerPlayer)
-                    continue;
-
-                min = Vector2Int.Distance(sender.gridPos, entity.gridPos);
-                closest = entity;
-            }
-        }
-        return closest;
-    }
-
-    public static List<T> checkForInRangeEntities<T>(Vector2Int pos, int range, Entity sender, bool ignoreOwnTeam) where T : Entity
-    {
-        List<T> foundEntities = new List<T>();
-        for (int x = -range; x <= range; x++)
-        {
-            for (int y = -range; y <= range; y++)
-            {
-                try
-                {
-                    if (State.GridContents[pos.x + x, pos.y + y].Entity && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>() != sender)
-                    {
-                        if (ignoreOwnTeam && State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren<Entity>().ownerPlayer == sender.ownerPlayer) continue;
-
-                        foundEntities.Add(State.GridContents[pos.x + x, pos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
-                    }
-                }
-                catch (IndexOutOfRangeException) { }
-            }
-        }
-        return foundEntities;
-    }
-
-    public static Character findClosestEnemy(Character sender)
-    {
-        float min = Mathf.Infinity;
-        Character closest = null;
-        foreach (Character character in GameObject.FindObjectsOfType<Character>())
-        {
-            if (Vector2Int.Distance(sender.gridPos, character.gridPos) < min && character.ownerPlayer != sender.ownerPlayer)
-            {
-                min = Vector2Int.Distance(sender.gridPos, character.gridPos);
-                closest = character;
-            }
-        }
-        return closest;
-    }
-
-    public void spawnOreDeposits()
-    {
-        for (int x = 0; x < numOfOreToSpawn / 2; x++)
-        {
-            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(0) / 2)), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
-        }
-
-        for (int x = 0; x < numOfOreToSpawn / 2; x++)
-        {
-            spawnOnGrid(orePrefab, new Vector2Int(UnityEngine.Random.Range(Mathf.CeilToInt(State.GridContents.GetLength(0) / 2), 0), UnityEngine.Random.Range(0, Mathf.CeilToInt(State.GridContents.GetLength(1)))));
+            OnReadyUpRecieved((string)(photonEvent.CustomData));
         }
     }
 
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this); 
+    }
 }

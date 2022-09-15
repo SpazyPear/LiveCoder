@@ -8,7 +8,7 @@ public class UnitSpawner : MonoBehaviour
     public Character spawnUnit(string characterType, Vector2Int spawnPos)
     {
         GameObject prefab = Resources.Load("Prefabs/" + characterType + "Prefab") as GameObject;
-        return GameManager.spawnOnGrid(prefab, spawnPos).GetComponent<Character>();
+        return GridManager.spawnOnGrid(prefab, spawnPos).GetComponent<Character>();
     }
 
 }

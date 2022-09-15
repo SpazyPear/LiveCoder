@@ -11,7 +11,7 @@ public class AttackBeahviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         unit = animator.GetComponent<Soldier>();
-        attacking = GameManager.findClosestEnemy(unit);
+        attacking = GridManager.findClosestEnemy(unit);
         CodeExecutor.onStepActions.Add(OnStep);
         this.animator = animator;
     }

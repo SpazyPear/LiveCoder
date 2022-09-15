@@ -12,7 +12,7 @@ public class PursueBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         unit = animator.GetComponent<Soldier>();
-        chasing = GameManager.findClosestEnemy(unit);
+        chasing = GridManager.findClosestEnemy(unit);
         this.animator = animator;
         CodeExecutor.onStepActions.Add(OnStep);
     }

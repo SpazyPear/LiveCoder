@@ -184,7 +184,7 @@ public abstract class Character : Entity
     {
         if (target != null && currentEnergy > 0 && checkForInRangeEntities<Entity>().Contains(target) && !isDisabled)
         {
-            photonView.RPC("replicatedAttack", RpcTarget.AllViaServer, target.viewID);
+            photonView.RPC("replicatedAttack", RpcTarget.All, target.viewID);
         }
         else
         {

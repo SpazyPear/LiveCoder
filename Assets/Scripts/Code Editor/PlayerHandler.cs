@@ -167,7 +167,6 @@ public class CharacterHandlerProxy : EntityProxy
 
     public void Attack(Entity entity) { target.attack(entity); }
 
-    //public void CollectOre(OreDeposit ore) { target.attack(ore); }
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
     public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
 

@@ -15,7 +15,7 @@ public class PlayerManager : ControlledMonoBehavour
     public BindableValue<int> creditsLeft;
     public int playerID;
     public List<Entity> units;
-    bool isLeftSide;
+    public bool isLeftSide;
 
     void Awake()
     {
@@ -31,14 +31,9 @@ public class PlayerManager : ControlledMonoBehavour
 
     void initPlayer()
     {
+        creditsLeft.value = gameData.initialGold;
         isLeftSide = PhotonNetwork.IsMasterClient;
-        GameManager.OnPhaseChange.AddListener(changePhase);
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
-    }
-
-    void changePhase(int newPhase)
-    {
-        
     }
 
     void spawnStartingObjects()
@@ -57,7 +52,7 @@ public class PlayerManager : ControlledMonoBehavour
                 if (prefab.GetComponentInChildren<Entity>().cost <= creditsLeft.value)
                 {
                     creditsLeft.value -= prefab.GetComponentInChildren<Entity>().cost;
-                    Entity entity = GameManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Entity>();
+                    Entity entity = GridManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Entity>();
                     entity.ownerPlayer = this;
                     units.Add(entity);
                     return entity;
