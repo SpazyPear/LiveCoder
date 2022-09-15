@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         State.gameManager = this;
         photonView = GetComponent<PhotonView>();
+        //photonView.TransferOwnership(PhotonNetwork.MasterClient);
     }
 
     void Start()
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
     public void initGameManager(object sender, EventArgs e)
     {
         gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
+       
         OnPhaseChange.AddListener(SetIDs);
         OnPhaseChange.AddListener(phaseEnter);
         OnAttackUnitsCleared.AddListener(unitsCleared);
@@ -131,25 +133,27 @@ public class GameManager : MonoBehaviour
         }
         
         GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
-        placeOnGrid(instance, pos);
-        if (isLeftSide) instance.transform.Rotate(0, 180, 0);
-
+        photonView.RPC("placeOnGrid", RpcTarget.AllViaServer, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
 
         return instance;
     }
 
-    public static void placeOnGrid(GameObject obj, Vector2Int pos)
+    [PunRPC]
+    public IEnumerator placeOnGrid(int viewID, int x, int y, bool isLeftSide)
     {
+        GameObject obj = PhotonView.Find(viewID).gameObject;
+        Vector2Int pos = new Vector2Int(x, y);
         obj.transform.position = State.gridToWorldPos(pos);
         Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
-        float y = (gridDimensions.y / 2);
+        float hieght = (gridDimensions.y / 2);
         obj.transform.position += new Vector3(0, 1, 0);
         State.GridContents[pos.x, pos.y].Entity = obj;
+        if (isLeftSide) obj.transform.Rotate(0, 180, 0);
 
         obj.GetComponentInChildren<Entity>().gridPos = pos;
-        obj.GetComponentInChildren<Entity>().photonView.RPC("replicatedTeleport", RpcTarget.Others, obj.transform.position.x, obj.transform.position.y, obj.transform.position.z, obj.transform.rotation.x, obj.transform.rotation.y, obj.transform.rotation.z, pos.x, pos.y);
+        yield return null;
     }
-
+    
     public static PlayerManager findPlayer(int playerID)
     {
         foreach (PlayerManager player in GameObject.FindObjectsOfType<PlayerManager>())

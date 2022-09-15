@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ public class PlayerManager : ControlledMonoBehavour
     public BindableValue<int> creditsLeft;
     public int playerID;
     public List<Entity> units;
-    public bool isLeftSide;
+    bool isLeftSide;
 
     void Awake()
     {
@@ -23,11 +25,13 @@ public class PlayerManager : ControlledMonoBehavour
 
     void Start()
     {
+        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { { "PlayerID", playerID } });
         spawnStartingObjects();
     }
 
     void initPlayer()
     {
+        isLeftSide = PhotonNetwork.IsMasterClient;
         GameManager.OnPhaseChange.AddListener(changePhase);
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
     }

@@ -1066,6 +1066,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7518361587917889574}
+  - component: {fileID: 8882145208190843747}
+  - component: {fileID: 4981651499132042998}
+  - component: {fileID: 6174151669837868949}
   m_Layer: 0
   m_Name: Healer
   m_TagString: Untagged
@@ -1091,6 +1094,86 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8882145208190843747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2411851710539245144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18560728b6cbe854da8b43efdf0ed8bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: {fileID: 0}
+  cost: 0
+  codeContext:
+    source: 'function OnStart()
+
+
+
+      end
+
+
+
+      function OnStep()
+
+
+
+      end'
+    entity: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 1
+  ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: c1ead4b0adfe9e44c8694a23edc07ec8, type: 2}
+  photonView: {fileID: 0}
+  tweener: {fileID: 4981651499132042998}
+  isMoveThreadRunning: 0
+  currentEnergy: 0
+  debugMove: 0
+  startInScene: 0
+  healRing: {fileID: 5188236973041117018}
+  healCrosses: {fileID: 8779315153691298738}
+--- !u!114 &4981651499132042998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2411851710539245144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6174151669837868949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2411851710539245144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2444336303192592334
 GameObject:
   m_ObjectHideFlags: 0
@@ -3375,8 +3458,6 @@ GameObject:
   - component: {fileID: 5800564381703160497}
   - component: {fileID: 367629159538035023}
   - component: {fileID: 4656594405058640800}
-  - component: {fileID: 8648184574147610047}
-  - component: {fileID: 3972212262426764507}
   m_Layer: 0
   m_Name: SM_Chr_ScifiWorlds_SpaceSuit_Alien_Female_01
   m_TagString: Untagged
@@ -3448,63 +3529,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2.77, z: 1}
   m_Center: {x: 0, y: 1.18, z: 0}
---- !u!114 &8648184574147610047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8024516875533601339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18560728b6cbe854da8b43efdf0ed8bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 0
-  selfDestructRange: 2
-  selfDestructDamage: 2
-  gridPos: {x: 0, y: 0}
-  ownerPlayer: {fileID: 0}
-  cost: 0
-  codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
-    character: {fileID: 0}
-    ownerPlayer: 0
-    shouldExecute: 1
-  ID: 0
-  isDisabled: 0
-  entityData: {fileID: 11400000, guid: c1ead4b0adfe9e44c8694a23edc07ec8, type: 2}
-  tweener: {fileID: 3972212262426764507}
-  isMoveThreadRunning: 0
-  currentEnergy: 0
-  debugMove: 0
-  startInScene: 0
-  healRing: {fileID: 5188236973041117018}
-  healCrosses: {fileID: 8779315153691298738}
---- !u!114 &3972212262426764507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8024516875533601339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8161680230514868510
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.Threading.Tasks;
+using Photon.Realtime;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
 
-    public bool LobbyJoined;
+    public bool Host;
+    public bool LevelLoaded;
 
     void Start()
     {
-        //DontDestroyOnLoad(this);
+        DontDestroyOnLoad(this);
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -22,24 +25,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby();
     }
 
-    public override async void OnJoinedLobby()
+    public override void OnJoinedLobby()
     {
         print("lobby joined");
-
-        /*if (Application.isEditor)
-            PhotonNetwork.CreateRoom("Room", new Photon.Realtime.RoomOptions { MaxPlayers = 2 }, null);
-        else
-        {
-            await Task.Delay(3000);
-            PhotonNetwork.JoinRoom("Room");
-        }*/
-        LobbyJoined = true;
     }
 
     public override void OnJoinedRoom()
     {
         print("room joined");
-        PhotonNetwork.LoadLevel("Multiplayer");
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (Host && !LevelLoaded)
+        {
+            LevelLoaded = true;
+            PhotonNetwork.LoadLevel("Multiplayer");
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Application.Quit();
     }
 
     public void JoinRoom(string room)
@@ -49,6 +56,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string room)
     {
+        Host = true;
         PhotonNetwork.CreateRoom(room, new Photon.Realtime.RoomOptions { MaxPlayers = 2 }, null);
     }
 

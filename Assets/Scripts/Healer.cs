@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class HealerProxy : CharacterHandlerProxy
 {
@@ -28,17 +29,24 @@ public class Healer : Character
     {
         if (!isDisabled)
         {
-            playHealFX();
-            List<Character> inRangeCharacters = checkForInRangeEntities<Character>();
-            foreach (Character c in inRangeCharacters)
-            {
-                try
-                {
-                    c.currentHealth += healerData.healRate;
-                }
-                catch (System.Exception e) { }
-            }
+            photonView.RPC("replicatedHeal", RpcTarget.AllViaServer);
         }
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedHeal() 
+    {
+        playHealFX();
+        List<Character> inRangeCharacters = checkForInRangeEntities<Character>();
+        foreach (Character c in inRangeCharacters)
+        {
+            try
+            {
+                c.currentHealth += healerData.healRate;
+            }
+            catch (System.Exception e) { }
+        }
+        yield return null;
     }
 
     void playHealFX()
@@ -57,15 +65,22 @@ public class Healer : Character
     {
         if (!isDisabled)
         {
-            List<Entity> inRange = GameManager.checkForInRangeEntities<Entity>(gridPos, healerData.EMPRange, this, true);
-            foreach (Entity c in inRange)
+            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer);
+        }
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedEMP()
+    {
+        List<Entity> inRange = GameManager.checkForInRangeEntities<Entity>(gridPos, healerData.EMPRange, this, true);
+        foreach (Entity c in inRange)
+        {
+            if (c.ownerPlayer != ownerPlayer)
             {
-                if (c.ownerPlayer != ownerPlayer)
-                {
-                    c.OnEMPDisable(healerData.EMPStrength);
-                }
+                c.OnEMPDisable(healerData.EMPStrength);
             }
         }
+        yield return null;
     }
 
 }

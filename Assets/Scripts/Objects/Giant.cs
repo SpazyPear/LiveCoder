@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
+using Photon.Pun;
 
 public class GiantProxy : CharacterHandlerProxy
 {
@@ -35,16 +36,23 @@ public class Giant : Character
         base.Start();
         shield.setDefaults(giantData.maxShieldHealth, giantData.shieldRegenRate);
     }
-
-    public void deployShield(bool raised)
+    
+    public void positionShield(bool raised)
     {
         if (shield.shieldHealth > 0)
         {
-            shield.gameObject.SetActive(true);
-            Transform transform = raised ? shieldUpPoint : shieldDownPoint;
-            shield.transform.position = transform.position;
-            shield.transform.rotation = transform.rotation;
+            photonView.RPC("replicatedPositionShield", RpcTarget.AllViaServer, raised);
         }
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedPositionShield(bool raised)
+    {
+        shield.gameObject.SetActive(true);
+        Transform transform = raised ? shieldUpPoint : shieldDownPoint;
+        shield.transform.position = transform.position;
+        shield.transform.rotation = transform.rotation;
+        yield return null;
     }
 
     public override void takeDamage(int damage, object sender = null)
@@ -70,7 +78,6 @@ public class Giant : Character
             shield.shieldState = ShieldState.InActive;
             shield.gameObject.SetActive(false);
         }
-        
     }
 
     public override void EMPRecover()
@@ -78,7 +85,7 @@ public class Giant : Character
         base.EMPRecover();
         if (shield.prevShieldState != ShieldState.InActive)
         {
-            deployShield(shield.prevShieldState == ShieldState.Raised ? true : false);
+            positionShield(shield.prevShieldState == ShieldState.Raised ? true : false);
         }
     }
 

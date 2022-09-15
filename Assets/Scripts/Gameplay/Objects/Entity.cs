@@ -51,6 +51,7 @@ public class Entity : ControlledMonoBehavour
     RectTransform healthBarObj;
     protected Slider healthBar;
     public PhotonView photonView;
+    public int viewID => photonView.ViewID;
    
 
     [MoonSharp.Interpreter.MoonSharpHidden]
@@ -80,14 +81,15 @@ public class Entity : ControlledMonoBehavour
         }
         Destroy(gameObject);
     }
-
+    
     public virtual void Start()
     {
-        GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
+        //GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
     }
 
     public virtual void Awake()
     {
+        
         codeContext.entity = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
@@ -96,7 +98,9 @@ public class Entity : ControlledMonoBehavour
         currentHealth = entityData.maxHealth;
         healthBar = healthBarObj.GetComponentInChildren<Slider>();
         photonView = GetComponentInParent<PhotonView>();
-       // healthBar.value = currentHealth;
+        GameManager.unitInstances.Add(viewID, this);
+        //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "unitInstances", GameManager.unitInstances } });
+        // healthBar.value = currentHealth;
     }
 
     public virtual void Update()

@@ -108,7 +108,7 @@ public class PlayerHandler : MonoBehaviour
         return entities;
     }
 
-    public Entity findClosestEntityOfType(Entity sender, string typeName)
+    public Entity findClosest(Entity sender, string typeName)
     {
         Entity closest = null;
         float minDistance = Mathf.Infinity;
@@ -165,7 +165,7 @@ public class CharacterHandlerProxy : EntityProxy
 
     public bool IsInRange(Entity entity) { return target.checkForInRangeEntities<Entity>().Contains(entity); } // make good
 
-    public void Attack(Entity entity) { target.photonView.RPC("attack", Photon.Pun.RpcTarget.All, entity.GetInstanceID()); }
+    public void Attack(Entity entity) { target.attack(entity); }
 
     //public void CollectOre(OreDeposit ore) { target.attack(ore); }
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
@@ -185,7 +185,7 @@ public class GiantHandlerProxy : CharacterHandlerProxy
         this.target = p;
     }
 
-    public void DeployShield(bool raised) { target.deployShield(raised); }
+    public void DeployShield(bool raised) { target.positionShield(raised); }
 }
 
 public class HealerHandlerProxy : CharacterHandlerProxy

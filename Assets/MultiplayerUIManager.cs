@@ -11,6 +11,7 @@ public class MultiplayerUIManager : MonoBehaviour
     public Button CreateButton;
     public Button JoinButton;
     public NetworkManager NetworkManager;
+    public TMP_Text WaitingText;
 
     public void Join()
     {
@@ -20,5 +21,6 @@ public class MultiplayerUIManager : MonoBehaviour
     public void Create()
     {
         NetworkManager.CreateRoom(CreateInput.text);
+        WaitingText.enabled = true;
     }
 }

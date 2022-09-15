@@ -45,6 +45,13 @@ MonoBehaviour:
   - attack
   - replicatedMove
   - replicatedTeleport
+  - placeOnGrid
+  - deployShield
+  - replicatedHeal
+  - replicatedEMP
+  - replicatedDeployShield
+  - replicatedPositionShield
+  - replicatedAttack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

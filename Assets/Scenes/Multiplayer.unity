@@ -429,7 +429,6 @@ GameObject:
   - component: {fileID: 143205209}
   - component: {fileID: 143205210}
   - component: {fileID: 143205212}
-  - component: {fileID: 143205211}
   - component: {fileID: 143205214}
   m_Layer: 0
   m_Name: Managers
@@ -524,19 +523,6 @@ MonoBehaviour:
   playerLabel: {fileID: 1939861527}
   creditCounter: {fileID: 147746244}
   gridLabel: {fileID: 1733222382}
---- !u!114 &143205211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143205204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a452fc1cf3d273543a6749e414bce33e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LobbyJoined: 0
 --- !u!114 &143205212
 MonoBehaviour:
   m_ObjectHideFlags: 0

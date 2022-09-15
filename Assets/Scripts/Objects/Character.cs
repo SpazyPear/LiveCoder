@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
 using Photon.Pun;
+using static UnityEngine.GraphicsBuffer;
 
 public enum CLASSTYPE
 {
@@ -14,7 +15,7 @@ public enum CLASSTYPE
     Scout
 }
 
-public abstract class Character : Entity, ICommandHandler
+public abstract class Character : Entity
 {
 
     [HideInInspector]
@@ -105,7 +106,7 @@ public abstract class Character : Entity, ICommandHandler
 
         if (startInScene)
         {
-            GameManager.placeOnGrid(gameObject, gridPos);
+            //GameManager.placeOnGrid(gameObject, gridPos);
         }
         energyRegen();
     }
@@ -178,19 +179,23 @@ public abstract class Character : Entity, ICommandHandler
     {
         currentEnergy += data.value;
     }
-
-    [PunRPC]
-    public virtual IEnumerator attack (int targetInstance)
+    
+    public void attack (Entity target)
     {
-        Entity target = GameManager.unitInstances[targetInstance];
         if (target != null && currentEnergy > 0 && checkForInRangeEntities<Entity>().Contains(target) && !isDisabled)
         {
-            target.takeDamage(1, this);
+            photonView.RPC("replicatedAttack", RpcTarget.AllViaServer, target.viewID);
         }
         else
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
         }
+    }
+    
+    [PunRPC]
+    public virtual IEnumerator replicatedAttack(int targetInstance)
+    {
+        GameManager.unitInstances[targetInstance].takeDamage(1, this);
         currentEnergy--;
         yield return null;
     }
@@ -198,18 +203,6 @@ public abstract class Character : Entity, ICommandHandler
     public override void OnEMPDisable(float strength)
     {
         base.OnEMPDisable(strength);
-    }
-
-    public void HandleCommand(Command command)
-    {
-        /*if (command is MoveCommand)
-        {
-            MoveTo(new Vector2Int((command as MoveCommand).x, (command as MoveCommand).y));
-        }
-        else if (command is AttackCommand)
-        {
-            attack((command as AttackCommand).toAttack);
-        }*/
     }
 
 }
