@@ -64,6 +64,48 @@ Transform:
   m_Father: {fileID: 5006257662905158341}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8699381272313143209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003976916028575791}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.02, y: 4.43, z: 5.91}
+  m_Center: {x: 0, y: 1.97, z: 1.07}
+--- !u!114 &430098131544200150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5003976916028575791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3833cdd47535231499cb63f804902237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: {fileID: 0}
+  cost: 30
+  codeContext:
+    source: "def OnStart():\n    # OnStart\n    print(\"Starting)\n\ndef OnStep():\n   
+      # OnStep\n    print (\"Stepping\")"
+    character: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 1
+  ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: db0dca859f4ef9d4c920e695252c7678, type: 2}
+  barrel: {fileID: 5006257662905158341}
+  shootPoint: {fileID: 57653478284216887}
 --- !u!1001 &2643470837536312670
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -410,43 +452,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5005576099303947353}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &8699381272313143209
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5003976916028575791}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.02, y: 4.43, z: 5.91}
-  m_Center: {x: 0, y: 1.97, z: 1.07}
---- !u!114 &430098131544200150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5003976916028575791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3833cdd47535231499cb63f804902237, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 0
-  selfDestructRange: 2
-  selfDestructDamage: 2
-  gridPos: {x: 0, y: 0}
-  ownerPlayer: {fileID: 0}
-  cost: 30
-  codeContext:
-    source: "function OnStart()\r\n\r\nend\r\n\r\nfunction OnStep()\r\n\r\nend\r"
-    character: {fileID: 0}
-    ownerPlayer: 0
-  ID: 0
-  isDisabled: 0
-  entityData: {fileID: 11400000, guid: db0dca859f4ef9d4c920e695252c7678, type: 2}
-  barrel: {fileID: 5006257662905158341}
-  shootPoint: {fileID: 57653478284216887}

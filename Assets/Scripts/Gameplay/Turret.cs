@@ -2,23 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoonSharp.Interpreter;
-
-public class TurretProxy : EntityProxy
-{
-    Turret target;
-
-    [MoonSharpHidden]
-    public TurretProxy(Turret p) : base(p)
-    {
-        this.target = p;
-    }
-
-    public void targetCharacter(Character enemy) => target.target(enemy);
-    public void shootCharacter() => target.shoot();
-
-    public void lookAt(Vector2Float pos) => target.lookAt(pos);
-
-}
+using Python3DMath;
+using PythonProxies;
 
 public class Turret : Entity
 {
@@ -31,6 +16,11 @@ public class Turret : Entity
     ParticleSystem shootPS;
     public Transform shootPoint;
     bool rotatingBarrel;
+
+    public override object CreateProxy()
+    {
+        return new TurretProxy(this);
+    }
 
     private void Start()
     {
@@ -49,6 +39,7 @@ public class Turret : Entity
 
     public void target(Character enemy)
     {
+        print("Starting targetting towards : " + enemy.transform.name);
         rotatingBarrel = false;
         this.StopAllCoroutines();
         currentTarget = enemy;
@@ -83,7 +74,7 @@ public class Turret : Entity
         }
     }
 
-    IEnumerator rotateBarrelTowards(Vector2Float point)
+    IEnumerator rotateBarrelTowards(vector2 point)
     {
 
         while (rotatingBarrel )
@@ -115,7 +106,7 @@ public class Turret : Entity
 
     private Vector3 lookatPoint = Vector3.zero;
 
-    public void lookAt (Vector2Float lookAt)
+    public void lookAt (vector2 lookAt)
 
     {
         this.StopAllCoroutines();

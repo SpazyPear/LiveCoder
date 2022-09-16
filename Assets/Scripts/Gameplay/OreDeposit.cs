@@ -3,16 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OreDepositProxy : EntityProxy
-{
-    OreDeposit target;
-
-    [MoonSharpHidden]
-    public OreDepositProxy(OreDeposit p) : base (p)
-    {
-        this.target = p;
-    }
-}
+using PythonProxies;
 
 public class OreDeposit : Entity
 {
@@ -29,5 +20,10 @@ public class OreDeposit : Entity
        
         //sender.recieveOre(data);
         base.die();
+    }
+
+    public override object CreateProxy()
+    {
+        return new OreDepositProxy(this);
     }
 }

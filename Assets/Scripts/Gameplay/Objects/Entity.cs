@@ -6,33 +6,15 @@ using MoonSharp.Interpreter;
 using System;
 using UnityEngine.UI;
 
-public class EntityProxy
-{
-    Entity target;
 
-    [MoonSharpHidden]
-    public EntityProxy(Entity p)
-    {
-        this.target = p;
-    }
+using PythonProxies;
+public class PythonProxyObject {
 
-    public Vector2Int position
-    {
-        get
-        {
-            return target.gridPos;
-        }
-    }
+    public string pythonClassName;
 
-
-    public string id => target.ID.ToString();
-    public int health => target.currentHealth;
-
-    public Vector2Float pos ()
-    {
-        return Vector2Float.fromVec2(new Vector2(target.transform.position.x, target.transform.position.z));
-    }
 }
+
+
 
 public class Entity : ControlledMonoBehavour
 {
@@ -79,6 +61,7 @@ public class Entity : ControlledMonoBehavour
         codeContext.character = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        PythonInterpreter.AddContext(codeContext);
         CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
         currentHealth = entityData.maxHealth;
@@ -194,5 +177,39 @@ public class Entity : ControlledMonoBehavour
     private void OnDestroy()
     {
         
+    }
+
+    // TODO Change TypeName to enum for ease of use
+    public Entity findClosestEntityOfType(Entity sender, string typeName)
+    {
+        Entity closest = null;
+        float minDistance = Mathf.Infinity;
+        Type type = Type.GetType(typeName);
+
+        if (type == null)
+        {
+            ErrorManager.instance.PushError(new ErrorSource { function = "findClosestEntityOfType", playerId = gameObject.name }, new Error("Incorrect type name."));
+            return null;
+        }
+
+        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        {
+            if (c == sender)
+                continue;
+
+            if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
+            {
+                closest = c;
+                minDistance = Vector2Int.Distance(c.gridPos, sender.gridPos);
+            }
+        }
+
+        return closest;
+    }
+
+
+    public virtual object CreateProxy()
+    {
+        return new EntityProxy(this);
     }
 }

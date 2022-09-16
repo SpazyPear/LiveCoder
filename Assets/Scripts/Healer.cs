@@ -2,19 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealerProxy : CharacterHandlerProxy
-{
-    Healer target;
-
-    [MoonSharp.Interpreter.MoonSharpHidden]
-    public HealerProxy(Healer p) : base(p)
-    {
-        this.target = p;
-    }
-}
+using PythonProxies;
 
 public class Healer : Character
 {
+    public override object CreateProxy()
+    {
+        return new HealerHandlerProxy(this);
+    }
 
     public ParticleSystem healRing;
     public ParticleSystem healCrosses;

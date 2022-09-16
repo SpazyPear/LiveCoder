@@ -3467,19 +3467,8 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
+    source: "def OnStart():\n    # OnStart\n\ndef OnStep():\n    # OnStep\n    print
+      (\"Stepping\")"
     character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1

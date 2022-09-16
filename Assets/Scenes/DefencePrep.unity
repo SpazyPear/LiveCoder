@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 143205205}
-  codeExecutor: {fileID: 1341797141}
+  codeExecutor: {fileID: 1341797148}
   gameData: {fileID: 11400000, guid: 712fc3a76c6424c43bf17b54b63c15f0, type: 2}
   uiManager: {fileID: 143205210}
   towerPrefab: {fileID: 2506164628930998903, guid: d01f9ff4f7a6dfc40b28323a709f7806,
@@ -3114,8 +3114,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1341797141}
-        m_TargetAssemblyTypeName: CodeExecutor, Assembly-CSharp
+      - m_Target: {fileID: 1341797148}
+        m_TargetAssemblyTypeName: PythonInterpreter, Assembly-CSharp
         m_MethodName: OnExecuteCode
         m_Mode: 1
         m_Arguments:
@@ -4240,6 +4240,9 @@ GameObject:
   - component: {fileID: 1341797145}
   - component: {fileID: 1341797146}
   - component: {fileID: 1341797147}
+  - component: {fileID: 1341797148}
+  - component: {fileID: 1341797149}
+  - component: {fileID: 1341797151}
   m_Layer: 0
   m_Name: Code Executor
   m_TagString: Untagged
@@ -4304,12 +4307,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1341797143}
-        m_TargetAssemblyTypeName: ErrorManager, CustomCode
-        m_MethodName: TestErrorHandling
+        m_TargetAssemblyTypeName: ErrorManager
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4379,6 +4382,54 @@ MonoBehaviour:
   checkboxPrefab: {fileID: 8507306911758348888, guid: c26792ff6d7e83847a81d08900428d6a,
     type: 3}
   nameInputField: {fileID: 1693310359}
+--- !u!114 &1341797148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341797140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 241d03c00779fa34c8ae449f72b5eeaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 1169140031}
+  editingContext:
+    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
+      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    character: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 1
+  codeContexts: []
+--- !u!114 &1341797149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341797140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf777f0efff116745b3200d538aa2edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTxStarted: 0
+  IP: 127.0.0.1
+  rxPort: 8000
+  txPort: 8001
+--- !u!114 &1341797151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341797140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5afa8b84d282574f8d6be6c0c10167d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1407332135
 GameObject:
   m_ObjectHideFlags: 0

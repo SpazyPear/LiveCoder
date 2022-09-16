@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     public GridManager gridManager;
-    public CodeExecutor codeExecutor;
+    public PythonInterpreter codeExecutor;
     public GameData gameData;
     public UIManager uiManager;
     public static Vector3 gridDimensions;

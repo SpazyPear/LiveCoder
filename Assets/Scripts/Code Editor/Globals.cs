@@ -2,6 +2,8 @@ using UnityEngine;
 using MoonSharp.Interpreter;
 using System.Collections.Generic;
 using System.Reflection;
+using Python3DMath;
+using PythonProxies;
 
 class GlobalManager
 {
@@ -10,9 +12,9 @@ class GlobalManager
     public static Dictionary<string, MethodInfo> globalFunctionMappings = new Dictionary<string, MethodInfo>();
 
 
-    public Vector2Float vec2(float x, float y)
+    public vector2 vec2(float x, float y)
     {
-        return new Vector2Float(x, y);
+        return new vector2(x, y);
 
     }
 
@@ -50,8 +52,8 @@ class GlobalManager
 
         RegisterProxy<TurretProxy, Turret>(r => new TurretProxy(r));
         RegisterProxy<SoldierProxy, Soldier>(r => new SoldierProxy(r));
-        RegisterProxy<GiantProxy, Giant>(r => new GiantProxy(r));
-        RegisterProxy<HealerProxy, Healer>(r => new HealerProxy(r));
+        RegisterProxy<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
+        RegisterProxy<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
 
         RegisterProxy<EntityProxy, Entity>(r => new EntityProxy(r));
 
@@ -63,7 +65,7 @@ class GlobalManager
 
         RegisterProxy<MathProxy, MathHelpers>(r => new MathProxy());
 
-        RegisterProxy<Vector2Proxy, Vector2Float>(r => new Vector2Proxy(r));
+        RegisterProxy<Vector2Proxy, vector2>(r => new Vector2Proxy(r));
 
 
         PlayerHandler handler = GameObject.FindObjectOfType<PlayerHandler>();
@@ -76,6 +78,10 @@ class GlobalManager
 
         RegisterGlobalFunction<System.Func<Character, string, Entity>>(script, "findClosest", handler.findClosestEntityOfType, ((System.Func<Character, string, Entity>)handler.findClosestEntityOfType).Method);
 
+
+        RegisterGlobalFunction<System.Func<string, List<Entity>>>(script, "getEntitiesOfType", handler.getAllEntitiesOfType, ((System.Func<string, List<Entity>>)handler.getAllEntitiesOfType).Method);
+
+
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
         /*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
@@ -86,7 +92,7 @@ class GlobalManager
     }
 
     //current.MoveToEntity(current.findClosestEntityOfType(current, "Wall"))
-      //current.Attack(current.findClosestEntityOfType(current, "Wall"))
+    //current.Attack(current.findClosestEntityOfType(current, "Wall"))
 
     public void DebugLog(DynValue debug)
     {
@@ -128,9 +134,9 @@ class GlobalManager
         RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>>(script, "FindPath", pathfinder.FindPath, ((System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath).Method);
     }
 
-    public Vector2Float gridPos (int x, int y)
+    public vector2 gridPos (int x, int y)
     {
-        return Vector2Float.fromVec2(new Vector2(State.GridContents[x, y].Object.transform.position.x, State.GridContents[x, y].Object.transform.position.z));
+        return vector2.fromVec2(new Vector2(State.GridContents[x, y].Object.transform.position.x, State.GridContents[x, y].Object.transform.position.z));
     }
 
     private void SetupTypes(Script script)
@@ -158,7 +164,7 @@ class GlobalManager
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
 */
         RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2Int",vec2Int, ((System.Func<int, int, Vector2Int>)vec2Int).Method);
-        RegisterGlobalFunction<System.Func<float, float, Vector2Float>>(script, "vec2", vec2, ((System.Func<float, float, Vector2Float>)vec2).Method);
+        RegisterGlobalFunction<System.Func<float, float, vector2>>(script, "vec2", vec2, ((System.Func<float, float, vector2>)vec2).Method);
         /*
                 script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
         */
@@ -175,7 +181,7 @@ class GlobalManager
 
         RegisterGlobalFunction<System.Action<Vector2Int>>(script, "printVec2", printVec2, ((System.Action<Vector2Int>)printVec2).Method);
 
-        RegisterGlobalFunction<System.Func<int, int, Vector2Float>>(script, "gridPos", gridPos, ((System.Func<int, int, Vector2Float>)gridPos).Method);
+        RegisterGlobalFunction<System.Func<int, int, vector2>>(script, "gridPos", gridPos, ((System.Func<int, int, vector2>)gridPos).Method);
 
         
         SetupTypes(script);

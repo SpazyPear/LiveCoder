@@ -50,6 +50,9 @@ public class CodeContext
 
     ";
     public Script script = new Script();
+    public Microsoft.Scripting.Hosting.ScriptSource pythonScript;
+    public Microsoft.Scripting.Hosting.ScriptScope pythonScriptScope;
+
     public Entity character;
     public int ownerPlayer;
 
@@ -82,21 +85,21 @@ public class CodeExecutor : MonoBehaviour
     // Saves code
     public void OnExecuteCode()
     {
-        editingContext.source = input.text;
+       /* editingContext.source = input.text;
         for (int i = 0; i < otherEditingContexts.Count; i++)
         {
             otherEditingContexts[i].source = input.text;
         }
         GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
-        input.onValueChanged.RemoveAllListeners();
+        input.onValueChanged.RemoveAllListeners();*/
     }
 
     public void CloseEditor()
     {
         
-        codeEditor.gameObject.SetActive(false);
+       /* codeEditor.gameObject.SetActive(false);
         GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
-        input.onValueChanged.RemoveAllListeners();
+        input.onValueChanged.RemoveAllListeners();*/
     }
 
     GlobalManager globalManager = new GlobalManager();
@@ -122,7 +125,7 @@ public class CodeExecutor : MonoBehaviour
 
     public void OpenEditor (CodeContext context)
     {
-        print("Editor for " + context.character.name);
+       /* print("Editor for " + context.character.name);
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
         //headerText.text = context.character.GetType().ToString();
@@ -133,7 +136,7 @@ public class CodeExecutor : MonoBehaviour
         currentGlobalsMap = setupIntellisense(editingContext.script.Globals, out currentSuggestions, true);
 
         input.onValueChanged.AddListener(OnValueChanged);
-
+*/
         
     }
 
@@ -148,7 +151,7 @@ public class CodeExecutor : MonoBehaviour
 
     void OnValueChanged(string value)
     {
-      
+      /*
         string lastWord = getLastWord(input.text);
 
         if (lastWord.Trim() != "")
@@ -213,7 +216,7 @@ public class CodeExecutor : MonoBehaviour
         {
             List<CodeSuggestion> foundSuggestions = currentSuggestions.ToList();
             GetComponent<IntellisenseHandler>().LoadNewSuggestions(foundSuggestions);
-        }
+        }*/
     }
 
     void printList(List<string> strings)
@@ -507,84 +510,42 @@ public class CodeExecutor : MonoBehaviour
 
     private IEnumerator AwakeCoroutineLua()
     {
-       
 
+        /*
 
-        foreach (CodeContext context in codeContexts)
-        {
-            try
-            {
-                context.script.DoString(context.source);
-                globalManager.OnScriptStart(context.script, target: context.character);
-            }
-            catch (MoonSharp.Interpreter.InterpreterException e)
-            {
-                context.character.selfDestruct();
-                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-                Debug.Log($"Call Stack : {e.CallStack}");
-                Debug.Log($"{e.Source}");
-                ErrorBubbleManager.spawnBubble(context.character.gridPos, context.character.name + " threw: " + e.DecoratedMessage);
-            }
-        }
-        
-
-        foreach (CodeContext context in codeContexts)
-        {
-            if (context.shouldExecute)
-            {
-                try
-                {
-
-
-                    controlPanelManager.UpdateGlobals(context);
-
-                    context.script.Call(context.script.Globals["OnStart"]);
-
-                    print("Calling start for " + context.script);
-                }
-
-                catch (MoonSharp.Interpreter.InterpreterException e)
-                {
-                    context.character.selfDestruct();
-                    Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-                    Debug.Log($"Call Stack : {e.CallStack}");
-                    Debug.Log($"{e.Source}");
-                }
-            }
-
-        }
-
-
-        foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
-        {
-            o.OnStart();
-        }
-
-
-        while (Application.isPlaying)
-        {
-            try
-            {
-                foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
-                {
-
-                    o.OnStep();
-                }
-
-                foreach (UnityAction action in CodeExecutor.onStepActions)
-                {
-                    action.Invoke();
-                }
                 foreach (CodeContext context in codeContexts)
                 {
+                    try
+                    {
+                        context.script.DoString(context.source);
+                        globalManager.OnScriptStart(context.script, target: context.character);
+                    }
+                    catch (MoonSharp.Interpreter.InterpreterException e)
+                    {
+                        context.character.selfDestruct();
+                        Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                        Debug.Log($"Call Stack : {e.CallStack}");
+                        Debug.Log($"{e.Source}");
+                        ErrorBubbleManager.spawnBubble(context.character.gridPos, context.character.name + " threw: " + e.DecoratedMessage);
+                    }
+                }
 
+
+                foreach (CodeContext context in codeContexts)
+                {
                     if (context.shouldExecute)
                     {
                         try
                         {
+
+
                             controlPanelManager.UpdateGlobals(context);
-                            context.script.Call(context.script.Globals["OnStep"]);
+
+                            context.script.Call(context.script.Globals["OnStart"]);
+
+                            print("Calling start for " + context.script);
                         }
+
                         catch (MoonSharp.Interpreter.InterpreterException e)
                         {
                             context.character.selfDestruct();
@@ -593,21 +554,65 @@ public class CodeExecutor : MonoBehaviour
                             Debug.Log($"{e.Source}");
                         }
                     }
+
                 }
+
 
                 foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
                 {
-                    o.OnPostStep();
+                    o.OnStart();
                 }
-            }
-            catch (ScriptRuntimeException e)
-            {
-                Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
-            }
 
-            yield return new WaitForSeconds(1);
-        }
 
+                while (Application.isPlaying)
+                {
+                    try
+                    {
+                        foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
+                        {
+
+                            o.OnStep();
+                        }
+
+                        foreach (UnityAction action in CodeExecutor.onStepActions)
+                        {
+                            action.Invoke();
+                        }
+                        foreach (CodeContext context in codeContexts)
+                        {
+
+                            if (context.shouldExecute)
+                            {
+                                try
+                                {
+                                    controlPanelManager.UpdateGlobals(context);
+                                    context.script.Call(context.script.Globals["OnStep"]);
+                                }
+                                catch (MoonSharp.Interpreter.InterpreterException e)
+                                {
+                                    context.character.selfDestruct();
+                                    Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                                    Debug.Log($"Call Stack : {e.CallStack}");
+                                    Debug.Log($"{e.Source}");
+                                }
+                            }
+                        }
+
+                        foreach (ControlledMonoBehavour o in GameObject.FindObjectsOfType<ControlledMonoBehavour>())
+                        {
+                            o.OnPostStep();
+                        }
+                    }
+                    catch (ScriptRuntimeException e)
+                    {
+                        Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
+                    }
+
+                    yield return new WaitForSeconds(1);
+                }
+        */
+
+        yield return null;
     }
 
 

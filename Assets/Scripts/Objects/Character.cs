@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
+using PythonProxies;
 
 public enum CLASSTYPE
 {
@@ -33,6 +34,11 @@ public abstract class Character : Entity
     {
         initializeUnit();
         
+    }
+
+    public override object CreateProxy()
+    {
+        return new CharacterHandlerProxy(this);
     }
 
     

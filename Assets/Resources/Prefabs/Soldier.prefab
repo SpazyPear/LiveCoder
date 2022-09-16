@@ -45,19 +45,8 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 20
   codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
+    source: "def OnStart():\n    # OnStart\n    print(\"Starting)\n\ndef OnStep():\n   
+      # OnStep\n    print (\"Stepping\")"
     character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
@@ -130,23 +119,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00224
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: -1.07
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.z

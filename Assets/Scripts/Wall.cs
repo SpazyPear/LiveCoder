@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 
+using PythonProxies;
 public class WallProxy : EntityProxy
 {
     Entity target;

@@ -3,17 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
-
-public class GiantProxy : CharacterHandlerProxy
-{
-    Giant target;
-
-    [MoonSharp.Interpreter.MoonSharpHidden]
-    public GiantProxy(Giant p) : base(p)
-    {
-        this.target = p;
-    }
-}
+using PythonProxies;
 
 public enum ShieldState
 {
@@ -39,15 +29,18 @@ public class Giant : Character
     
     public void deployShield(bool raised)
     {
-        if (shieldHealth > 0)
-        {
             shield.SetActive(true);
             Transform transform = raised ? shieldUpPoint : shieldDownPoint;
             shield.transform.position = transform.position;
             shield.transform.rotation = transform.rotation;
-        }
+        
     }
-    
+
+    public override object CreateProxy()
+    {
+        return new GiantHandlerProxy(this);
+    }
+
     void takeShieldDamage(float damage)
     {
         shieldHealth -= damage;
