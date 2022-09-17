@@ -4,10 +4,11 @@ using UnityEngine;
 using System;
 using PythonProxies;
 
-// World Descriptions for Helper Functions
-public class World : MonoBehaviour
+[PythonClass("World", true)]
+public class world : MonoBehaviour
 {
 
+    [PythonMethod]
     public List<CharacterHandlerProxy> getEnemies()
     {
         List<CharacterHandlerProxy> characters = new List<CharacterHandlerProxy>();
@@ -22,6 +23,7 @@ public class World : MonoBehaviour
         return characters;
     }
 
+    [PythonMethod]
     public List<OreDepositProxy> getOreDeposits()
     {
         List<OreDepositProxy> ores = new List<OreDepositProxy>();
@@ -33,11 +35,13 @@ public class World : MonoBehaviour
         return ores;
     }
 
+    [PythonMethod]
     public EntityProxy getEnemyTower()
     {
         return GameObject.FindObjectOfType<Tower>().CreateProxy() as EntityProxy;
     }
 
+    [PythonMethod]
     public List<object> getAllEntities()
     {
         List<object> entities = new List<object>();
@@ -49,8 +53,9 @@ public class World : MonoBehaviour
         return entities;
     }
 
-   
 
+
+    [PythonMethod]
     public List<EntityProxy> getAllEntitiesOfType(String typeName)
     {
         List<EntityProxy> entities = new List<EntityProxy>();

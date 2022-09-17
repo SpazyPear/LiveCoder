@@ -13,7 +13,8 @@ using System.Linq;
 public enum CodeSuggestionType
 {
     Function,
-    Property
+    Property,
+    Constructor
 }
 
 public struct CodeMethodParameters

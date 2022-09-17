@@ -10,11 +10,16 @@ namespace PythonProxies
     public class PythonClass : System.Attribute
     {
         public string className;
-        public PythonClass(string className)
+        public bool pythonAcceptedMethodsOnly;
+        public PythonClass(string className, bool onlyPythonAcceptedMethods = false)
         {
             this.className = className;
+            this.pythonAcceptedMethodsOnly = onlyPythonAcceptedMethods;
         }
     }
+
+    [System.AttributeUsage(System.AttributeTargets.Method)]
+    public class PythonMethod : System.Attribute { }
 
     [PythonClass("Soldier")]
     public class SoldierProxy : CharacterHandlerProxy
@@ -43,7 +48,7 @@ namespace PythonProxies
     [PythonClass("Entity")]
     public class EntityProxy : PythonProxyObject
     {
-        Entity target;
+        public Entity target;
 
         public EntityProxy(Entity p)
         {
@@ -100,7 +105,7 @@ namespace PythonProxies
     [PythonClass("Character")]
     public class CharacterHandlerProxy : EntityProxy
     {
-        Character target;
+        public Character target;
 
         public CharacterHandlerProxy(Character p) : base(p)
         {
@@ -122,15 +127,15 @@ namespace PythonProxies
         public bool PathCompleted() { return target.PathCompleted(); }
         public void MoveOnPathNext() { target.MoveOnPathNext(); }
 
-        public bool IsInRange(Entity entity) { return target.checkForInRangeEntities<Entity>().Contains(entity); } // make good
+        public bool IsInRange(EntityProxy entity) { return target.checkForInRangeEntities<Entity>().Contains(entity.target); } // make good
 
-        public void Attack(Entity entity) { target.attack(entity); }
+        public void Attack(EntityProxy entity) { target.attack(entity.target); }
 
-        public void CollectOre(OreDeposit ore) { target.attack(ore); }
-        public void MoveToCharacter(Character character) { target.MoveToCharacter(character); }
+        public void CollectOre(OreDepositProxy ore) { target.attack(ore.target); }
+        public void MoveToCharacter(CharacterHandlerProxy character) { target.MoveToCharacter(character.target); }
         public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
 
-        public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
+        public void MoveToEntity(EntityProxy entity) { target.MoveTo(entity.target.gridPos); }
 
 
 
@@ -175,7 +180,7 @@ namespace PythonProxies
             this.target = p;
         }
 
-        public void targetCharacter(Character enemy) => target.target(enemy);
+        public void targetCharacter(CharacterHandlerProxy enemy) => target.target(enemy.target);
         public void shootCharacter()
         {
             Debug.Log("Turret shooting through proxy");
@@ -189,7 +194,7 @@ namespace PythonProxies
     [PythonClass("OreDeposit")]
     public class OreDepositProxy : EntityProxy
     {
-        OreDeposit target;
+        public OreDeposit target;
 
         public OreDepositProxy(OreDeposit p) : base(p)
         {

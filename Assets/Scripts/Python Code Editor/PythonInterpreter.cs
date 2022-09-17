@@ -65,6 +65,12 @@ public class PythonInterpreter : MonoBehaviour
         //headerText.text = context.character.GetType().ToString();
         editingContext = context;
 
+        globalAssigns = "";
+        SetVariable("current", context.character);
+        SetVariable("world", GameObject.FindObjectOfType<world>());
+        SetVariable("debug", (System.Action<dynamic>)debug);
+
+
         input.onValueChanged.AddListener(OnValueChanged);
 
     }
@@ -72,6 +78,7 @@ public class PythonInterpreter : MonoBehaviour
 
     public void RecievePythonIntellisenseSuggestions (string suggestionsJSON)
     {
+        print(suggestionsJSON);
         JObject valJson = Newtonsoft.Json.Linq.JObject.Parse(suggestionsJSON);
         var completions = valJson["completions"];
 
@@ -79,45 +86,110 @@ public class PythonInterpreter : MonoBehaviour
 
         foreach (var comp in completions)
         {
-            CodeSuggestion s = new CodeSuggestion {
-                name = comp.ToString(),
-                returnType = ""
-            };
-            suggestions.Add(s);
+            if (comp != null && comp is JObject)
+            {
+
+                CodeSuggestionType sugType = ((comp["typeHint"].ToString()).Contains("(") && (comp["typeHint"].ToString()).Contains(")")) ? CodeSuggestionType.Function : CodeSuggestionType.Property;
+
+                if (comp["typeHint"].ToString().Contains("Type["))
+                {
+                    sugType = CodeSuggestionType.Constructor;
+                }
+
+                List<CodeMethodParameters> methodParameters = new List<CodeMethodParameters>();
+
+                foreach (var param in comp["params"])
+                {
+                    methodParameters.Add(new CodeMethodParameters { name = param.ToString().Replace("param","").Trim() });
+                }
+
+                CodeSuggestion s = new CodeSuggestion
+                {
+                    name = comp["name"].ToString(),
+                    returnType = comp["typeHint"].ToString(),
+                    type = sugType,
+                    parameters = methodParameters.ToArray()
+                };
+
+                suggestions.Add(s);
+            }
+
+            GetComponent<IntellisenseHandler>().LoadNewSuggestions(suggestions);
         }
-
-        GetComponent<IntellisenseHandler>().LoadNewSuggestions(suggestions);
-
     }
+
+    string globalAssigns = "";
 
     void OnValueChanged(string value)
     {
 
-        // GetComponent<IntellisenseEngine>().GetSuggestions(value, input.caretPosition);
 
-
-        string importDefinitions = "from unit import Unit\n";
-        string globals = "current = Unit()\n";
+        string importDefinitions = "from game_stubs import *\n";
 
 
         string substring = value.Substring(0, input.caretPosition);
 
-        //GetComponent<PythonSocketConnection>().SendData(importDefinitions + globals + substring);
+
+        print("Sending");
+        print(importDefinitions + globalAssigns + substring);
+
+        GetComponent<PythonSocketConnection>().SendData(importDefinitions + globalAssigns + substring);
     }
 
     Microsoft.Scripting.Hosting.ScriptEngine pythonEngine;
 
-    public void SetVariable(Microsoft.Scripting.Hosting.ScriptScope scope, string name, object var)
+    public string TypeToPythonTypeString(System.Type type)
     {
-        if (var is Entity)
+
+        PythonProxies.PythonClass[] attrs = type.GetCustomAttributes(typeof(PythonProxies.PythonClass), true) as PythonProxies.PythonClass[];
+        if (attrs.Length > 0)
         {
-            object proxy = ((Entity)var).CreateProxy();
-            scope.SetVariable(name, proxy);
+            return attrs[0].className;
         }
         else
         {
+
+            if (type == typeof(int))
+            {
+                return "int";
+            }
+            else if (type == typeof(string))
+            {
+                return "str";
+            }
+            else if (type == typeof(float))
+            {
+                return "float";
+            }
+            else if (type == typeof(bool))
+            {
+                return "bool";
+            }
+
+            return "None";
+        }
+    }
+
+
+    public void SetVariable( string name, object var, Microsoft.Scripting.Hosting.ScriptScope scope = null)
+    {
+        
+        if (var is Entity)
+        {
+            object proxy = ((Entity)var).CreateProxy();
+
+            globalAssigns += $"{name} = {TypeToPythonTypeString(proxy.GetType())}()\n";
+
+            if (scope != null)
+            scope.SetVariable(name, proxy);
+
+        }
+        else
+        {
+            globalAssigns += $"{name} = {TypeToPythonTypeString(var.GetType())}()\n";
             scope.SetVariable(name, var);
         }
+      
     }
 
 
@@ -152,10 +224,12 @@ public class PythonInterpreter : MonoBehaviour
                 print("Found code context with code : " + context.source);
                 context.pythonScript = pythonEngine.CreateScriptSourceFromString(ProcessSource(context));
                 Microsoft.Scripting.Hosting.ScriptScope scope = pythonEngine.CreateScope();
+
+                globalAssigns = "";
                
-                SetVariable(scope, "current", context.character);
-                SetVariable(scope, "world", GameObject.FindObjectOfType <World>());
-                SetVariable(scope, "debug", (System.Action<dynamic>)debug);
+                SetVariable("current", context.character, scope);
+                SetVariable("world", GameObject.FindObjectOfType <world>(), scope);
+                SetVariable("debug", (System.Action<dynamic>)debug, scope);
                 
                 context.pythonScriptScope = scope;
                 context.pythonScript.Execute(scope);

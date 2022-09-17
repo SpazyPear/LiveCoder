@@ -28,32 +28,33 @@ namespace Python3DMath
     {
         public vector2 add(vector2 a, vector2 b)
         {
-            return vector2.fromVec2(a.from() + b.from());
+            return vector2.fromVec2(a.getVect2() + b.getVect2());
         }
 
         public vector2 subtract(vector2 a, vector2 b)
         {
-            return vector2.fromVec2(a.from() - b.from());
+            return vector2.fromVec2(a.getVect2() - b.getVect2());
         }
 
         public vector2 dot(vector2 a, vector2 b)
         {
-            return vector2.fromVec2(a.from() * b.from());
+            return vector2.fromVec2(a.getVect2() * b.getVect2());
         }
 
         public vector2 scale(vector2 a, float scale)
         {
-            return vector2.fromVec2(a.from() * scale);
+            return vector2.fromVec2(a.getVect2() * scale);
         }
 
 
         public float dist(vector2 a, vector2 b)
         {
-            return Vector2.Distance(a.from(), b.from());
+            return Vector2.Distance(a.getVect2(), b.getVect2());
         }
 
     }
 
+    [PythonProxies.PythonClass("vector2")]
     public class vector2
     {
         public float x;
@@ -70,7 +71,7 @@ namespace Python3DMath
             return new vector2(v.x, v.y);
         }
 
-        public Vector2 from()
+        public Vector2 getVect2()
         {
             return new Vector2(x, y);
         }

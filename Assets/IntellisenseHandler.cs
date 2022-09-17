@@ -80,17 +80,26 @@ public class IntellisenseHandler : MonoBehaviour
         }
 
 
+
         foreach (CodeSuggestion suggestion in suggestions)
         {
             Transform t = Transform.Instantiate(intellisenseSpawned, intellisenseParent);
             TextMeshProUGUI textObject = t.GetComponent<TextMeshProUGUI>();
 
-            string typeString = suggestion.type == CodeSuggestionType.Function ? "[Method] " : "[Property] ";
+            string typeString = suggestion.type == CodeSuggestionType.Function ? "[Method] " : suggestion.type == CodeSuggestionType.Property ? "[Property] " : "[Constructor]";
             string nameString = suggestion.name;
-            string returnType = " : " + suggestion.returnType;
 
+            string retString = suggestion.returnType;
 
-            string paramString = (suggestion.type == CodeSuggestionType.Function && suggestion.parameters != null) ? giveList(suggestion.parameters.Select((a) => "" + a.name + " : " + a.type + "").ToList()) : "";
+            if (retString.Contains("->"))
+            {
+                retString = retString.Substring(retString.IndexOf("->"));
+            }
+
+            string returnType = " : " + retString;
+
+            //+ " : " + a.type +
+            string paramString = ((suggestion.type == CodeSuggestionType.Function  || suggestion.type == CodeSuggestionType.Constructor) && suggestion.parameters != null) ? giveList(suggestion.parameters.Select((a) => "" + a.name + "").ToList()) : "";
 
 
             string finalString = typeString + nameString + " " + paramString + returnType;

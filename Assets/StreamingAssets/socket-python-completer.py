@@ -1,6 +1,11 @@
+import threading
 from operator import truediv
 import jedi
 import json
+import os
+
+import sys
+
 
 class UdpComms():
 
@@ -76,47 +81,79 @@ class UdpComms():
         return data
 
 
-def get_type (completion, result):
+def get_type(completion, result):
     try:
-        result[0] = completion.get_type_hint()
-    except:
-        result[0] = None
 
-import threading
+        paramList = []
 
-def Intellisense(data: str):
+        if (len(completion.get_signatures()) > 0 and completion.get_signatures()[0].params != None):
+            for param in completion.get_signatures()[0].params:
+                paramList.append(str(param.description))
+
+        result[0] = {
+            "name": completion.name,
+            "typeHint": str(completion.get_type_hint()),
+            "params": paramList
+        }
+    except Exception as e:
+        print(e)
+        result[0] = {
+            "name": "__",
+            "typeHint": "",
+            "params": []
+        }
+
+
+lastFilePath = ""
+f = None
+
+
+def Intellisense(filePath: str, f, lastFilePath):
     try:
-        print (data)
+
+        if (f == None or filePath != lastFilePath):
+            f = open(filePath, 'r')
+            lastFilePath = filePath
+
+        data = f.read()
+
+        # print(data)
         new_lines = data.split('\n')
         last_line = new_lines[len(new_lines)-1]
-        
-        script = jedi.Script(data, project=jedi.Project("C:/Users/ajayv/Desktop/LiveCoder/Assets/StreamingAssets"))
+
+        dirname, filename = os.path.split(os.path.abspath(__file__))
+        script = jedi.Script(data, project=jedi.Project(dirname))
+
         #script.path = "C:/Users/ajayv/Desktop/LiveCoder/Assets/StreamingAssets"
-        
+
         completions = script.complete(len(new_lines), len(last_line))
-        
-        print ("================")
-        print ("Looking in " + str(len(new_lines)) + "," + str(len(last_line)))
-        
+
+        # print("================")
+        # print("Looking in " + str(len(new_lines)) + "," + str(len(last_line)))
+
         completionJSON = {
             'completions': []
         }
 
         for (i, completion) in enumerate(completions):
-            
-                
+
             # print (f"{i}: {completion.name} : {}")
-            
+
             result = [None]
             # print (f"Found type : {completion.get_type_hint()}" )
-            thread = threading.Thread(target=get_type, args=(completion, result))
+
+            thread = threading.Thread(
+                target=get_type, args=(completion, result))
             thread.start()
-            
+
             thread.join(timeout=0.01)
-            
-            completionJSON['completions'].append(completion.name + " : " + str(result[0]))
-            
-            
+
+            if (result[0] != None and str(result[0]['name']).startswith("__") == False):
+                completionJSON['completions'].append(result[0])
+
+            if (len(completionJSON['completions']) > 5):
+                break
+
         # if (completion.complete is None):
         #     print (completion.name + " : " + completion.get_type_hint())
         # else:
@@ -124,30 +161,39 @@ def Intellisense(data: str):
         #print (completion.name)
         # print (" Completion : " + completion.complete + " : " + completion.get_type_hint())
         # completionJSON['completions'].append(completion.complete + " : " )
-    
-        print ("===============>")
+
+        # print("===============>")
         return completionJSON
     except Exception as e:
-        print (e)
+        print(e)
         return {
             'completions': []
         }
         pass
 
 
-def __init__():
-    # Create UDP socket to use for sending (and receiving)
-    sock = UdpComms(udpIp="127.0.0.1", portTX=8000, portRX=8001,
-                    enableRX=True, supressWarnings=False)
+# Create UDP socket to use for sending (and receiving)
+sock = UdpComms(udpIp="127.0.0.1", portTX=8003, portRX=8002,
+                enableRX=True, supressWarnings=False)
 
-    i = 0
+i = 0
 
-    while True:
-        data = sock.ReadReceivedData()
-        if data != None:
-            sock.SendData(
-                json.dumps(Intellisense(data.decode("utf-8")))
-            )
+print("Connected")
+while True:
+    data = sock.ReadReceivedData()
 
+    if data != None:
 
-__init__()
+        d = data.decode("utf-8")
+
+        if (d == "END"):
+            print("Ending")
+            if (f != None):
+                f.close()
+            break
+
+        sock.SendData(
+            json.dumps(Intellisense(d, f, lastFilePath))
+        )
+
+# __init__()
