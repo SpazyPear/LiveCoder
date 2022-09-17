@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Reflection;
-using MoonSharp.Interpreter;
+using System.Reflection;/*
+using MoonSharp.Interpreter;*/
 using UnityEngine.Events;
 using System.Linq;
 
@@ -49,8 +49,8 @@ public class CodeContext
 
         end
 
-    ";
-    public Script script = new Script();
+    ";/*
+    public Script script = new Script();*/
     public Microsoft.Scripting.Hosting.ScriptSource pythonScript;
     public Microsoft.Scripting.Hosting.ScriptScope pythonScriptScope;
 
@@ -70,7 +70,7 @@ public class CodeExecutor : MonoBehaviour
     public Transform codeEditor;
 
     [Header("Context & Script Management")]
-    public UnityEvent<Script> preScript;
+   /* public UnityEvent<Script> preScript;*/
     public List<CodeContext> codeContexts;
 
 
@@ -94,13 +94,13 @@ public class CodeExecutor : MonoBehaviour
         GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
         input.onValueChanged.RemoveAllListeners();*/
     }
-
+/*
     public void CloseEditor()
     {
         
-       /* codeEditor.gameObject.SetActive(false);
+       *//* codeEditor.gameObject.SetActive(false);
         GetComponent<IntellisenseHandler>().LoadNewSuggestions(new List<CodeSuggestion>());
-        input.onValueChanged.RemoveAllListeners();*/
+        input.onValueChanged.RemoveAllListeners();*//*
     }
 
     GlobalManager globalManager = new GlobalManager();
@@ -126,7 +126,7 @@ public class CodeExecutor : MonoBehaviour
 
     public void OpenEditor (CodeContext context)
     {
-       /* print("Editor for " + context.character.name);
+       *//* print("Editor for " + context.character.name);
         codeEditor.gameObject.SetActive(true);
         input.text = context.source;
         //headerText.text = context.character.GetType().ToString();
@@ -137,7 +137,7 @@ public class CodeExecutor : MonoBehaviour
         currentGlobalsMap = setupIntellisense(editingContext.script.Globals, out currentSuggestions, true);
 
         input.onValueChanged.AddListener(OnValueChanged);
-*/
+*//*
         
     }
 
@@ -152,7 +152,7 @@ public class CodeExecutor : MonoBehaviour
 
     void OnValueChanged(string value)
     {
-      /*
+      *//*
         string lastWord = getLastWord(input.text);
 
         if (lastWord.Trim() != "")
@@ -217,7 +217,7 @@ public class CodeExecutor : MonoBehaviour
         {
             List<CodeSuggestion> foundSuggestions = currentSuggestions.ToList();
             GetComponent<IntellisenseHandler>().LoadNewSuggestions(foundSuggestions);
-        }*/
+        }*//*
     }
 
     void printList(List<string> strings)
@@ -512,7 +512,7 @@ public class CodeExecutor : MonoBehaviour
     private IEnumerator AwakeCoroutineLua()
     {
 
-        /*
+        *//*
 
                 foreach (CodeContext context in codeContexts)
                 {
@@ -611,10 +611,10 @@ public class CodeExecutor : MonoBehaviour
 
                     yield return new WaitForSeconds(1);
                 }
-        */
+        *//*
 
         yield return null;
-    }
+    }*/
 
 
 

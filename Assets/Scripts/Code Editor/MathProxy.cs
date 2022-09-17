@@ -81,8 +81,6 @@ namespace Python3DMath
     public class Vector2Proxy
     {
         vector2 target;
-
-        [MoonSharp.Interpreter.MoonSharpHidden]
         public Vector2Proxy(vector2 p)
         {
             this.target = p;

@@ -1,4 +1,4 @@
-using MoonSharp.Interpreter;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,6 @@ public class WallProxy : EntityProxy
 {
     Entity target;
 
-    [MoonSharpHidden]
     public WallProxy(Wall p) : base(p)
     {
         this.target = p;

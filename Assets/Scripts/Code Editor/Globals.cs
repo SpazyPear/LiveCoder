@@ -1,5 +1,4 @@
 using UnityEngine;
-using MoonSharp.Interpreter;
 using System.Collections.Generic;
 using System.Reflection;
 using Python3DMath;
@@ -7,7 +6,7 @@ using PythonProxies;
 
 class GlobalManager
 {
-
+/*
     public static Dictionary<System.Type, System.Type> proxyMappings = new Dictionary<System.Type, System.Type>();
     public static Dictionary<string, MethodInfo> globalFunctionMappings = new Dictionary<string, MethodInfo>();
 
@@ -83,11 +82,11 @@ class GlobalManager
 
 
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
-        /*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
+        *//*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
         script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
         script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
-*/
+*//*
 
     }
 
@@ -129,8 +128,8 @@ class GlobalManager
     private void SetupPathfinding(Script script)
     {
         Pathfinder pathfinder = GameObject.FindObjectOfType<Pathfinder>();
-/*        script.Globals["FindPath"] = (System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath;
-*/
+*//*        script.Globals["FindPath"] = (System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath;
+*//*
         RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>>(script, "FindPath", pathfinder.FindPath, ((System.Func<Vector2Int, Vector2Int, System.Collections.Generic.List<Vector2Int>>)pathfinder.FindPath).Method);
     }
 
@@ -160,14 +159,14 @@ class GlobalManager
             }
         );
 
-/*
+*//*
         script.Globals["vec2"] = (System.Func<int, int, Vector2Int>)vec2;
-*/
+*//*
         RegisterGlobalFunction<System.Func<int, int, Vector2Int>>(script, "vec2Int",vec2Int, ((System.Func<int, int, Vector2Int>)vec2Int).Method);
         RegisterGlobalFunction<System.Func<float, float, vector2>>(script, "vec2", vec2, ((System.Func<float, float, vector2>)vec2).Method);
-        /*
+        *//*
                 script.Globals["dist"] = (System.Func<Vector2Int, Vector2Int, int>)dist;
-        */
+        *//*
         RegisterGlobalFunction<System.Func<Vector2Int, Vector2Int, float>>(script, "dist", dist, ((System.Func<Vector2Int, Vector2Int, float>)dist).Method);
 
     }
@@ -199,6 +198,6 @@ class GlobalManager
     public void OnScriptPreStep (Script script)
     {
 
-    }
+    }*/
 
 }

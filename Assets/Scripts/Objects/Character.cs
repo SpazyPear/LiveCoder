@@ -101,7 +101,6 @@ public abstract class Character : Entity
     }
 
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public async virtual void initializeUnit()
     {
         currentEnergy = characterData.maxEnergy;

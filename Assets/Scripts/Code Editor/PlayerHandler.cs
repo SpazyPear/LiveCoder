@@ -1,4 +1,4 @@
-using MoonSharp.Interpreter;
+/*using MoonSharp.Interpreter;*/
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,7 +59,7 @@ public class PlayerHandler : MonoBehaviour
                         if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                         {
                             this.multipleSelectedPlayers.Add(hit.transform.GetComponentInChildren<Entity>());
-                            GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
+                            //GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
                         }
                     }
                 }

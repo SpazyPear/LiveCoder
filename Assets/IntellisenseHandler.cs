@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using TMPro.EditorUtilities;
 
 public class IntellisenseHandler : MonoBehaviour
 {

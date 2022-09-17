@@ -18,8 +18,8 @@ public class Trap : Entity
         if (character)
         {
             //character.codeContext.script = this.codeContext.script;
-            GameObject.FindObjectOfType<CodeExecutor>().StartCoroutine(GameObject.FindObjectOfType<CodeExecutor>().ResetScript(codeContext.source, character));
-            print("Recieved character hit -- resetting to \n " + this.codeContext.script);
+            //GameObject.FindObjectOfType<CodeExecutor>().StartCoroutine(GameObject.FindObjectOfType<CodeExecutor>().ResetScript(codeContext.source, character));
+            //print("Recieved character hit -- resetting to \n " + this.codeContext.script);
         }
     }
 }

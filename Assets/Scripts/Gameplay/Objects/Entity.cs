@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
-using MoonSharp.Interpreter;
 using System;
 using UnityEngine.UI;
 
@@ -32,8 +31,6 @@ public class Entity : ControlledMonoBehavour
     RectTransform healthBarObj;
     protected Slider healthBar;
    
-
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual async void die(object sender = null)
     {
         float timer = 0;
@@ -103,7 +100,6 @@ public class Entity : ControlledMonoBehavour
         healthBar.transform.position = orignalPosition;
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void takeDamage(int damage, object sender = null)
     {
         if (currentHealth - damage > 0)
@@ -123,7 +119,6 @@ public class Entity : ControlledMonoBehavour
         die(sender);
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void selfDestruct()
     {
         for (int x = -selfDestructRange; x <= selfDestructRange; x++)
