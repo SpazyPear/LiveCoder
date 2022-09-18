@@ -1,3 +1,4 @@
+from distutils.log import error
 import threading
 from operator import truediv
 import jedi
@@ -131,8 +132,18 @@ def Intellisense(filePath: str, f, lastFilePath):
         # print("================")
         # print("Looking in " + str(len(new_lines)) + "," + str(len(last_line)))
 
+        errors = []
+
+        for error in script.get_syntax_errors():
+            errors.append({
+                'line': error.line,
+                'column': error.column,
+                'message': error.get_message()
+            })
+
         completionJSON = {
-            'completions': []
+            'completions': [],
+            'errors': errors
         }
 
         for (i, completion) in enumerate(completions):
