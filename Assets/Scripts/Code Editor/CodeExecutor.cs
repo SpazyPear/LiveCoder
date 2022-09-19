@@ -512,7 +512,6 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
-           // if (!context.entity.GetComponent<Photon.Pun.PhotonView>().IsMine) { continue; }
             try
             {
                 context.script.DoString(context.source);
@@ -531,14 +530,11 @@ public class CodeExecutor : MonoBehaviour
 
         foreach (CodeContext context in codeContexts)
         {
-            //if (!context.entity.GetComponent<Photon.Pun.PhotonView>().IsMine) { continue; }
 
             if (context.shouldExecute)
             {
                 try
                 {
-
-
                     controlPanelManager.UpdateGlobals(context);
 
                     context.script.Call(context.script.Globals["OnStart"]);

@@ -7,18 +7,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using Photon.Realtime;
 
 public class PlayerManager : ControlledMonoBehavour
 {
+    public Player LocalPlayer;
     public GameData gameData;
     public BindableValue<int> creditsLeft;
-    public int playerID;
+    public string playerID => LocalPlayer.UserId;
+    public bool isLocalPlayer => LocalPlayer.IsLocal;
     public List<Entity> units;
     public bool isLeftSide;
 
     void Awake()
     {
+        LocalPlayer = PhotonNetwork.LocalPlayer;
         creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();
     }
@@ -38,8 +41,8 @@ public class PlayerManager : ControlledMonoBehavour
 
     void spawnStartingObjects()
     {
-        spawnUnit("BaseTower", isLeftSide ? new Vector2Int(State.GridContents.GetLength(0) / 2, State.GridContents.GetLength(1) - 1) : new Vector2Int(State.GridContents.GetLength(0) / 2, 0));
-        spawnUnit("CoinStore", isLeftSide ? new Vector2Int(State.GridContents.GetLength(0) / 2 + 1, State.GridContents.GetLength(1) - 1) : new Vector2Int(State.GridContents.GetLength(0) / 2 + 1, 0));
+        spawnUnit("BaseTower", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2, 0));
+        spawnUnit("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
     }
 
     public Entity spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
@@ -47,7 +50,7 @@ public class PlayerManager : ControlledMonoBehavour
         GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;
         if (prefab)
         {
-            if (State.validMovePosition(spawnPos))
+            if (GridManager.validMovePosition(spawnPos))
             {
                 if (prefab.GetComponentInChildren<Entity>().cost <= creditsLeft.value)
                 {

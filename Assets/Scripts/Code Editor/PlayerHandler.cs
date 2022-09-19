@@ -72,7 +72,7 @@ public class PlayerHandler : MonoBehaviour
         List<Character> characters = new List<Character>();
         foreach (Character c in GameObject.FindObjectsOfType<Character>())
         {
-            if (c.ownerPlayer.playerID == 1)
+            if (!c.ownerPlayer.isLocalPlayer)
             {
                 characters.Add(c);
             }
@@ -108,7 +108,7 @@ public class PlayerHandler : MonoBehaviour
         return entities;
     }
 
-    public Entity findClosest(Entity sender, string typeName)
+    public Entity findClosest(Entity sender, string typeName, bool enemyOnly)
     {
         Entity closest = null;
         float minDistance = Mathf.Infinity;
@@ -122,7 +122,7 @@ public class PlayerHandler : MonoBehaviour
 
         foreach (Entity c in GameObject.FindObjectsOfType(type))
         {
-            if (c == sender)
+            if (c == sender || (enemyOnly && c.ownerPlayer && c.ownerPlayer.playerID == sender.ownerPlayer.playerID))
                 continue;
 
             if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
@@ -163,14 +163,16 @@ public class CharacterHandlerProxy : EntityProxy
     public bool PathCompleted() { return target.PathCompleted(); }
     public void MoveOnPathNext() { target.MoveOnPathNext(); }
 
-    public bool IsInRange(Entity entity) { return target.checkForInRangeEntities<Entity>().Contains(entity); } // make good
+    public bool IsInRange(Entity entity) { return target.checkForInRangeEntities("Entity", true, true).Contains(entity); } // make good
 
-    public void Attack(Entity entity) { target.attack(entity); }
+    public void Attack(int x, int y) { target.attack(x, y); }
 
     public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
     public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
 
     public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
+
+    public void CheckForInRangeEntities(string typeName, bool friendlies, bool enemies) { target.checkForInRangeEntities(typeName, friendlies, enemies); }
 
 }
 

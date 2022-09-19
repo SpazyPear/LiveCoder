@@ -93,12 +93,12 @@ public class Wall : Entity
 
     Wall wallAt(int x, int y)
     {
-        if (x < 0 || x >= State.GridContents.GetLength(0) || y < 0 || y >= State.GridContents.GetLength(1))
+        if (x < 0 || x >= GridManager.GridContents.GetLength(0) || y < 0 || y >= GridManager.GridContents.GetLength(1))
             return null;
         
-        if (State.GridContents[x, y].Entity && State.GridContents[x, y].Entity.GetComponentInChildren<Wall>())
+        if (GridManager.GridContents[x, y].Entity && GridManager.GridContents[x, y].Entity.GetComponentInChildren<Wall>())
         {
-            return State.GridContents[x, y].Entity.GetComponentInChildren<Wall>();
+            return GridManager.GridContents[x, y].Entity.GetComponentInChildren<Wall>();
         }
         return null;
     }

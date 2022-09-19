@@ -74,7 +74,7 @@ class GlobalManager
 
         RegisterGlobalFunction<System.Func<Entity>>(script, "getEnemyTower", handler.getEnemyTower, ((System.Func<Entity>)handler.getEnemyTower).Method);
 
-        RegisterGlobalFunction<System.Func<Character, string, Entity>>(script, "findClosest", handler.findClosest, ((System.Func<Character, string, Entity>)handler.findClosest).Method);
+        RegisterGlobalFunction<System.Func<Character, string, bool, Entity>>(script, "findClosest", handler.findClosest, ((System.Func<Character, string, bool, Entity>)handler.findClosest).Method);
 
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
         /*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
@@ -130,7 +130,7 @@ class GlobalManager
 
     public Vector2Float gridPos (int x, int y)
     {
-        return Vector2Float.fromVec2(new Vector2(State.GridContents[x, y].Object.transform.position.x, State.GridContents[x, y].Object.transform.position.z));
+        return Vector2Float.fromVec2(new Vector2(GridManager.GridContents[x, y].Object.transform.position.x, GridManager.GridContents[x, y].Object.transform.position.z));
     }
 
     private void SetupTypes(Script script)

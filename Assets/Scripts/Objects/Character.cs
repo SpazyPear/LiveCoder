@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
 using Photon.Pun;
-using static UnityEngine.GraphicsBuffer;
 
 public enum CLASSTYPE
 {
@@ -101,7 +100,7 @@ public abstract class Character : Entity
         currentEnergy = characterData.maxEnergy;
         currentHealth = characterData.maxHealth;
 
-        while (State.GridContents == null)
+        while (GridManager.GridContents == null)
             await Task.Yield();
 
         if (startInScene)
@@ -132,11 +131,11 @@ public abstract class Character : Entity
         {
             if (checkPosOnGrid(new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton)))
             {
-                State.GridContents[gridPos.x, gridPos.y].Entity = null;
+                GridManager.GridContents[gridPos.x, gridPos.y].Entity = null;
               
                 gridPos = new Vector2Int(gridPos.x + XDirection, gridPos.y + YDirecton);
-                State.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
-                tweener.AddTween(transform, transform.position, State.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);
+                GridManager.GridContents[gridPos.x, gridPos.y].Entity = gameObject;
+                tweener.AddTween(transform, transform.position, GridManager.GridContents[gridPos.x, gridPos.y].Object.transform.position, characterData.playerSpeed);
                 currentEnergy -= 1;
             }
             else
@@ -149,30 +148,8 @@ public abstract class Character : Entity
 
     public bool checkPosOnGrid(Vector2Int pos)
     {
-        try { return State.GridContents[pos.x, pos.y].Entity == null || (State.GridContents[pos.x, pos.y].Entity != null && State.GridContents[pos.x, pos.y].Entity.GetComponentInChildren<Trap>() != null); }
+        try { return GridManager.GridContents[pos.x, pos.y].Entity == null || (GridManager.GridContents[pos.x, pos.y].Entity != null && GridManager.GridContents[pos.x, pos.y].Entity.GetComponentInChildren<Trap>() != null); }
         catch(IndexOutOfRangeException) { return false; }
-    }
-
-
-    public List<T> checkForInRangeEntities<T>() where T : Entity
-    {
-        List<T> foundCharacters = new List<T>();
-        for (int x = -characterData.range; x <= characterData.range; x++)
-        {
-            for (int y = -characterData.range; y <= characterData.range; y++)
-            {
-                try
-                {
-                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
-                    {
-                        
-                        foundCharacters.Add(State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(typeof(T)) as T);
-                    }
-                }
-                catch (IndexOutOfRangeException) { }
-            }
-        }
-        return foundCharacters;
     }
 
     public void recieveOre(OreDepositData data)
@@ -180,15 +157,26 @@ public abstract class Character : Entity
         currentEnergy += data.value;
     }
     
-    public void attack (Entity target)
+    public void attack (int x, int y)
     {
-        if (target != null && currentEnergy > 0 && checkForInRangeEntities<Entity>().Contains(target) && !isDisabled)
+        if (!isDisabled)
         {
-            photonView.RPC("replicatedAttack", RpcTarget.All, target.viewID);
-        }
-        else
-        {
-            ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
+            if (Mathf.Max(x, y) <= characterData.range)
+            {
+                Entity target = GridManager.getEntityAtPos(gridPos + new Vector2Int(x, y));
+                if (target != null && currentEnergy > 0)
+                {
+                    photonView.RPC("replicatedAttack", RpcTarget.All, target.viewID);
+                }
+                else
+                {
+                    ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
+                }
+            }
+            else
+            {
+                ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("Attack position out of range for this unit."));
+            }
         }
     }
     

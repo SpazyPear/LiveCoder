@@ -25,7 +25,7 @@ public class ErrorBubbleManager : MonoBehaviour
 
     public static void spawnBubble(Vector2Int pos, string error)
     {
-        GameObject text = Instantiate(errorBubble, State.gridToWorldPos(pos) + new Vector3(0, 7f, 0), Quaternion.identity, FindObjectOfType<Canvas>().transform);
+        GameObject text = Instantiate(errorBubble, GridManager.gridToWorldPos(pos) + new Vector3(0, 7f, 0), Quaternion.identity, FindObjectOfType<Canvas>().transform);
         text.GetComponentInChildren<TMPro.TMP_Text>().text = error;
         Destroy(text, 5f);
         instance.animateBubble(text.transform);

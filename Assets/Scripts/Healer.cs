@@ -37,8 +37,8 @@ public class Healer : Character
     public IEnumerator replicatedHeal() 
     {
         playHealFX();
-        List<Character> inRangeCharacters = checkForInRangeEntities<Character>();
-        foreach (Character c in inRangeCharacters)
+        List<Entity> inRangeEntities = checkForInRangeEntities("Entity", true, false);
+        foreach (Character c in inRangeEntities)
         {
             try
             {
@@ -72,7 +72,7 @@ public class Healer : Character
     [PunRPC]
     public IEnumerator replicatedEMP()
     {
-        List<Entity> inRange = GridManager.checkForInRangeEntities<Entity>(gridPos, healerData.EMPRange, this, true);
+        List<Entity> inRange = checkForInRangeEntities("Entity", false, true);
         foreach (Entity c in inRange)
         {
             if (c.ownerPlayer != ownerPlayer)

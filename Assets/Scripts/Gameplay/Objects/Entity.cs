@@ -17,7 +17,7 @@ public class EntityProxy
         this.target = p;
     }
 
-    public Vector2Int position
+    public Vector2Int gridPos
     {
         get
         {
@@ -25,11 +25,13 @@ public class EntityProxy
         }
     }
 
-
+    
     public string id => target.ID.ToString();
     public int health => target.currentHealth;
 
-    public Vector2Float pos ()
+    public bool friendly => target.ownerPlayer.playerID == PhotonNetwork.LocalPlayer.UserId;
+
+    public Vector2Float worldPos()
     {
         return Vector2Float.fromVec2(new Vector2(target.transform.position.x, target.transform.position.z));
     }
@@ -154,16 +156,22 @@ public class Entity : ControlledMonoBehavour
     [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void selfDestruct()
     {
+        photonView.RPC("replicatedSelfDestruct", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedSelfDestruct()
+    {
         for (int x = -selfDestructRange; x <= selfDestructRange; x++)
         {
             for (int y = -selfDestructRange; y <= selfDestructRange; y++)
             {
                 try
                 {
-                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
                     {
-                        if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
-                            State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
+                        if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
+                            GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
                     }
                 }
                 catch (IndexOutOfRangeException) { }
@@ -172,6 +180,7 @@ public class Entity : ControlledMonoBehavour
         Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
         Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
         Destroy(gameObject);
+        yield return null;
     }
     
     async void EMPTimer(float strength)
@@ -211,6 +220,31 @@ public class Entity : ControlledMonoBehavour
         yield return null;
     }
 
+    public List<Entity> checkForInRangeEntities(string typeName, bool friendlies, bool enemies)
+    {
+        Type type = Type.GetType(typeName);
+        List<Entity> foundEntities = new List<Entity>();
+        for (int x = -entityData.range; x <= entityData.range; x++)
+        {
+            for (int y = -entityData.range; y <= entityData.range; y++)
+            {
+                try
+                {
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) != this)
+                    {
+                        if (!friendlies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer == this.ownerPlayer) continue;
+
+                        if (!enemies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer != this.ownerPlayer) continue;
+
+                        foundEntities.Add(GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity);
+    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        return foundEntities;
+    }
+    
     private void OnDestroy()
     {
         

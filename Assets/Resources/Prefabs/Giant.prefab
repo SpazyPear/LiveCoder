@@ -2585,11 +2585,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.18
+      value: 4.62
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.18
+      value: 10.19
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalScale.z
@@ -2605,7 +2605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.44
+      value: 0.921
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2637,14 +2637,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a,
         type: 3}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
 --- !u!1 &7891210787500344020 stripped
 GameObject:
@@ -2665,10 +2666,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldHealth: 0
-  maxShieldHealth: 0
-  shieldRegenRate: 0
+  maxShieldHealth: 5
+  shieldRegenRate: 1
   shieldState: 0
   prevShieldState: 0
+--- !u!65 &3198106492253566826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891210787500344020}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.53931797, y: 1.1337919, z: 0.12707861}
+  m_Center: {x: -0.000000059604645, y: 0, z: 0.030161042}
 --- !u!4 &7896669111611145384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a,

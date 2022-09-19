@@ -14,9 +14,9 @@ public class TurretProxy : EntityProxy
         this.target = p;
     }
 
-    public void targetCharacter(Character enemy) => target.target(enemy);
+    public void targetCharacter(Entity e) => target.target(e);
     public void shoot() => target.shoot();
-
+    
     public void lookAt(Vector2Float pos) => target.lookAt(pos);
 
 }
@@ -26,7 +26,7 @@ public class Turret : Entity
 
     TurretData turretData { get { return entityData as TurretData; } }
     GameObject projectile;
-    Character currentTarget;
+    Entity currentTarget;
     Transform pivot;
     [SerializeField] Transform barrel;
     ParticleSystem shootPS;
@@ -48,7 +48,7 @@ public class Turret : Entity
         //StartCoroutine(debugShoot());
     }
 
-    public void target(Character enemy)
+    public void target(Entity enemy)
     {
         rotatingBarrel = false;
         this.StopAllCoroutines();
