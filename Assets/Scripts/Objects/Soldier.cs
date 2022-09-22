@@ -22,12 +22,10 @@ public class Soldier : Character
     }
 
     // Start is called before the first frame update
-    new void Start()
+   /* new void Start()
     {
         base.Start();
-    }
-
-    // Update is called once per frame
-
+        photonView.RPC("attack", Photon.Pun.RpcTarget.All, new Entity());
+    }*/
 
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 using UnityEngine.UI;
+using Photon.Pun;
 
 
 using PythonProxies;
@@ -30,9 +31,15 @@ public class Entity : ControlledMonoBehavour
     RectTransform CanvasRect;
     RectTransform healthBarObj;
     protected Slider healthBar;
+    public PhotonView photonView;
+    public int viewID => photonView.ViewID;
    
     public virtual async void die(object sender = null)
     {
+        if (ownerPlayer)
+            ownerPlayer.units.Remove(this);
+     
+        
         float timer = 0;
 
 
@@ -52,10 +59,16 @@ public class Entity : ControlledMonoBehavour
         }
         Destroy(gameObject);
     }
-
-    private void Awake()
+    
+    public virtual void Start()
     {
-        codeContext.character = this;
+        //GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
+    }
+
+    public virtual void Awake()
+    {
+        
+        codeContext.entity = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         PythonInterpreter.AddContext(codeContext);
@@ -63,15 +76,13 @@ public class Entity : ControlledMonoBehavour
         healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
         currentHealth = entityData.maxHealth;
         healthBar = healthBarObj.GetComponentInChildren<Slider>();
-       // healthBar.value = currentHealth;
+        photonView = GetComponentInParent<PhotonView>();
+        GameManager.unitInstances.Add(viewID, this);
+        //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "unitInstances", GameManager.unitInstances } });
+        // healthBar.value = currentHealth;
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
+    public virtual void Update()
     {
        
         Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(transform.position + new Vector3(0, 13f, 0));
@@ -121,16 +132,22 @@ public class Entity : ControlledMonoBehavour
 
     public virtual void selfDestruct()
     {
+        photonView.RPC("replicatedSelfDestruct", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public IEnumerator replicatedSelfDestruct()
+    {
         for (int x = -selfDestructRange; x <= selfDestructRange; x++)
         {
             for (int y = -selfDestructRange; y <= selfDestructRange; y++)
             {
                 try
                 {
-                    if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity && State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
                     {
-                        if (State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
-                            State.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
+                        if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
+                            GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
                     }
                 }
                 catch (IndexOutOfRangeException) { }
@@ -139,6 +156,7 @@ public class Entity : ControlledMonoBehavour
         Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
         Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
         Destroy(gameObject);
+        yield return null;
     }
     
     async void EMPTimer(float strength)
@@ -169,6 +187,40 @@ public class Entity : ControlledMonoBehavour
         EMPTimer(strength);
     }
 
+    [PunRPC]
+    public IEnumerator replicatedTeleport(float x, float y, float z, float pitch, float yaw, float roll, int gridX, int gridY)
+    {
+        transform.position = new Vector3(x, y, z);
+        transform.rotation = Quaternion.Euler(pitch, yaw, roll);
+        gridPos = new Vector2Int(gridX, gridY);
+        yield return null;
+    }
+
+    public List<Entity> checkForInRangeEntities(string typeName, bool friendlies, bool enemies)
+    {
+        Type type = Type.GetType(typeName);
+        List<Entity> foundEntities = new List<Entity>();
+        for (int x = -entityData.range; x <= entityData.range; x++)
+        {
+            for (int y = -entityData.range; y <= entityData.range; y++)
+            {
+                try
+                {
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) != this)
+                    {
+                        if (!friendlies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer == this.ownerPlayer) continue;
+
+                        if (!enemies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer != this.ownerPlayer) continue;
+
+                        foundEntities.Add(GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity);
+    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        return foundEntities;
+    }
+    
     private void OnDestroy()
     {
         

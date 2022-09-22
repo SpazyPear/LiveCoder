@@ -23,15 +23,15 @@ public class PlayerHandler : MonoBehaviour
           
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
+                if (hit.transform != null && hit.transform.GetComponentInParent<Entity>() != null)
                 {
                     print($"Player {hit.transform.parent} has been selected");
 
 
-                    if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
+                    if (hit.transform.GetComponentInParent<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                     {
                         this.multipleSelectedPlayers.Clear();
-                        this.selectedPlayer = hit.transform.GetComponentInChildren<Entity>();
+                        this.selectedPlayer = hit.transform.GetComponentInParent<Entity>();
 
                         PythonInterpreter.instance.OpenEditor(this.selectedPlayer.codeContext);
                         //GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
@@ -72,7 +72,7 @@ public class PlayerHandler : MonoBehaviour
         List<Character> characters = new List<Character>();
         foreach (Character c in GameObject.FindObjectsOfType<Character>())
         {
-            if (c.ownerPlayer.playerID == 1)
+            if (!c.ownerPlayer.isLocalPlayer)
             {
                 characters.Add(c);
             }
@@ -108,7 +108,7 @@ public class PlayerHandler : MonoBehaviour
         return entities;
     }
 
-    public Entity findClosestEntityOfType(Entity sender, string typeName)
+    public Entity findClosest(Entity sender, string typeName, bool enemyOnly)
     {
         Entity closest = null;
         float minDistance = Mathf.Infinity;
@@ -122,7 +122,7 @@ public class PlayerHandler : MonoBehaviour
 
         foreach (Entity c in GameObject.FindObjectsOfType(type))
         {
-            if (c == sender)
+            if (c == sender || (enemyOnly && c.ownerPlayer && c.ownerPlayer.playerID == sender.ownerPlayer.playerID))
                 continue;
 
             if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
@@ -154,4 +154,5 @@ public class PlayerHandler : MonoBehaviour
         return entities;
     }
 
+ 
 }

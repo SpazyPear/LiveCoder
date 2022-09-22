@@ -11,25 +11,28 @@ public enum ProjectileLane
 public class ProjectileBehaviour : MonoBehaviour
 {
     public int damage = 1;
-    bool isColliding;
+    public PlayerManager ownerPlayer;
+    public float aliveRange;
     public ProjectileLane lane;
 
     private void Start()
     {
-        Destroy(gameObject, 4);
+        Destroy(gameObject, aliveRange);
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (!isColliding)
+        Entity character = collision.gameObject.GetComponentInParent<Entity>();
+        Shield shield = collision.GetComponentInParent<Shield>();
+        if (character && character.ownerPlayer != ownerPlayer)
         {
-            isColliding = true;
-            Character character = collision.gameObject.GetComponentInChildren<Character>();
-            if (character)
-            {
-                character.takeDamage(damage, this);
-            }
+            character.takeDamage(damage, this);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+        else if (shield)
+        {
+            shield.takeShieldDamage(damage);
+            Destroy(gameObject);
+        }
     }
 }

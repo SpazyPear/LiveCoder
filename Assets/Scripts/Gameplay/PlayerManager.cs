@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,48 +7,55 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using Photon.Realtime;
 
 public class PlayerManager : ControlledMonoBehavour
 {
+    public Player LocalPlayer;
     public GameData gameData;
     public BindableValue<int> creditsLeft;
-    public int playerID;
+    public string playerID => LocalPlayer.UserId;
+    public bool isLocalPlayer => LocalPlayer.IsLocal;
     public List<Entity> units;
-    public bool isAttacking;
+    public bool isLeftSide;
 
     void Awake()
     {
+        LocalPlayer = PhotonNetwork.LocalPlayer;
         creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();
     }
 
+    void Start()
+    {
+        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { { "PlayerID", playerID } });
+        spawnStartingObjects();
+    }
+
     void initPlayer()
     {
-        GameManager.OnPhaseChange.AddListener(changePhase);
+        creditsLeft.value = gameData.initialGold;
+        isLeftSide = PhotonNetwork.IsMasterClient;
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
-        /*if (isAttacking)
-            creditsLeft.value += gameData.attackGoldIncrease[0];
-        else
-            creditsLeft.value += gameData.defenceGoldIncrease[0];*/
     }
 
-    void changePhase(int newPhase)
+    void spawnStartingObjects()
     {
-        
+        spawnUnit("BaseTower", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2, 0));
+        spawnUnit("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
     }
 
-    public Entity spawnUnit(string entityType, Vector2Int spawnPos)
+    public Entity spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
     {
         GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;
         if (prefab)
         {
-            if (State.validMovePosition(spawnPos))
+            if (GridManager.validMovePosition(spawnPos))
             {
                 if (prefab.GetComponentInChildren<Entity>().cost <= creditsLeft.value)
                 {
                     creditsLeft.value -= prefab.GetComponentInChildren<Entity>().cost;
-                    Entity entity = GameManager.spawnOnGrid(prefab, spawnPos).GetComponentInChildren<Entity>();
+                    Entity entity = GridManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Entity>();
                     entity.ownerPlayer = this;
                     units.Add(entity);
                     return entity;

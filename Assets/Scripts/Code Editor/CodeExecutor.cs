@@ -79,7 +79,7 @@ public class CodeExecutor : MonoBehaviour
     public void RunCode ()
     {
         StopAllCoroutines();
-        StartCoroutine("AwakeCoroutineLua");
+        StartCoroutine(AwakeCoroutineLua());
     }
 
 
@@ -132,7 +132,7 @@ public class CodeExecutor : MonoBehaviour
         //headerText.text = context.character.GetType().ToString();
         editingContext = context;
         editingContext.script.DoString(context.source);
-        globalManager.OnScriptStart(editingContext.script, target: context.character);
+        globalManager.OnScriptStart(editingContext.script, target: context.entity);
         Dictionary<string, DynValue> map = setupIntellisense(editingContext.script.Globals,out currentSuggestions);
         currentGlobalsMap = setupIntellisense(editingContext.script.Globals, out currentSuggestions, true);
 
@@ -488,13 +488,13 @@ public class CodeExecutor : MonoBehaviour
         
         for (int i = 0; i < codeContexts.Count; i++)
         {
-            if (codeContexts[i].character == sender)
+            if (codeContexts[i].entity == sender)
             {
 
                 codeContexts[i].source = newSource;
                 codeContexts[i].script = new Script();
                 codeContexts[i].script.DoString(newSource);
-                globalManager.OnScriptStart(codeContexts[i].script, target: codeContexts[i].character);
+                globalManager.OnScriptStart(codeContexts[i].script, target: codeContexts[i].entity);
                 controlPanelManager.UpdateGlobals(codeContexts[i]);
 
                 print("Calling start on " + i. ToString() + " ::: " + newSource);
@@ -549,7 +549,7 @@ public class CodeExecutor : MonoBehaviour
 
                         catch (MoonSharp.Interpreter.InterpreterException e)
                         {
-                            context.character.selfDestruct();
+                            context.entity.selfDestruct();
                             Debug.Log($"Doh! An error occured! {e.DecoratedMessage}");
                             Debug.Log($"Call Stack : {e.CallStack}");
                             Debug.Log($"{e.Source}");

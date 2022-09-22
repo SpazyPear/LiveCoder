@@ -75,7 +75,7 @@ class GlobalManager
 
         RegisterGlobalFunction<System.Func<Entity>>(script, "getEnemyTower", handler.getEnemyTower, ((System.Func<Entity>)handler.getEnemyTower).Method);
 
-        RegisterGlobalFunction<System.Func<Character, string, Entity>>(script, "findClosest", handler.findClosestEntityOfType, ((System.Func<Character, string, Entity>)handler.findClosestEntityOfType).Method);
+        RegisterGlobalFunction<System.Func<Character, string, bool, Entity>>(script, "findClosest", handler.findClosest, ((System.Func<Character, string, bool, Entity>)handler.findClosest).Method);
 
 
         RegisterGlobalFunction<System.Func<string, List<Entity>>>(script, "getEntitiesOfType", handler.getAllEntitiesOfType, ((System.Func<string, List<Entity>>)handler.getAllEntitiesOfType).Method);

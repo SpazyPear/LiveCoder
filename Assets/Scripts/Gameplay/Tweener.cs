@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,7 +38,6 @@ public class Tweener : MonoBehaviour
                 activeTween.Target.position = activeTween.EndPos;
                 tweenActive = false;
                 activeTween = null;
-
             }
         }
            
@@ -47,7 +47,6 @@ public class Tweener : MonoBehaviour
     {
         await waitForComplete();
         activeTween = new Tween(targetObject, startPos, endPos, Time.time, duration);
-        
     }
 
     public async Task waitForComplete()

@@ -8,4 +8,5 @@ public class EntityData : ScriptableObject
     public int maxHealth;
     public int cost;
     public float empResistance = 1;
+    public int range = 1;
 }

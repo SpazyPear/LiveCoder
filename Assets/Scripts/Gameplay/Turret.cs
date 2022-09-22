@@ -7,9 +7,9 @@ using PythonProxies;
 public class Turret : Entity
 {
 
-    TurretData turretData;
+    TurretData turretData { get { return entityData as TurretData; } }
     GameObject projectile;
-    Character currentTarget;
+    Entity currentTarget;
     Transform pivot;
     [SerializeField] Transform barrel;
     ParticleSystem shootPS;
@@ -23,10 +23,10 @@ public class Turret : Entity
 
     private void Start()
     {
+        base.Start();
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
         pivot = transform.GetChild(0);
         shootPS = GetComponentInChildren<ParticleSystem>();
-        
     }
 
     public override void OnStart()
@@ -36,7 +36,7 @@ public class Turret : Entity
         //StartCoroutine(debugShoot());
     }
 
-    public void target(Character enemy)
+    public void target(Entity enemy)
     {
         print("Starting targetting towards : " + enemy.transform.name);
         rotatingBarrel = false;
@@ -46,13 +46,22 @@ public class Turret : Entity
         StartCoroutine(rotateBarrel());
     }
 
-    public void shoot()
+    [PunRPC]
+    IEnumerator replicatedShoot()
+    {
+        GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
+        obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = ownerPlayer;
+        obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.prpjectileAliveTime;
+        obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
+        shootPS.Play();
+        yield return null;
+    }
+
+    public void shoot() //todo action function type that checks if disabled, has energy and depletes energy
     {
         if (!isDisabled)
         {
-            GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
-            obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
-            shootPS.Play();
+            photonView.RPC("replicatedShoot", RpcTarget.All);
         }
     }
 

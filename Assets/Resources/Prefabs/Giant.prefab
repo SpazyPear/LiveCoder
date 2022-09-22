@@ -2214,6 +2214,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3817093007077917260}
+  - component: {fileID: 7001191000162214988}
+  - component: {fileID: 4735557412909335029}
+  - component: {fileID: 6740158699036501558}
   m_Layer: 0
   m_Name: Giant
   m_TagString: Untagged
@@ -2237,6 +2240,87 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7001191000162214988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216981470073652444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 716398b3e4209cb40af4b3fa94356a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  selfDestructRange: 2
+  selfDestructDamage: 2
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: {fileID: 0}
+  cost: 0
+  codeContext:
+    source: 'function OnStart()
+
+
+
+      end
+
+
+
+      function OnStep()
+
+
+
+      end'
+    entity: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 1
+  ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
+  photonView: {fileID: 0}
+  tweener: {fileID: 4735557412909335029}
+  isMoveThreadRunning: 0
+  currentEnergy: 0
+  debugMove: 0
+  startInScene: 0
+  shieldDownPoint: {fileID: 7854719270260663899}
+  shieldUpPoint: {fileID: 6126807153367468742}
+  shield: {fileID: 2225077093456170452}
+--- !u!114 &4735557412909335029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216981470073652444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6740158699036501558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216981470073652444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8390953412532019935
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,8 +2500,6 @@ GameObject:
   - component: {fileID: 7897161079455242477}
   - component: {fileID: 809062181828294086}
   - component: {fileID: 8310247424533291580}
-  - component: {fileID: 8548310436323557153}
-  - component: {fileID: 6999732456707353362}
   m_Layer: 0
   m_Name: SM_Chr_ScifiWorlds_AlienCombat_01
   m_TagString: Untagged
@@ -2432,7 +2514,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9168144760825188083}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.43, z: 0}
   m_LocalScale: {x: 1.5, y: 1.4698862, z: 1.4698862}
   m_ConstrainProportionsScale: 0
@@ -2448,7 +2530,7 @@ Transform:
   - {fileID: 7854719270260663899}
   m_Father: {fileID: 3817093007077917260}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &809062181828294086
 Animator:
   serializedVersion: 4
@@ -2482,56 +2564,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2.86, z: 1}
   m_Center: {x: 0, y: 0.84, z: 0}
---- !u!114 &8548310436323557153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9168144760825188083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 716398b3e4209cb40af4b3fa94356a68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 0
-  selfDestructRange: 2
-  selfDestructDamage: 2
-  gridPos: {x: 0, y: 0}
-  ownerPlayer: {fileID: 0}
-  cost: 0
-  codeContext:
-    source: "def OnStart():\n    # OnStart\n    print(\"Starting)\n\ndef OnStep():\n   
-      # OnStep\n    print (\"Stepping\")"
-    character: {fileID: 0}
-    ownerPlayer: 0
-    shouldExecute: 1
-  ID: 0
-  isDisabled: 0
-  entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
-  tweener: {fileID: 6999732456707353362}
-  isMoveThreadRunning: 0
-  currentEnergy: 0
-  debugMove: 0
-  startInScene: 0
-  shield: {fileID: 7891210787500344020}
-  shieldDownPoint: {fileID: 7854719270260663899}
-  shieldUpPoint: {fileID: 6126807153367468742}
-  shieldState: 0
-  prevShieldState: 0
-  shieldHealth: 0
---- !u!114 &6999732456707353362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9168144760825188083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7892260306956371374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2552,6 +2584,18 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 4.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.043
       objectReference: {fileID: 0}
@@ -2561,7 +2605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.44
+      value: 0.921
       objectReference: {fileID: 0}
     - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2591,6 +2635,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
@@ -2600,6 +2653,36 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7892260306956371374}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2225077093456170452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891210787500344020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4a5519c6d5ec14697f4e352b294c39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldHealth: 0
+  maxShieldHealth: 5
+  shieldRegenRate: 1
+  shieldState: 0
+  prevShieldState: 0
+--- !u!65 &3198106492253566826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891210787500344020}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.53931797, y: 1.1337919, z: 0.12707861}
+  m_Center: {x: -0.000000059604645, y: 0, z: 0.030161042}
 --- !u!4 &7896669111611145384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a,

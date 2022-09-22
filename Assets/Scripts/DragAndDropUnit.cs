@@ -56,16 +56,12 @@ public class DragAndDropUnit : MonoBehaviour
         print(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            print("Transform " + hit.transform.name);
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
 
-                if ((pos.y > GameManager.gridDimensions.z / 2 && GameManager.activePlayer.isAttacking) || (pos.y < GameManager.gridDimensions.z / 2 && !GameManager.activePlayer.isAttacking))
-
+                if ((pos.y > GameManager.gridDimensions.z / 2 && GameManager.activePlayer.isLeftSide) || (pos.y < GameManager.gridDimensions.z / 2 && !GameManager.activePlayer.isLeftSide))
                     GameManager.activePlayer.spawnUnit(unitType, pos);
-
-
             }
         }
         
