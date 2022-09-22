@@ -179,10 +179,13 @@ public class Entity : ControlledMonoBehavour
     public virtual void EMPRecover()
     {
         isDisabled = false;
+        print("recovred");
+
     }
 
     public virtual void OnEMPDisable(float strength)
     {
+        print("disabled");
         if (isDisabled)
         {
             return;

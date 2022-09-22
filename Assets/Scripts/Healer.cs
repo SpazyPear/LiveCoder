@@ -63,23 +63,27 @@ public class Healer : Character
     {
         if (!isDisabled)
         {
+            print("run");
             List<Entity> inRange = checkForInRangeEntities("Entity", false, true);
-            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange.Select(x => x as object).ToArray());
+            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange.Select(x => x as object).ToArray() as object);
         }
     }
 
 
     [PunRPC]
-    public IEnumerator replicatedEMP(List<Entity> inRange)
+    public void replicatedEMP(object[] inRange)
     {
+        print("rpc");
+
         foreach (Entity c in inRange)
         {
+            print("entity");
+
             if (c.ownerPlayer != ownerPlayer)
             {
                 c.OnEMPDisable(healerData.EMPStrength);
             }
         }
-        yield return null;
     }
 
 }

@@ -1113,20 +1113,8 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
-    entity: {fileID: 0}
+    source: "def OnStart():\r\n   print(\"stub\")\ndef OnStep():\n   print(\"stub\")"
+    character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0

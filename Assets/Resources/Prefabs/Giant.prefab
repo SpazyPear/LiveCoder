@@ -2259,24 +2259,12 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
-    entity: {fileID: 0}
+    source: "def OnStart():\r\n   print(\"stub\")\ndef OnStep():\n   print(\"stub\")"
+    character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0
-  isDisabled: 0
+  isDisabled: 1
   entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
   photonView: {fileID: 0}
   executing: 0
