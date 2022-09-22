@@ -5,7 +5,7 @@ using System;
 using PythonProxies;
 
 [PythonClass("World", true)]
-public class world : MonoBehaviour
+public class World : MonoBehaviour
 {
 
     [PythonMethod]

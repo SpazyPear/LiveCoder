@@ -67,7 +67,7 @@ public class PythonInterpreter : MonoBehaviour
 
         globalAssigns = "";
         SetVariable("current", context.character);
-        SetVariable("world", GameObject.FindObjectOfType<world>());
+        SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
 
@@ -228,7 +228,7 @@ public class PythonInterpreter : MonoBehaviour
                 globalAssigns = "";
                
                 SetVariable("current", context.character, scope);
-                SetVariable("world", GameObject.FindObjectOfType <world>(), scope);
+                SetVariable("world", GameObject.FindObjectOfType <World>(), scope);
                 SetVariable("debug", (System.Action<dynamic>)debug, scope);
                 
                 context.pythonScriptScope = scope;

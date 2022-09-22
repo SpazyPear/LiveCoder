@@ -430,6 +430,7 @@ GameObject:
   - component: {fileID: 143205210}
   - component: {fileID: 143205212}
   - component: {fileID: 143205214}
+  - component: {fileID: 143205215}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -613,6 +614,18 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &143205215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 143205204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b091ab2a910c044dac2d535f34bbb6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &147746242
 GameObject:
   m_ObjectHideFlags: 0
@@ -4344,13 +4357,6 @@ MonoBehaviour:
   headerText: {fileID: 1595046652}
   codeEditor: {fileID: 353966145}
   codeContexts: []
-  editingContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
-    entity: {fileID: 0}
-    ownerPlayer: 0
-    shouldExecute: 1
-  controlPanelManager: {fileID: 1341797147}
 --- !u!4 &1341797142
 Transform:
   m_ObjectHideFlags: 0

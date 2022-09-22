@@ -54,7 +54,7 @@ MonoBehaviour:
   cost: 30
   codeContext:
     source: "function OnStart()\r\n\r\nend\r\n\r\nfunction OnStep()\r\n\r\nend\r"
-    entity: {fileID: 0}
+    character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0
