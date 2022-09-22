@@ -6,6 +6,8 @@ using PythonProxies;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+
+
 public class Turret : Entity
 {
 
@@ -50,6 +52,7 @@ public class Turret : Entity
         }
         else
             ErrorManager.instance.PushError(new ErrorSource { function = "target", playerId = gameObject.name }, new Error("Target is out of range"));
+
     }
 
     [PunRPC]

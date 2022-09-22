@@ -173,7 +173,7 @@ namespace PythonProxies
 
         public void heal() { target.heal(); }
 
-        public void emp() { target.EMP(); }
+        public void emp() { target.OnEMP(); }
     }
 
     [PythonClass("Turret")]
