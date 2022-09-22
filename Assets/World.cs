@@ -14,7 +14,7 @@ public class world : MonoBehaviour
         List<CharacterHandlerProxy> characters = new List<CharacterHandlerProxy>();
         foreach (Character c in GameObject.FindObjectsOfType<Character>())
         {
-            if (c.ownerPlayer.playerID == 1)
+            if (c.ownerPlayer.playerID == GameObject.FindObjectOfType<PlayerManager>().playerID)
             {
                 characters.Add(c.CreateProxy() as CharacterHandlerProxy);
             }

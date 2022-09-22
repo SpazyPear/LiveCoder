@@ -78,7 +78,7 @@ public class PythonSocketConnection : MonoBehaviour
     private void Awake()
     {
 
-        //p = System.Diagnostics.Process.Start(Application.streamingAssetsPath + "/output/socket-python-completer/socket-python-completer.exe");
+        p = System.Diagnostics.Process.Start(Application.streamingAssetsPath + "/output/socket-python-completer/socket-python-completer.exe");
 
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), txPort);
 

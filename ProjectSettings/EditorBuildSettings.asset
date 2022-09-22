@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/DefencePrep.unity
+    path: Assets/Scenes/Menu.unity
+    guid: 30d94dd3f03353e4ab3fe4332453cda2
+  - enabled: 1
+    path: Assets/Scenes/Multiplayer.unity
     guid: 4bd9f3a46cef5224b82a83c6a431b9e6
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity

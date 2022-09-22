@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
-using TMPro;
-using UnityEngine.UI;
 using PythonProxies;
-
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 public enum CLASSTYPE
 {
     Tank,

@@ -234,6 +234,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmoothGround
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 37e8e6ea4ddd0c7408b57ee2b30f4de6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37e8e6ea4ddd0c7408b57ee2b30f4de6, type: 3}
 --- !u!4 &6188620834317666383 stripped

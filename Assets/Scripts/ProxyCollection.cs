@@ -64,7 +64,7 @@ namespace PythonProxies
             }
         }
 
-        public int owner => target.ownerPlayer.playerID;
+        public string owner => target.ownerPlayer.playerID;
 
         public string id => target.ID.ToString();
         public int health => target.currentHealth;
@@ -121,17 +121,24 @@ namespace PythonProxies
                 return target.characterData.range;
             }
         }
+        
+        public void AttackInDirection(int x, int y) { target.attack(x, y); }
 
-        public void MovePlayer(Vector2Int move) { target.moveUnit(move.x, move.y); }
+        public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
+
+        public void CheckForInRangeEntities(string typeName, bool friendlies, bool enemies) { target.checkForInRangeEntities(typeName, friendlies, enemies); }
+
+        
+        public void MovePlayer(Vector2Int move) { target.replicatedMove(move.x, move.y); }
         public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
         public bool PathCompleted() { return target.PathCompleted(); }
         public void MoveOnPathNext() { target.MoveOnPathNext(); }
 
-        public bool IsInRange(EntityProxy entity) { return target.checkForInRangeEntities<Entity>().Contains(entity.target); } // make good
+        public bool IsInRange(EntityProxy entity) { return target.checkForInRangeEntities("Entity", true, true).Contains(entity.target); } // make good
 
-        public void Attack(EntityProxy entity) { target.attack(entity.target); }
+        public void Attack(int x, int y) { target.attack(x,y); }
 
-        public void CollectOre(OreDepositProxy ore) { target.attack(ore.target); }
+      
         public void MoveToCharacter(CharacterHandlerProxy character) { target.MoveToCharacter(character.target); }
         public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
 
@@ -151,7 +158,7 @@ namespace PythonProxies
             this.target = p;
         }
 
-        public void DeployShield(bool raised) { target.deployShield(raised); }
+        public void DeployShield(bool raised) { target.replicatedPositionShield(raised); }
     }
 
     [PythonClass("Healer")]
@@ -181,7 +188,7 @@ namespace PythonProxies
         }
 
         public void targetCharacter(CharacterHandlerProxy enemy) => target.target(enemy.target);
-        public void shootCharacter()
+        public void shoot()
         {
             Debug.Log("Turret shooting through proxy");
             target.shoot();

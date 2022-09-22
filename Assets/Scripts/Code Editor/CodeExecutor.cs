@@ -79,7 +79,6 @@ public class CodeExecutor : MonoBehaviour
     public void RunCode ()
     {
         StopAllCoroutines();
-        StartCoroutine(AwakeCoroutineLua());
     }
 
 

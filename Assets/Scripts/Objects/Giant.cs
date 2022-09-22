@@ -5,7 +5,9 @@ using System.Threading;
 using UnityEngine;
 using PythonProxies;
 
-
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class Giant : Character
 {
@@ -22,8 +24,8 @@ public class Giant : Character
 
     public override void Start()
     {
-            shield.SetActive(true);
-            Transform transform = raised ? shieldUpPoint : shieldDownPoint;
+            //shield.SetActive(true);
+            //Transform transform = raised ? shieldUpPoint : shieldDownPoint;
             shield.transform.position = transform.position;
             shield.transform.rotation = transform.rotation;
         
@@ -34,7 +36,12 @@ public class Giant : Character
         return new GiantHandlerProxy(this);
     }
 
-    void takeShieldDamage(float damage)
+    void takeShieldDamage(float damage) {
+        base.Start();
+        shield.setDefaults(giantData.maxShieldHealth, giantData.shieldRegenRate);
+    }
+    
+    public void positionShield(bool raised)
     {
         if (shield.shieldHealth > 0)
         {

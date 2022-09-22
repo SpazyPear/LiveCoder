@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Python3DMath;
 using PythonProxies;
-
+using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 public class Turret : Entity
 {
 

@@ -68,7 +68,7 @@ public class Entity : ControlledMonoBehavour
     public virtual void Awake()
     {
         
-        codeContext.entity = this;
+        codeContext.character = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         PythonInterpreter.AddContext(codeContext);
