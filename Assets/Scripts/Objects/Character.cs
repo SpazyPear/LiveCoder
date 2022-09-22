@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
-using TMPro;
-using UnityEngine.UI;
+using PythonProxies;
 using Photon.Pun;
-
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 public enum CLASSTYPE
 {
     Tank,
@@ -35,6 +35,13 @@ public abstract class Character : Entity
         base.Start();
         initializeUnit();
     }
+
+    public override object CreateProxy()
+    {
+        return new CharacterHandlerProxy(this);
+    }
+
+    
 
     public override void OnStep()
     {
@@ -92,7 +99,7 @@ public abstract class Character : Entity
         currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
+
     public async virtual void initializeUnit()
     {
         currentEnergy = characterData.maxEnergy;

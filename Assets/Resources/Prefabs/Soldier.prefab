@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &5793804312653130764
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153337334515650565}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 4.3052216, z: 1}
+  m_Center: {x: -0.00999999, y: 2.117611, z: 0}
 --- !u!1 &8548406550646563085
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +114,7 @@ MonoBehaviour:
 
 
       end'
-    entity: {fileID: 0}
+    character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0
@@ -131,23 +144,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.9348
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00224
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: -1.07
       objectReference: {fileID: 0}
     - target: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -249,19 +262,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6152433477488658247}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &5793804312653130764
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6153337334515650565}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 4.3052216, z: 1}
-  m_Center: {x: -0.00999999, y: 2.117611, z: 0}
 --- !u!4 &6156293531169544547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4039605645712932, guid: 098f4014b5053c24f87a7f5d56fd48f5,

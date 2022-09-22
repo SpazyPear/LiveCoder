@@ -2,23 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using MoonSharp.Interpreter;
-using Photon.Pun;
-using static UnityEngine.EventSystems.EventTrigger;
-using static UnityEngine.GraphicsBuffer;
 
-public class SoldierProxy : CharacterHandlerProxy
-{
-    Soldier target;
-
-    [MoonSharpHidden]
-    public SoldierProxy(Soldier p) : base(p)
-    {
-        this.target = p;
-    }
-
-}
-
+using PythonProxies;
 
 public class Soldier : Character
 {
@@ -30,6 +15,12 @@ public class Soldier : Character
             return characterData as SoldierData;
         }
     }
+
+    public override object CreateProxy()
+    {
+        return new SoldierProxy(this);
+    }
+
     // Start is called before the first frame update
    /* new void Start()
     {

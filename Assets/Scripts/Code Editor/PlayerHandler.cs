@@ -1,5 +1,4 @@
-using ExitGames.Client.Photon.StructWrapping;
-using MoonSharp.Interpreter;
+/*using MoonSharp.Interpreter;*/
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,9 +33,9 @@ public class PlayerHandler : MonoBehaviour
                         this.multipleSelectedPlayers.Clear();
                         this.selectedPlayer = hit.transform.GetComponentInParent<Entity>();
 
-
-                        GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
-                        GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
+                        PythonInterpreter.instance.OpenEditor(this.selectedPlayer.codeContext);
+                        //GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
+                        //GameObject.FindObjectOfType<CodeExecutor>().OpenEditor(this.selectedPlayer.codeContext);
                     }
                 }
             }
@@ -46,6 +45,7 @@ public class PlayerHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
             {
+                print("AA");
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
@@ -59,7 +59,7 @@ public class PlayerHandler : MonoBehaviour
                         if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                         {
                             this.multipleSelectedPlayers.Add(hit.transform.GetComponentInChildren<Entity>());
-                            GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
+                            //GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
                         }
                     }
                 }
@@ -135,71 +135,24 @@ public class PlayerHandler : MonoBehaviour
         return closest;
     }
 
-}
-
-
-public class CharacterHandlerProxy : EntityProxy
-{
-    Character target;
-
-    [MoonSharpHidden]
-    public CharacterHandlerProxy(Character p) : base(p)
+    public List<Entity> getAllEntitiesOfType(String typeName)
     {
-        this.target = p;
-    }
+        List<Entity> entities = new List<Entity>();
+        Type type = Type.GetType(typeName);
 
-    public bool isDead() { return (target == null || target.currentHealth <= 0); }
-  
-    public float attackRange
-    {
-        get
+        if (type == null)
         {
-            return target.characterData.range;
+            ErrorManager.instance.PushError(new ErrorSource { function = "findClosestEntityOfType", playerId = gameObject.name }, new Error("Incorrect type name."));
+            return null;
         }
+
+        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        {
+           entities.Add(c);
+        }
+
+        return entities;
     }
 
-    public void MovePlayer(Vector2Int move) { target.replicatedMove(move.x, move.y); }
-    public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
-    public bool PathCompleted() { return target.PathCompleted(); }
-    public void MoveOnPathNext() { target.MoveOnPathNext(); }
-
-    public bool IsInRange(Entity entity) { return target.checkForInRangeEntities("Entity", true, true).Contains(entity); } // make good
-
-    public void Attack(int x, int y) { target.attack(x, y); }
-
-    public void MoveToCharacter (Character character) { target.MoveToCharacter(character); }
-    public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
-
-    public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
-
-    public void CheckForInRangeEntities(string typeName, bool friendlies, bool enemies) { target.checkForInRangeEntities(typeName, friendlies, enemies); }
-
-}
-
-public class GiantHandlerProxy : CharacterHandlerProxy
-{
-    Giant target;
-    
-    [MoonSharpHidden]
-    public GiantHandlerProxy(Giant p) : base(p)
-    {
-        this.target = p;
-    }
-
-    public void DeployShield(bool raised) { target.positionShield(raised); }
-}
-
-public class HealerHandlerProxy : CharacterHandlerProxy
-{
-    Healer target;
-
-    [MoonSharpHidden]
-    public HealerHandlerProxy(Healer p) : base(p)
-    {
-        this.target = p;
-    }
-
-    public void heal() { target.heal(); }
-
-    public void emp() { target.OnEMP(); }
+ 
 }

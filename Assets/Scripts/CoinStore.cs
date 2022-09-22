@@ -1,14 +1,12 @@
-using MoonSharp.Interpreter;
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CoinStoreProxy
 {
     Entity target;
 
-    [MoonSharpHidden]
     public CoinStoreProxy(CoinStore p)
     {
         this.target = p;

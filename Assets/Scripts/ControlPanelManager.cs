@@ -80,14 +80,14 @@ public class ControlPanelManager : MonoBehaviour
     {
 
         foreach (string e in checkboxValues.Keys)
-        {
-            context.script.Globals[e] = checkboxValues[e];
+        {/*
+            context.script.Globals[e] = checkboxValues[e];*/
 
         }
 
         foreach (string e in sliderValues.Keys)
-        {
-            context.script.Globals[e] = sliderValues[e];
+        {/*
+            context.script.Globals[e] = sliderValues[e];*/
 
         }
     }

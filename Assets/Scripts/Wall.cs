@@ -1,4 +1,4 @@
-using MoonSharp.Interpreter;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System;
 using Photon.Pun;
 
+using PythonProxies;
 public class WallProxy : EntityProxy
 {
     Entity target;
 
-    [MoonSharpHidden]
     public WallProxy(Wall p) : base(p)
     {
         this.target = p;

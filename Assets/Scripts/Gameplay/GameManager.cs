@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
-using Unity.VisualScripting;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
@@ -13,7 +12,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
 {
     public static PhotonView photonView;
     public GridManager gridManager;
-    public CodeExecutor codeExecutor;
+    public PythonInterpreter codeExecutor;
     public GameData gameData;
     public UIManager uiManager;
     public static Vector3 gridDimensions;

@@ -1,26 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MoonSharp.Interpreter;
+using Python3DMath;
+using PythonProxies;
 using Photon.Pun;
-
-public class TurretProxy : EntityProxy
-{
-    Turret target;
-
-    [MoonSharpHidden]
-    public TurretProxy(Turret p) : base(p)
-    {
-        this.target = p;
-    }
-
-    public void targetEntity(Entity e) => target.target(e);
-    public void shoot() => target.shoot();
-    
-    public void lookAt(Vector2Float pos) => target.lookAt(pos);
-
-}
-
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 public class Turret : Entity
 {
 
@@ -33,7 +18,12 @@ public class Turret : Entity
     public Transform shootPoint;
     bool rotatingBarrel;
 
-    public override void Start()
+    public override object CreateProxy()
+    {
+        return new TurretProxy(this);
+    }
+
+    private void Start()
     {
         base.Start();
         projectile = Resources.Load("Prefabs/projectile") as GameObject;
@@ -98,7 +88,7 @@ public class Turret : Entity
         }
     }
 
-    IEnumerator rotateBarrelTowards(Vector2Float point)
+    IEnumerator rotateBarrelTowards(vector2 point)
     {
 
         while (rotatingBarrel )
@@ -130,7 +120,7 @@ public class Turret : Entity
 
     private Vector3 lookatPoint = Vector3.zero;
 
-    public void lookAt (Vector2Float lookAt)
+    public void lookAt (vector2 lookAt)
 
     {
         this.StopAllCoroutines();

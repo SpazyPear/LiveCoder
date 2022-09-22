@@ -2,40 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
-using MoonSharp.Interpreter;
 using System;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class EntityProxy
-{
-    Entity target;
 
-    [MoonSharpHidden]
-    public EntityProxy(Entity p)
-    {
-        this.target = p;
-    }
+using PythonProxies;
+public class PythonProxyObject {
 
-    public Vector2Int gridPos
-    {
-        get
-        {
-            return target.gridPos;
-        }
-    }
+    public string pythonClassName;
 
-    
-    public string id => target.ID.ToString();
-    public int health => target.currentHealth;
-
-    public bool friendly => target.ownerPlayer.playerID == PhotonNetwork.LocalPlayer.UserId;
-
-    public Vector2Float worldPos()
-    {
-        return Vector2Float.fromVec2(new Vector2(target.transform.position.x, target.transform.position.z));
-    }
 }
+
+
 
 public class Entity : ControlledMonoBehavour
 {
@@ -57,8 +36,6 @@ public class Entity : ControlledMonoBehavour
 
     public bool executing = false;
    
-
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual async void die(object sender = null)
     {
         if (ownerPlayer)
@@ -93,9 +70,10 @@ public class Entity : ControlledMonoBehavour
     public virtual void Awake()
     {
         
-        codeContext.entity = this;
+        codeContext.character = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
+        PythonInterpreter.AddContext(codeContext);
         CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
         currentHealth = entityData.maxHealth;
@@ -139,7 +117,6 @@ public class Entity : ControlledMonoBehavour
         healthBar.transform.position = orignalPosition;
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void takeDamage(int damage, object sender = null)
     {
         if (currentHealth - damage > 0)
@@ -157,7 +134,6 @@ public class Entity : ControlledMonoBehavour
         die(sender);
     }
 
-    [MoonSharp.Interpreter.MoonSharpHidden]
     public virtual void selfDestruct()
     {
         photonView.RPC("replicatedSelfDestruct", RpcTarget.All);
@@ -269,5 +245,39 @@ public class Entity : ControlledMonoBehavour
     private void OnDestroy()
     {
         
+    }
+
+    // TODO Change TypeName to enum for ease of use
+    public Entity findClosestEntityOfType(Entity sender, string typeName)
+    {
+        Entity closest = null;
+        float minDistance = Mathf.Infinity;
+        Type type = Type.GetType(typeName);
+
+        if (type == null)
+        {
+            ErrorManager.instance.PushError(new ErrorSource { function = "findClosestEntityOfType", playerId = gameObject.name }, new Error("Incorrect type name."));
+            return null;
+        }
+
+        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        {
+            if (c == sender)
+                continue;
+
+            if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
+            {
+                closest = c;
+                minDistance = Vector2Int.Distance(c.gridPos, sender.gridPos);
+            }
+        }
+
+        return closest;
+    }
+
+
+    public virtual object CreateProxy()
+    {
+        return new EntityProxy(this);
     }
 }
