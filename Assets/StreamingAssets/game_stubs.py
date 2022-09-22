@@ -2,7 +2,7 @@ class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -30,6 +30,12 @@ class Soldier():
     def isDead(self) -> bool:
         print('called isDead on Soldier')
     attackRange = float()
+    def AttackInDirection(self,x : int,y : int) -> None:
+        print('called AttackInDirection on Soldier')
+    def MoveToEntity(self,entity : None) -> None:
+        print('called MoveToEntity on Soldier')
+    def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
+        print('called CheckForInRangeEntities on Soldier')
     def MovePlayer(self,move : None) -> None:
         print('called MovePlayer on Soldier')
     def SetPath(self,path : None) -> None:
@@ -40,10 +46,8 @@ class Soldier():
         print('called MoveOnPathNext on Soldier')
     def IsInRange(self,entity : Entity) -> bool:
         print('called IsInRange on Soldier')
-    def Attack(self,entity : Entity) -> None:
+    def Attack(self,x : int,y : int) -> None:
         print('called Attack on Soldier')
-    def CollectOre(self,ore : OreDeposit) -> None:
-        print('called CollectOre on Soldier')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Soldier')
     def MoveToPos(self,pos : None) -> None:
@@ -51,7 +55,7 @@ class Soldier():
     def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Soldier')
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -63,7 +67,7 @@ class Trap():
     def __init__ (self,p : None):
         print ("Constructing Method")
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -75,7 +79,7 @@ class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -89,6 +93,12 @@ class Character():
     def isDead(self) -> bool:
         print('called isDead on Character')
     attackRange = float()
+    def AttackInDirection(self,x : int,y : int) -> None:
+        print('called AttackInDirection on Character')
+    def MoveToEntity(self,entity : None) -> None:
+        print('called MoveToEntity on Character')
+    def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
+        print('called CheckForInRangeEntities on Character')
     def MovePlayer(self,move : None) -> None:
         print('called MovePlayer on Character')
     def SetPath(self,path : None) -> None:
@@ -99,10 +109,8 @@ class Character():
         print('called MoveOnPathNext on Character')
     def IsInRange(self,entity : Entity) -> bool:
         print('called IsInRange on Character')
-    def Attack(self,entity : Entity) -> None:
+    def Attack(self,x : int,y : int) -> None:
         print('called Attack on Character')
-    def CollectOre(self,ore : OreDeposit) -> None:
-        print('called CollectOre on Character')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Character')
     def MoveToPos(self,pos : None) -> None:
@@ -110,7 +118,7 @@ class Character():
     def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Character')
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -126,6 +134,12 @@ class Giant():
     def isDead(self) -> bool:
         print('called isDead on Giant')
     attackRange = float()
+    def AttackInDirection(self,x : int,y : int) -> None:
+        print('called AttackInDirection on Giant')
+    def MoveToEntity(self,entity : None) -> None:
+        print('called MoveToEntity on Giant')
+    def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
+        print('called CheckForInRangeEntities on Giant')
     def MovePlayer(self,move : None) -> None:
         print('called MovePlayer on Giant')
     def SetPath(self,path : None) -> None:
@@ -136,10 +150,8 @@ class Giant():
         print('called MoveOnPathNext on Giant')
     def IsInRange(self,entity : Entity) -> bool:
         print('called IsInRange on Giant')
-    def Attack(self,entity : Entity) -> None:
+    def Attack(self,x : int,y : int) -> None:
         print('called Attack on Giant')
-    def CollectOre(self,ore : OreDeposit) -> None:
-        print('called CollectOre on Giant')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Giant')
     def MoveToPos(self,pos : None) -> None:
@@ -147,7 +159,7 @@ class Giant():
     def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Giant')
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -165,6 +177,12 @@ class Healer():
     def isDead(self) -> bool:
         print('called isDead on Healer')
     attackRange = float()
+    def AttackInDirection(self,x : int,y : int) -> None:
+        print('called AttackInDirection on Healer')
+    def MoveToEntity(self,entity : None) -> None:
+        print('called MoveToEntity on Healer')
+    def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
+        print('called CheckForInRangeEntities on Healer')
     def MovePlayer(self,move : None) -> None:
         print('called MovePlayer on Healer')
     def SetPath(self,path : None) -> None:
@@ -175,10 +193,8 @@ class Healer():
         print('called MoveOnPathNext on Healer')
     def IsInRange(self,entity : Entity) -> bool:
         print('called IsInRange on Healer')
-    def Attack(self,entity : Entity) -> None:
+    def Attack(self,x : int,y : int) -> None:
         print('called Attack on Healer')
-    def CollectOre(self,ore : OreDeposit) -> None:
-        print('called CollectOre on Healer')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Healer')
     def MoveToPos(self,pos : None) -> None:
@@ -186,7 +202,7 @@ class Healer():
     def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Healer')
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -199,12 +215,12 @@ class Turret():
         print ("Constructing Method")
     def targetCharacter(self,enemy : Character) -> None:
         print('called targetCharacter on Turret')
-    def shootCharacter(self) -> None:
-        print('called shootCharacter on Turret')
+    def shoot(self) -> None:
+        print('called shoot on Turret')
     def lookAt(self,pos : vector2) -> None:
         print('called lookAt on Turret')
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
@@ -216,7 +232,7 @@ class OreDeposit():
     def __init__ (self,p : None):
         print ("Constructing Method")
     position = None()
-    owner = int()
+    owner = str()
     id = str()
     health = int()
     def pos(self) -> vector2:
