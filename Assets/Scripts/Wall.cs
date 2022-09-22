@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using System;
+using Photon.Pun;
 
 public class WallProxy : EntityProxy
 {
@@ -18,34 +19,39 @@ public class WallProxy : EntityProxy
 
 public class Wall : Entity
 {
-    bool rotChecked;
+    [SerializeField] bool rotationInitiator = true;
     
-    async void Start()
+    async public override void Start()
     {
         await Task.Yield();
-        CheckWallRotation(true);
+        if (photonView.IsMine && rotationInitiator)
+            CheckWallRotation(rotationInitiator);
             
     }
     
     public void CheckWallRotation(bool initiator)
     {
-
-            
+        print(gridPos);
         if (wallAt(gridPos.x, gridPos.y + 1) || wallAt(gridPos.x, gridPos.y - 1))
         {
-            transform.parent.eulerAngles = new Vector3(0, 90, 0);  
+            photonView.RPC("RotateWall", RpcTarget.All);
         }
 
         if (initiator)
             CheckSurroundingWallRotations();
-
-        resetChecked();
 
         if (isCorner())
         {
             ReplaceWithCorner();
         }
         
+    }
+
+    [PunRPC]
+    public IEnumerator RotateWall()
+    {
+        transform.eulerAngles = new Vector3(0, 90, 0);
+        yield break;
     }
 
     void CheckSurroundingWallRotations()
@@ -63,9 +69,9 @@ public class Wall : Entity
     void ReplaceWithCorner()
     {
         GridManager.spawnOnGrid(Resources.Load("Prefabs/CornerWall") as GameObject, gridPos, true);
-        Destroy(transform.parent.gameObject);
+        PhotonNetwork.Destroy(transform.gameObject);
     }
-
+/*
     void resetChecked()
     {
         for (int x = gridPos.x - 1; x < gridPos.x + 1; x++)
@@ -76,7 +82,7 @@ public class Wall : Entity
                     wallAt(x, y).rotChecked = false;
             }
         }
-    }
+    }*/
 
     bool isCorner()
     {

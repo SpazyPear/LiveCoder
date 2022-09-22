@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using System.Linq;
 
 public class HealerProxy : CharacterHandlerProxy
 {
@@ -61,18 +64,19 @@ public class Healer : Character
         healCrosses.Play();
     }
 
-    public void EMP()
+    public void OnEMP()
     {
         if (!isDisabled)
         {
-            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer);
+            List<Entity> inRange = checkForInRangeEntities("Entity", false, true);
+            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange.Select(x => x as object).ToArray());
         }
     }
 
+
     [PunRPC]
-    public IEnumerator replicatedEMP()
+    public IEnumerator replicatedEMP(List<Entity> inRange)
     {
-        List<Entity> inRange = checkForInRangeEntities("Entity", false, true);
         foreach (Entity c in inRange)
         {
             if (c.ownerPlayer != ownerPlayer)

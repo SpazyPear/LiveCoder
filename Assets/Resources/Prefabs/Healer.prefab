@@ -1133,6 +1133,7 @@ MonoBehaviour:
   isDisabled: 0
   entityData: {fileID: 11400000, guid: c1ead4b0adfe9e44c8694a23edc07ec8, type: 2}
   photonView: {fileID: 0}
+  executing: 0
   tweener: {fileID: 4981651499132042998}
   isMoveThreadRunning: 0
   currentEnergy: 0

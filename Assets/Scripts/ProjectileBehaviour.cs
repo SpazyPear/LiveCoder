@@ -22,9 +22,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        Entity character = collision.gameObject.GetComponentInParent<Entity>();
         Shield shield = collision.GetComponentInParent<Shield>();
-        if (character && character.ownerPlayer != ownerPlayer)
+        Entity character = collision.gameObject.GetComponentInParent<Entity>();
+        if (shield == null && character && character.ownerPlayer != ownerPlayer)
         {
             character.takeDamage(damage, this);
             Destroy(gameObject);

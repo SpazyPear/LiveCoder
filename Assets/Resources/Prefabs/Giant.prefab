@@ -798,14 +798,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2556260948743569265}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.114, z: 0.577}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.114, z: 0.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7897161079455242477}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &2566191994926213728
 GameObject:
   m_ObjectHideFlags: 0
@@ -2279,6 +2279,7 @@ MonoBehaviour:
   isDisabled: 0
   entityData: {fileID: 11400000, guid: cc2ade8fc942ca4449aa4e78e47bca2f, type: 2}
   photonView: {fileID: 0}
+  executing: 0
   tweener: {fileID: 4735557412909335029}
   isMoveThreadRunning: 0
   currentEnergy: 0
@@ -2646,6 +2647,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64641910451394200, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
+    - {fileID: 64086139378251828, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8f586ae580f0247830e49f0fd9928a, type: 3}
 --- !u!1 &7891210787500344020 stripped
 GameObject:
@@ -2653,6 +2655,19 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7892260306956371374}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &3198106492253566826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7891210787500344020}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.53931797, y: 1.1337919, z: 0.12707861}
+  m_Center: {x: -0.000000059604645, y: 0, z: 0.030161042}
 --- !u!114 &2225077093456170452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2670,19 +2685,6 @@ MonoBehaviour:
   shieldRegenRate: 1
   shieldState: 0
   prevShieldState: 0
---- !u!65 &3198106492253566826
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7891210787500344020}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.53931797, y: 1.1337919, z: 0.12707861}
-  m_Center: {x: -0.000000059604645, y: 0, z: 0.030161042}
 --- !u!4 &7896669111611145384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4620529531975942, guid: 9a8f586ae580f0247830e49f0fd9928a,

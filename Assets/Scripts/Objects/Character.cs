@@ -61,7 +61,6 @@ public abstract class Character : Entity
         MoveOnPathNext();
     }
 
-
     public bool PathCompleted()
     {
         if (moveIndex >= moveSet.Count - 1) return true;
@@ -93,7 +92,6 @@ public abstract class Character : Entity
         currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, characterData.maxEnergy);
     }
 
-
     [MoonSharp.Interpreter.MoonSharpHidden]
     public async virtual void initializeUnit()
     {
@@ -107,7 +105,6 @@ public abstract class Character : Entity
         {
             //GameManager.placeOnGrid(gameObject, gridPos);
         }
-        energyRegen();
     }
 
     public void addUnitToPlayer()
@@ -166,6 +163,7 @@ public abstract class Character : Entity
                 Entity target = GridManager.getEntityAtPos(gridPos + new Vector2Int(x, y));
                 if (target != null && currentEnergy > 0)
                 {
+                    currentEnergy--;
                     photonView.RPC("replicatedAttack", RpcTarget.All, target.viewID);
                 }
                 else
@@ -184,7 +182,6 @@ public abstract class Character : Entity
     public virtual IEnumerator replicatedAttack(int targetInstance)
     {
         GameManager.unitInstances[targetInstance].takeDamage(1, this);
-        currentEnergy--;
         yield return null;
     }
 

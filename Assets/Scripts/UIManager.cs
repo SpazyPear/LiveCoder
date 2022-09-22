@@ -12,10 +12,12 @@ public class UIManager : MonoBehaviour
     public TMP_Text playerLabel;
     public TMP_Text creditCounter;
     public TMP_Text gridLabel;
+    GameManager gameManager;
     
 
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         GameManager.OnPhaseChange.AddListener(phaseUIChange);        
     }
 
@@ -65,6 +67,13 @@ public class UIManager : MonoBehaviour
             gridLabel.gameObject.SetActive(false);
         }
     }
+    
+    public void readyPressed()
+    {
+        readyButton.SetActive(false);
+        GameManager.photonView.RPC("playerReady", RpcTarget.All, PhotonNetwork.LocalPlayer.UserId);
+        gameManager.OnReadyUp();
+    }
 
     [PunRPC]
     public IEnumerator playerReady(string player)
@@ -90,9 +99,9 @@ public class UIManager : MonoBehaviour
     void battlePhase()
     {
         readyButton.SetActive(false);
-        dragDropManager.gameObject.SetActive(false);
+        /*dragDropManager.gameObject.SetActive(false);
         playerLabel.enabled = false;
-        creditCounter.enabled = false;
+        creditCounter.enabled = false;*/
     }
 
     void resultsPhase()

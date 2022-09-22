@@ -159,6 +159,8 @@ MonoBehaviour:
   isDisabled: 0
   entityData: {fileID: 11400000, guid: 8038eabd8a066d246abf7181db290006, type: 2}
   photonView: {fileID: 0}
+  executing: 0
+  rotationInitiator: 1
 --- !u!114 &310597631957273518
 MonoBehaviour:
   m_ObjectHideFlags: 0

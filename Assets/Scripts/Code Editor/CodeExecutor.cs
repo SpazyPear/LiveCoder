@@ -82,6 +82,7 @@ public class CodeExecutor : MonoBehaviour
     // Saves code
     public void OnExecuteCode()
     {
+
         editingContext.source = input.text;
         for (int i = 0; i < otherEditingContexts.Count; i++)
         {

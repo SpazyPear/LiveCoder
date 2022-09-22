@@ -5,6 +5,7 @@ using Photon.Pun;
 using System.Threading.Tasks;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -12,6 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public bool Host;
     public bool LevelLoaded;
+    public static event EventHandler OnConnectedToLobbyCallback;
 
     void Start()
     {
@@ -29,6 +31,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         print("lobby joined");
+        OnConnectedToLobbyCallback?.Invoke(this, EventArgs.Empty);
     }
 
     public override void OnJoinedRoom()

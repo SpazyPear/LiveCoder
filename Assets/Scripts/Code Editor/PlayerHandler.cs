@@ -29,7 +29,7 @@ public class PlayerHandler : MonoBehaviour
                     print($"Player {hit.transform.parent} has been selected");
 
 
-                    if (hit.transform.GetComponentInParent<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
+                    if (hit.transform.GetComponentInParent<Entity>().ownerPlayer && hit.transform.GetComponentInParent<Entity>().ownerPlayer.isLocalPlayer)
                     {
                         this.multipleSelectedPlayers.Clear();
                         this.selectedPlayer = hit.transform.GetComponentInParent<Entity>();
@@ -201,5 +201,5 @@ public class HealerHandlerProxy : CharacterHandlerProxy
 
     public void heal() { target.heal(); }
 
-    public void emp() { target.EMP(); }
+    public void emp() { target.OnEMP(); }
 }

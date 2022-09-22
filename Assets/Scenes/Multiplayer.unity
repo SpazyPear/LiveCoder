@@ -870,9 +870,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 143205206}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnReadyUp
+      - m_Target: {fileID: 143205210}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: readyPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1650,6 +1650,7 @@ MonoBehaviour:
   dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
     type: 3}
   uiManager: {fileID: 143205210}
+  playerManager: {fileID: 427652263}
 --- !u!114 &360286195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1896,9 +1897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 712fc3a76c6424c43bf17b54b63c15f0, type: 2}
-  playerID: 0
   units: []
-  isLeftSide: 1
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0
@@ -3116,7 +3115,7 @@ GameObject:
   - component: {fileID: 801559665}
   - component: {fileID: 801559664}
   m_Layer: 5
-  m_Name: ' (1)Savey (1)'
+  m_Name: ' (1)Save (1)'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

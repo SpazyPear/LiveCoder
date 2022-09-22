@@ -17,7 +17,7 @@ public class PlayerManager : ControlledMonoBehavour
     public string playerID => LocalPlayer.UserId;
     public bool isLocalPlayer => LocalPlayer.IsLocal;
     public List<Entity> units;
-    public bool isLeftSide;
+    public bool isLeftSide => PhotonNetwork.IsMasterClient;
 
     void Awake()
     {
@@ -28,14 +28,12 @@ public class PlayerManager : ControlledMonoBehavour
 
     void Start()
     {
-        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { { "PlayerID", playerID } });
         spawnStartingObjects();
     }
 
     void initPlayer()
     {
         creditsLeft.value = gameData.initialGold;
-        isLeftSide = PhotonNetwork.IsMasterClient;
         gameData = Resources.Load("Scriptableobjects/GameScriptableObject") as GameData;
     }
 
@@ -82,5 +80,10 @@ public class PlayerManager : ControlledMonoBehavour
         return units.Contains(unit);
     }
 
+    public void deleteUnit(Entity unit)
+    {
+        units.Remove(unit);
+        PhotonNetwork.Destroy(unit.gameObject);
+    }
 
 }

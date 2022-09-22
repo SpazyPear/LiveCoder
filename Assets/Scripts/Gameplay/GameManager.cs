@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         else { PhotonNetwork.RaiseEvent(0, PhotonNetwork.LocalPlayer.UserId, new RaiseEventOptions(), new SendOptions()); }
     }
 
-    public void OnReadyUpRecieved(string player)
+    void OnReadyUpRecieved(string player)
     {
         playersReadied++;
         if (playersReadied >= 2)

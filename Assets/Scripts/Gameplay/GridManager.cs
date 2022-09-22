@@ -30,6 +30,10 @@ public class GridManager : MonoBehaviour
 
     }
 
+    public static Entity entityOnTile(int x, int y)
+    {
+        return GridContents[x, y].Entity ? GridContents[x, y].Entity.GetComponent<Entity>() : null;
+    }
 
     public void generateGrid(object sender, EventArgs e)
     {
@@ -118,7 +122,7 @@ public class GridManager : MonoBehaviour
         }
 
         GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
-        photonView.RPC("placeOnGrid", RpcTarget.AllViaServer, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
+        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
 
         return instance;
     }
@@ -126,16 +130,20 @@ public class GridManager : MonoBehaviour
     [PunRPC]
     public IEnumerator placeOnGrid(int viewID, int x, int y, bool isLeftSide)
     {
-        GameObject obj = PhotonView.Find(viewID).gameObject;
-        Vector2Int pos = new Vector2Int(x, y);
-        obj.transform.position = gridToWorldPos(pos);
-        Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
-        float hieght = (GridHeight / 2);
-        obj.transform.position += new Vector3(0, 1, 0);
-        GridContents[pos.x, pos.y].Entity = obj;
-        if (isLeftSide) obj.transform.Rotate(0, 180, 0);
+        Debug.Log(GridContents.GetLength(1) + " " + GameManager.gridDimensions.x);
+        if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
+        {
+            GameObject obj = PhotonView.Find(viewID).gameObject;
+            Vector2Int pos = new Vector2Int(x, y);
+            obj.transform.position = gridToWorldPos(pos);
+            Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
+            float hieght = (GridHeight / 2);
+            obj.transform.position += new Vector3(0, 1, 0);
+            GridContents[pos.x, pos.y].Entity = obj;
+            if (isLeftSide) obj.transform.Rotate(0, 180, 0);
 
-        obj.GetComponentInChildren<Entity>().gridPos = pos;
+            obj.GetComponentInChildren<Entity>().gridPos = pos;
+        }
         yield return null;
     }
 

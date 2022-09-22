@@ -62,6 +62,7 @@ MonoBehaviour:
   isDisabled: 0
   entityData: {fileID: 11400000, guid: 9d2d2d53641051c47a44af52588e5a47, type: 2}
   photonView: {fileID: 0}
+  executing: 0
   towerHealth: 5
 --- !u!114 &6100894096283069821
 MonoBehaviour:

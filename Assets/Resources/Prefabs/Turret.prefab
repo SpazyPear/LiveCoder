@@ -61,6 +61,7 @@ MonoBehaviour:
   isDisabled: 0
   entityData: {fileID: 11400000, guid: db0dca859f4ef9d4c920e695252c7678, type: 2}
   photonView: {fileID: 6518458648958172873}
+  executing: 0
   barrel: {fileID: 5006257662905158341}
   shootPoint: {fileID: 57653478284216887}
 --- !u!114 &6518458648958172873

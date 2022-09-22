@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2374280668338034035}
   - component: {fileID: 6489443409357859738}
   - component: {fileID: 3667939956947163746}
-  - component: {fileID: 4210429230707490218}
   - component: {fileID: 5329380244492103846}
   m_Layer: 0
   m_Name: Obj
@@ -85,33 +84,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7621768212558797154}
   m_Mesh: {fileID: 4300000, guid: 67d269e9e4357d0429f9a790c70bae3f, type: 3}
---- !u!114 &4210429230707490218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7621768212558797154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb46b3d6ba5f62141a81ec0a43964f0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 4
-  selfDestructRange: 2
-  selfDestructDamage: 2
-  gridPos: {x: 0, y: 0}
-  ownerPlayer: {fileID: 0}
-  cost: 10
-  codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
-    character: {fileID: 0}
-    ownerPlayer: 0
-    shouldExecute: 1
-  ID: 0
-  isDisabled: 0
-  entityData: {fileID: 11400000, guid: 8038eabd8a066d246abf7181db290006, type: 2}
 --- !u!65 &5329380244492103846
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -134,6 +106,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7194070426348869016}
+  - component: {fileID: 1688243874000648324}
+  - component: {fileID: 1930907220730300523}
   m_Layer: 0
   m_Name: CornerWall
   m_TagString: Untagged
@@ -157,3 +131,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1688243874000648324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7651880821118448460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb46b3d6ba5f62141a81ec0a43964f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 4
+  selfDestructRange: 2
+  selfDestructDamage: 2
+  gridPos: {x: 0, y: 0}
+  ownerPlayer: {fileID: 0}
+  cost: 10
+  codeContext:
+    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
+      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    entity: {fileID: 0}
+    ownerPlayer: 0
+    shouldExecute: 1
+  ID: 0
+  isDisabled: 0
+  entityData: {fileID: 11400000, guid: 8038eabd8a066d246abf7181db290006, type: 2}
+  photonView: {fileID: 0}
+  rotationInitiator: 0
+--- !u!114 &1930907220730300523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7651880821118448460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

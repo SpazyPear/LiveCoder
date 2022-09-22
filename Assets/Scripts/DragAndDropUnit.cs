@@ -60,7 +60,7 @@ public class DragAndDropUnit : MonoBehaviour
             {
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
 
-                if ((pos.y > GameManager.gridDimensions.z / 2 && GameManager.activePlayer.isLeftSide) || (pos.y < GameManager.gridDimensions.z / 2 && !GameManager.activePlayer.isLeftSide))
+                if ((pos.y > GridManager.GridContents.GetLength(1) / 2 && GameManager.activePlayer.isLeftSide) || (pos.y < GridManager.GridContents.GetLength(1) / 2 && !GameManager.activePlayer.isLeftSide))
                     GameManager.activePlayer.spawnUnit(unitType, pos);
             }
         }
@@ -68,5 +68,6 @@ public class DragAndDropUnit : MonoBehaviour
         print($"Drag ended of {unitType} at {Input.mousePosition}");
 
     }
+
 
 }

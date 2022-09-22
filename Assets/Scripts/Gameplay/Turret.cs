@@ -14,7 +14,7 @@ public class TurretProxy : EntityProxy
         this.target = p;
     }
 
-    public void targetCharacter(Entity e) => target.target(e);
+    public void targetEntity(Entity e) => target.target(e);
     public void shoot() => target.shoot();
     
     public void lookAt(Vector2Float pos) => target.lookAt(pos);
@@ -50,11 +50,16 @@ public class Turret : Entity
 
     public void target(Entity enemy)
     {
-        rotatingBarrel = false;
-        this.StopAllCoroutines();
-        currentTarget = enemy;
-        rotatingBarrel = true;
-        StartCoroutine(rotateBarrel());
+        if (isInRange(enemy))
+        {
+            rotatingBarrel = false;
+            this.StopAllCoroutines();
+            currentTarget = enemy;
+            rotatingBarrel = true;
+            StartCoroutine(rotateBarrel());
+        }
+        else
+            ErrorManager.instance.PushError(new ErrorSource { function = "target", playerId = gameObject.name }, new Error("Target is out of range"));
     }
 
     [PunRPC]

@@ -54,6 +54,8 @@ public class Entity : ControlledMonoBehavour
     protected Slider healthBar;
     public PhotonView photonView;
     public int viewID => photonView.ViewID;
+
+    public bool executing = false;
    
 
     [MoonSharp.Interpreter.MoonSharpHidden]
@@ -106,15 +108,19 @@ public class Entity : ControlledMonoBehavour
 
     public virtual void Update()
     {
+
        
+    }
+
+    void setupHealthBar()
+    {
         Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(transform.position + new Vector3(0, 13f, 0));
         Vector2 WorldObject_ScreenPosition = new Vector2(
         ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
         ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
 
         if (healthBarObj)
-        healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
-
+            healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
     }
 
     IEnumerator shakeHealthBar()
@@ -145,8 +151,6 @@ public class Entity : ControlledMonoBehavour
             StopCoroutine(shakeHealthBar());
             StartCoroutine(shakeHealthBar());
             healthBar.value = (float)currentHealth / entityData.maxHealth;
-
-
             return;
         }
             
@@ -243,6 +247,23 @@ public class Entity : ControlledMonoBehavour
             }
         }
         return foundEntities;
+    }
+
+    public bool isInRange(Entity enemy)
+    {
+        for (int x = -entityData.range; x <= entityData.range; x++)
+        {
+            for (int y = -entityData.range; y <= entityData.range; y++)
+            {
+                if (GridManager.isPosInBounds(new Vector2Int(x, y)))
+                {
+
+                    if (GridManager.entityOnTile(x, y) == enemy)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
     
     private void OnDestroy()
