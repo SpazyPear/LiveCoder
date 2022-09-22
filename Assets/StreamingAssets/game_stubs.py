@@ -1,7 +1,7 @@
 class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -32,14 +32,12 @@ class Soldier():
     attackRange = float()
     def AttackInDirection(self,x : int,y : int) -> None:
         print('called AttackInDirection on Soldier')
-    def MoveToEntity(self,entity : None) -> None:
+    def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Soldier')
     def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
         print('called CheckForInRangeEntities on Soldier')
-    def MovePlayer(self,move : None) -> None:
+    def MovePlayer(self,move : vector2) -> None:
         print('called MovePlayer on Soldier')
-    def SetPath(self,path : None) -> None:
-        print('called SetPath on Soldier')
     def PathCompleted(self) -> bool:
         print('called PathCompleted on Soldier')
     def MoveOnPathNext(self) -> None:
@@ -50,11 +48,9 @@ class Soldier():
         print('called Attack on Soldier')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Soldier')
-    def MoveToPos(self,pos : None) -> None:
+    def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Soldier')
-    def MoveToEntity(self,entity : Entity) -> None:
-        print('called MoveToEntity on Soldier')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -66,7 +62,7 @@ class Soldier():
 class Trap():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -78,7 +74,7 @@ class Trap():
 class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -95,14 +91,12 @@ class Character():
     attackRange = float()
     def AttackInDirection(self,x : int,y : int) -> None:
         print('called AttackInDirection on Character')
-    def MoveToEntity(self,entity : None) -> None:
+    def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Character')
     def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
         print('called CheckForInRangeEntities on Character')
-    def MovePlayer(self,move : None) -> None:
+    def MovePlayer(self,move : vector2) -> None:
         print('called MovePlayer on Character')
-    def SetPath(self,path : None) -> None:
-        print('called SetPath on Character')
     def PathCompleted(self) -> bool:
         print('called PathCompleted on Character')
     def MoveOnPathNext(self) -> None:
@@ -113,11 +107,9 @@ class Character():
         print('called Attack on Character')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Character')
-    def MoveToPos(self,pos : None) -> None:
+    def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Character')
-    def MoveToEntity(self,entity : Entity) -> None:
-        print('called MoveToEntity on Character')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -136,14 +128,12 @@ class Giant():
     attackRange = float()
     def AttackInDirection(self,x : int,y : int) -> None:
         print('called AttackInDirection on Giant')
-    def MoveToEntity(self,entity : None) -> None:
+    def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Giant')
     def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
         print('called CheckForInRangeEntities on Giant')
-    def MovePlayer(self,move : None) -> None:
+    def MovePlayer(self,move : vector2) -> None:
         print('called MovePlayer on Giant')
-    def SetPath(self,path : None) -> None:
-        print('called SetPath on Giant')
     def PathCompleted(self) -> bool:
         print('called PathCompleted on Giant')
     def MoveOnPathNext(self) -> None:
@@ -154,11 +144,9 @@ class Giant():
         print('called Attack on Giant')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Giant')
-    def MoveToPos(self,pos : None) -> None:
+    def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Giant')
-    def MoveToEntity(self,entity : Entity) -> None:
-        print('called MoveToEntity on Giant')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -179,14 +167,12 @@ class Healer():
     attackRange = float()
     def AttackInDirection(self,x : int,y : int) -> None:
         print('called AttackInDirection on Healer')
-    def MoveToEntity(self,entity : None) -> None:
+    def MoveToEntity(self,entity : Entity) -> None:
         print('called MoveToEntity on Healer')
     def CheckForInRangeEntities(self,typeName : str,friendlies : bool,enemies : bool) -> None:
         print('called CheckForInRangeEntities on Healer')
-    def MovePlayer(self,move : None) -> None:
+    def MovePlayer(self,move : vector2) -> None:
         print('called MovePlayer on Healer')
-    def SetPath(self,path : None) -> None:
-        print('called SetPath on Healer')
     def PathCompleted(self) -> bool:
         print('called PathCompleted on Healer')
     def MoveOnPathNext(self) -> None:
@@ -197,11 +183,9 @@ class Healer():
         print('called Attack on Healer')
     def MoveToCharacter(self,character : Character) -> None:
         print('called MoveToCharacter on Healer')
-    def MoveToPos(self,pos : None) -> None:
+    def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Healer')
-    def MoveToEntity(self,entity : Entity) -> None:
-        print('called MoveToEntity on Healer')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -219,7 +203,7 @@ class Turret():
         print('called shoot on Turret')
     def lookAt(self,pos : vector2) -> None:
         print('called lookAt on Turret')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -231,7 +215,7 @@ class Turret():
 class OreDeposit():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -239,6 +223,16 @@ class OreDeposit():
         print('called pos on OreDeposit')
     def findClosestEntityOfType(self,type : str) -> Entity:
         print('called findClosestEntityOfType on OreDeposit')
+
+class Module():
+    def __init__ (self,p : None):
+        print ("Constructing Method")
+
+class MoveModule():
+    def __init__ (self,p : None):
+        print ("Constructing Method")
+    def move(self,dir : vector2) -> None:
+        print('called move on MoveModule')
 
 class vector2():
     def __init__ (self,_x : float,_y : float):
