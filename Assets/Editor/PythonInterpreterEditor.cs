@@ -158,7 +158,7 @@ public class PythonInterpreterEditor : Editor
 
                 stubs += classDefinition +"\n";
 
-                string path = Application.streamingAssetsPath + "/game_stubs.py";
+                string path = Application.streamingAssetsPath + "/output/socket-python-completer/game_stubs.py";
 
                 System.IO.File.WriteAllText(path, stubs);
             }

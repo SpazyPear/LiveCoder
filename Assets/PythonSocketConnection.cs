@@ -29,11 +29,10 @@ public class PythonSocketConnection : MonoBehaviour
     }
 
 
-
     public async void SendData (string message)
     {
 
-        string path = Application.temporaryCachePath + "/input.py";
+        string path = Application.temporaryCachePath + "/" + outputName;
         await System.Threading.Tasks.Task.Run( () =>
         {
 
@@ -49,7 +48,7 @@ public class PythonSocketConnection : MonoBehaviour
 
         try
         {
-            byte[] data = Encoding.UTF8.GetBytes(Application.temporaryCachePath + "/input.py");
+            byte[] data = Encoding.UTF8.GetBytes(Application.temporaryCachePath + "/" + outputName);
             client.Send(data, data.Length, remoteEndPoint);
         }
         catch (Exception err)
@@ -74,10 +73,11 @@ public class PythonSocketConnection : MonoBehaviour
 
     System.Diagnostics.Process p;
 
+    string outputName;
 
     private void Awake()
     {
-
+        outputName = DateTime.Now.Millisecond.ToString() + ".py";
         p = System.Diagnostics.Process.Start(Application.streamingAssetsPath + "/output/socket-python-completer/socket-python-completer.exe");
 
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), txPort);

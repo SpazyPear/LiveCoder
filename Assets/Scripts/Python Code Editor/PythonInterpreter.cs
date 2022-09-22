@@ -50,6 +50,7 @@ public class PythonInterpreter : MonoBehaviour
     public void OnExecuteCode()
     {
         editingContext.source = input.text;
+        print("Intellisense removed");
         input.onValueChanged.RemoveAllListeners();
     }
 
@@ -70,6 +71,8 @@ public class PythonInterpreter : MonoBehaviour
         SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
+
+        print("Starting intellisense");
 
         input.onValueChanged.AddListener(OnValueChanged);
 
@@ -127,13 +130,16 @@ public class PythonInterpreter : MonoBehaviour
         string importDefinitions = "from game_stubs import *\n";
 
 
-        string substring = value.Substring(0, input.caretPosition);
+        if (value.Length > 0)
+        {
+            string substring = value.Substring(0, Mathf.Clamp(input.caretPosition, 0, value.Length));
 
+            print("Sending");
+            print(importDefinitions + globalAssigns + substring);
 
-        print("Sending");
-        print(importDefinitions + globalAssigns + substring);
+            GetComponent<PythonSocketConnection>().SendData(importDefinitions + globalAssigns + substring);
+        }
 
-        GetComponent<PythonSocketConnection>().SendData(importDefinitions + globalAssigns + substring);
     }
 
     Microsoft.Scripting.Hosting.ScriptEngine pythonEngine;
@@ -186,8 +192,11 @@ public class PythonInterpreter : MonoBehaviour
         }
         else
         {
-            globalAssigns += $"{name} = {TypeToPythonTypeString(var.GetType())}()\n";
-            scope.SetVariable(name, var);
+            if (var != null && scope != null)
+            {
+                globalAssigns += $"{name} = {TypeToPythonTypeString(var.GetType())}()\n";
+                scope.SetVariable(name, var);
+            }
         }
       
     }

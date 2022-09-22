@@ -124,13 +124,13 @@ namespace PythonProxies
         
         public void AttackInDirection(int x, int y) { target.attack(x, y); }
 
-        public void MoveToEntity(Entity entity) { target.MoveTo(entity.gridPos); }
+        public void MoveToEntity(EntityProxy entity) { target.MoveTo(entity.target.gridPos); }
 
         public void CheckForInRangeEntities(string typeName, bool friendlies, bool enemies) { target.checkForInRangeEntities(typeName, friendlies, enemies); }
 
         
-        public void MovePlayer(Vector2Int move) { target.replicatedMove(move.x, move.y); }
-        public void SetPath(List<Vector2Int> path) { target.SetPath(path); }
+        public void MovePlayer(vector2 move) { target.replicatedMove(Mathf.RoundToInt(move.x), Mathf.RoundToInt(move.y)); }
+        //public void SetPath(List<vector2> path) { target.SetPath(path); }
         public bool PathCompleted() { return target.PathCompleted(); }
         public void MoveOnPathNext() { target.MoveOnPathNext(); }
 
@@ -140,10 +140,9 @@ namespace PythonProxies
 
       
         public void MoveToCharacter(CharacterHandlerProxy character) { target.MoveToCharacter(character.target); }
-        public void MoveToPos(Vector2Int pos) { target.MoveTo(pos); }
+        public void MoveToPos(vector2 pos) { target.MoveTo(new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y))); }
 
-        public void MoveToEntity(EntityProxy entity) { target.MoveTo(entity.target.gridPos); }
-
+        
 
 
     }
