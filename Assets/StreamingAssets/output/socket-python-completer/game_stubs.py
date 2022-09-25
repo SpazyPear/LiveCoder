@@ -1,7 +1,7 @@
 class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -50,7 +50,7 @@ class Soldier():
         print('called MoveToCharacter on Soldier')
     def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Soldier')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -62,7 +62,7 @@ class Soldier():
 class Trap():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -74,7 +74,7 @@ class Trap():
 class Entity():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -109,7 +109,7 @@ class Character():
         print('called MoveToCharacter on Character')
     def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Character')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -146,7 +146,7 @@ class Giant():
         print('called MoveToCharacter on Giant')
     def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Giant')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -185,7 +185,7 @@ class Healer():
         print('called MoveToCharacter on Healer')
     def MoveToPos(self,pos : vector2) -> None:
         print('called MoveToPos on Healer')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -203,7 +203,7 @@ class Turret():
         print('called shoot on Turret')
     def lookAt(self,pos : vector2) -> None:
         print('called lookAt on Turret')
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -215,7 +215,7 @@ class Turret():
 class OreDeposit():
     def __init__ (self,p : None):
         print ("Constructing Method")
-    position = None()
+    position = vector2()
     owner = str()
     id = str()
     health = int()
@@ -223,6 +223,16 @@ class OreDeposit():
         print('called pos on OreDeposit')
     def findClosestEntityOfType(self,type : str) -> Entity:
         print('called findClosestEntityOfType on OreDeposit')
+
+class Module():
+    def __init__ (self,p : None):
+        print ("Constructing Method")
+
+class MoveModule():
+    def __init__ (self,p : None):
+        print ("Constructing Method")
+    def move(self,dir : vector2) -> None:
+        print('called move on MoveModule')
 
 class vector2():
     def __init__ (self,_x : float,_y : float):
