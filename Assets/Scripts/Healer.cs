@@ -7,6 +7,7 @@ using ExitGames.Client.Photon;
 using System.Linq;
 
 using PythonProxies;
+using System;
 
 public class Healer : Character
 {
@@ -63,23 +64,24 @@ public class Healer : Character
     {
         if (!isDisabled)
         {
-            List<Entity> inRange = checkForInRangeEntities("Entity", false, true);
-            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange.Select(x => x as object).ToArray());
+            int[] inRange = GridManager.checkForInRangeEntities(this, healerData.EMPRange, false, true).Select(x => x.viewID).ToArray();
+            photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange);
         }
     }
 
 
     [PunRPC]
-    public IEnumerator replicatedEMP(List<Entity> inRange)
+    public void replicatedEMP(int[] inRange)
     {
-        foreach (Entity c in inRange)
+
+        foreach (int c in inRange)
         {
-            if (c.ownerPlayer != ownerPlayer)
+
+            if (PhotonView.Find(c).GetComponent<Entity>().ownerPlayer != ownerPlayer)
             {
-                c.OnEMPDisable(healerData.EMPStrength);
+                PhotonView.Find(c).GetComponent<Entity>().OnEMPDisable(healerData.EMPStrength);
             }
         }
-        yield return null;
     }
 
 }

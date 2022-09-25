@@ -54,7 +54,7 @@ public class CodeContext
     public Microsoft.Scripting.Hosting.ScriptSource pythonScript;
     public Microsoft.Scripting.Hosting.ScriptScope pythonScriptScope;
 
-    public Entity character;
+    public Entity entity;
     public int ownerPlayer;
 
     public bool shouldExecute = true;

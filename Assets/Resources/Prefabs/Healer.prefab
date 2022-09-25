@@ -1113,19 +1113,7 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: 'function OnStart()
-
-
-
-      end
-
-
-
-      function OnStep()
-
-
-
-      end'
+    source: "def OnStart():\r\n   print(\"stub\")\ndef OnStep():\n   print(\"stub\")"
     character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
@@ -3945,15 +3933,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb1bfc45e39f46fe80f8ca0b02b73a8a, type: 3}
---- !u!4 &5390475217133523436 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4018445390276112, guid: fb1bfc45e39f46fe80f8ca0b02b73a8a,
-    type: 3}
-  m_PrefabInstance: {fileID: 5386470525033986044}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &5188236973041117018 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198374362501009574, guid: fb1bfc45e39f46fe80f8ca0b02b73a8a,
+    type: 3}
+  m_PrefabInstance: {fileID: 5386470525033986044}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5390475217133523436 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4018445390276112, guid: fb1bfc45e39f46fe80f8ca0b02b73a8a,
     type: 3}
   m_PrefabInstance: {fileID: 5386470525033986044}
   m_PrefabAsset: {fileID: 0}
@@ -4076,15 +4064,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 499ea39bfd784211aca7942a38c7a9fa, type: 3}
---- !u!4 &8891933100298983656 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4329498442067738, guid: 499ea39bfd784211aca7942a38c7a9fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 8892673766999078898}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &8779315153691298738 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198012367258483776, guid: 499ea39bfd784211aca7942a38c7a9fa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8892673766999078898}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8891933100298983656 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4329498442067738, guid: 499ea39bfd784211aca7942a38c7a9fa,
     type: 3}
   m_PrefabInstance: {fileID: 8892673766999078898}
   m_PrefabAsset: {fileID: 0}

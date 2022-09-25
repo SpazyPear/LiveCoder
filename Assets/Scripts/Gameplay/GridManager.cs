@@ -227,6 +227,30 @@ public class GridManager : MonoBehaviour
     {
         return GridContents[gridPoint.x, gridPoint.y].Object.transform.position;
     }
+    public static List<Entity> checkForInRangeEntities(Entity sender, int range, bool friendlies, bool enemies)
+    {
+        List<Entity> foundEntities = new List<Entity>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = -range; y <= range; y++)
+            {
+                try
+                {
+                    if (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>() && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>() != sender)
+                    {
+                        if (!friendlies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>()).ownerPlayer == sender.ownerPlayer) continue;
+
+                        if (!enemies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>()).ownerPlayer != sender.ownerPlayer) continue;
+
+                        foundEntities.Add(GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>());
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        return foundEntities;
+    }
+
 
 }
 

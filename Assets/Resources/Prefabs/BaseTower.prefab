@@ -53,8 +53,7 @@ MonoBehaviour:
   ownerPlayer: {fileID: 0}
   cost: 0
   codeContext:
-    source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
-      function OnStep()\r\n\r\n        end\r\n\r\n    "
+    source: 
     character: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
