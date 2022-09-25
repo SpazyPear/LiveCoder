@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Newtonsoft.Json.Linq;
+using Microsoft.Scripting.Hosting;
 
 public class PythonTypeDef
 {
@@ -17,6 +18,7 @@ public class PythonInterpreter : MonoBehaviour
     public CodeContext editingContext;
     public List<CodeContext> codeContexts;
     public static PythonInterpreter instance;
+    Queue<CodeContext> contextsToBeAdded = new Queue<CodeContext>();
 
     private void Awake()
     {
@@ -47,6 +49,35 @@ public class PythonInterpreter : MonoBehaviour
         instance.codeContexts.Add(context);
     }
 
+    public void ResetScript(string newSource, Entity sender)
+    {
+        CodeContext context = codeContexts.Find(x => x.entity == sender);
+        
+        context.source = newSource;
+        context.pythonScript = pythonEngine.CreateScriptSourceFromString(ProcessSource(context));
+        //codeContexts[i].script.DoString(newSource);
+        //globalManager.OnScriptStart(codeContexts[i].script, target: codeContexts[i].entity);
+        //controlPanelManager.UpdateGlobals(codeContexts[i]);
+
+        print("Script Reset");
+        if (context.shouldExecute)
+        {
+            if (context.pythonScriptScope.ContainsVariable("OnStart"))
+            {
+                var onStart = context.pythonScriptScope.GetVariable("OnStart");
+
+                if (onStart != null)
+                    onStart();
+            }
+        }
+
+    }
+
+    public void InsertCodeContext(CodeContext context)
+    {
+
+    }
+
     public void OnExecuteCode()
     {
         editingContext.source = input.text;
@@ -67,7 +98,7 @@ public class PythonInterpreter : MonoBehaviour
         editingContext = context;
 
         globalAssigns = "";
-        SetVariable("current", context.character);
+        SetVariable("current", context.entity);
         SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
@@ -236,7 +267,7 @@ public class PythonInterpreter : MonoBehaviour
 
                 globalAssigns = "";
                
-                SetVariable("current", context.character, scope);
+                SetVariable("current", context.entity, scope);
                 SetVariable("world", GameObject.FindObjectOfType <World>(), scope);
                 SetVariable("debug", (System.Action<dynamic>)debug, scope);
                 

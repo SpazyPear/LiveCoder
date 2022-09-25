@@ -70,7 +70,7 @@ public class Entity : ControlledMonoBehavour
     public virtual void Awake()
     {
         
-        codeContext.character = this;
+        codeContext.entity = this;
       
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         PythonInterpreter.AddContext(codeContext);
@@ -179,13 +179,11 @@ public class Entity : ControlledMonoBehavour
     public virtual void EMPRecover()
     {
         isDisabled = false;
-        print("recovred");
 
     }
 
     public virtual void OnEMPDisable(float strength)
     {
-        print("disabled");
         if (isDisabled)
         {
             return;
@@ -220,7 +218,7 @@ public class Entity : ControlledMonoBehavour
                         if (!enemies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer != this.ownerPlayer) continue;
 
                         foundEntities.Add(GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity);
-    }
+                    }
                 }
                 catch (IndexOutOfRangeException) { }
             }
