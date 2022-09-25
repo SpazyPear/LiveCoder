@@ -82,6 +82,8 @@ public class PythonSocketConnection : MonoBehaviour
 
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), txPort);
 
+     
+
         client = new UdpClient(rxPort);
 
         recieveThread = new Thread(new ThreadStart(RecieveData));
@@ -131,6 +133,7 @@ public class PythonSocketConnection : MonoBehaviour
 
         if (p != null)
         {
+            print("Killed");
             p.Kill();
         }
 

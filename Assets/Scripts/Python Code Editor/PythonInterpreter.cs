@@ -31,7 +31,7 @@ public class PythonInterpreter : MonoBehaviour
 
         ICollection<string> currentSearchPaths = pythonEngine.GetSearchPaths();
 
-        currentSearchPaths.Add(Application.streamingAssetsPath+"/Lib");
+        currentSearchPaths.Add(Application.streamingAssetsPath + "/Lib");
         currentSearchPaths.Add(Application.streamingAssetsPath + "/Lib/site-packages");
 
 
@@ -42,7 +42,7 @@ public class PythonInterpreter : MonoBehaviour
 
     }
 
-    public static void AddContext (CodeContext context)
+    public static void AddContext(CodeContext context)
     {
         instance.codeContexts.Add(context);
     }
@@ -71,6 +71,14 @@ public class PythonInterpreter : MonoBehaviour
         SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
+        foreach (Module m in context.character.transform.GetComponents<Module>())
+        {
+            print("Using module " + m.displayName());
+            SetVariable(m.displayName(), m);
+        }
+
+        
+
 
         print("Starting intellisense");
 
@@ -79,7 +87,7 @@ public class PythonInterpreter : MonoBehaviour
     }
 
 
-    public void RecievePythonIntellisenseSuggestions (string suggestionsJSON)
+    public void RecievePythonIntellisenseSuggestions(string suggestionsJSON)
     {
         print(suggestionsJSON);
         JObject valJson = Newtonsoft.Json.Linq.JObject.Parse(suggestionsJSON);
@@ -103,7 +111,7 @@ public class PythonInterpreter : MonoBehaviour
 
                 foreach (var param in comp["params"])
                 {
-                    methodParameters.Add(new CodeMethodParameters { name = param.ToString().Replace("param","").Trim() });
+                    methodParameters.Add(new CodeMethodParameters { name = param.ToString().Replace("param", "").Trim() });
                 }
 
                 CodeSuggestion s = new CodeSuggestion
@@ -177,9 +185,9 @@ public class PythonInterpreter : MonoBehaviour
     }
 
 
-    public void SetVariable( string name, object var, Microsoft.Scripting.Hosting.ScriptScope scope = null)
+    public void SetVariable(string name, object var, Microsoft.Scripting.Hosting.ScriptScope scope = null)
     {
-        
+
         if (var is Entity)
         {
             object proxy = ((Entity)var).CreateProxy();
@@ -187,22 +195,33 @@ public class PythonInterpreter : MonoBehaviour
             globalAssigns += $"{name} = {TypeToPythonTypeString(proxy.GetType())}()\n";
 
             if (scope != null)
-            scope.SetVariable(name, proxy);
+                scope.SetVariable(name, proxy);
 
+        }
+        else if (var is Module)
+        {
+            object proxy = ((Module)var).CreateProxy();
+
+            print($"Setting module {name} with type ${TypeToPythonTypeString(proxy.GetType())}");
+            globalAssigns += $"{name} = {TypeToPythonTypeString(proxy.GetType())}()\n";
+
+            if (scope != null)
+                scope.SetVariable(name, proxy);
         }
         else
         {
-            if (var != null && scope != null)
+            if (var != null)
             {
                 globalAssigns += $"{name} = {TypeToPythonTypeString(var.GetType())}()\n";
+                if (scope != null)
                 scope.SetVariable(name, var);
             }
         }
-      
+
     }
 
 
-    public string ProcessSource (CodeContext context)
+    public string ProcessSource(CodeContext context)
     {
 
         string imports = "from Python3DMath import *\nfrom PythonProxies import *\n";
@@ -212,7 +231,7 @@ public class PythonInterpreter : MonoBehaviour
         return source.Trim();
     }
 
-    private void debug (dynamic anything)
+    private void debug(dynamic anything)
     {
         Debug.Log(anything.ToString());
     }
@@ -222,6 +241,7 @@ public class PythonInterpreter : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(ExecuteScript(false));
     }
+
 
     private IEnumerator ExecuteScript(bool runOnStep)
     {
@@ -237,6 +257,12 @@ public class PythonInterpreter : MonoBehaviour
                 globalAssigns = "";
                
                 SetVariable("current", context.character, scope);
+
+                foreach (Module m in context.character.transform.GetComponents<Module>()) 
+                {
+                    SetVariable(m.displayName(), m, scope);
+                }
+                
                 SetVariable("world", GameObject.FindObjectOfType <World>(), scope);
                 SetVariable("debug", (System.Action<dynamic>)debug, scope);
                 

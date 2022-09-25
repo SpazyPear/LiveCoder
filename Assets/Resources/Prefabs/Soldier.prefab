@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 6924671367652650172}
   - component: {fileID: 3467221991074472160}
   - component: {fileID: 5740584398352259394}
+  - component: {fileID: 8967698964722667375}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Untagged
@@ -114,7 +115,7 @@ MonoBehaviour:
 
 
       end'
-    character: {fileID: 0}
+    character: {fileID: 5740584398352259394}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0
@@ -127,6 +128,18 @@ MonoBehaviour:
   currentEnergy: 0
   debugMove: 0
   startInScene: 0
+--- !u!114 &8967698964722667375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8548406550646563085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068cbf85f8e98c4479e185aa017b0deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6152433477488658247
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,10 +11,13 @@ namespace PythonProxies
     {
         public string className;
         public bool pythonAcceptedMethodsOnly;
-        public PythonClass(string className, bool onlyPythonAcceptedMethods = false)
+        public string instanceVariableName;
+
+        public PythonClass(string className, bool onlyPythonAcceptedMethods = false, string instanceVariableName = "")
         {
             this.className = className;
             this.pythonAcceptedMethodsOnly = onlyPythonAcceptedMethods;
+            this.instanceVariableName = instanceVariableName;
         }
     }
 
@@ -56,11 +59,11 @@ namespace PythonProxies
             this.target = p;
         }
 
-        public Vector2Int position
+        public vector2 position
         {
             get
             {
-                return target.gridPos;
+                return new vector2(target.gridPos.x, target.gridPos.y);
             }
         }
 
@@ -206,5 +209,33 @@ namespace PythonProxies
         {
             this.target = p;
         }
+    }
+
+    // Modules
+
+    [PythonClass("Module")]
+    public class ModuleProxy
+    {
+        public Module target;
+        public ModuleProxy (Module p)
+        {
+            this.target = p;
+        }
+    }
+
+    [PythonClass("MoveModule",false,"moveModule")]
+    public class MoveModuleProxy : ModuleProxy
+    {
+        public MoveModule target;
+        public MoveModuleProxy(MoveModule p) : base(p)
+        {
+            this.target = p;
+        }
+
+        public void move (vector2 dir)
+        {
+            this.target.Move(Mathf.RoundToInt(dir.x), Mathf.RoundToInt(dir.y));
+        }
+
     }
 }
