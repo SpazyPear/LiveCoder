@@ -10,9 +10,9 @@ public interface PlayerHandlerInterface
 
 public class PlayerHandler : MonoBehaviour
 {
-    public Entity selectedPlayer;
+    public Unit selectedPlayer;
 
-    public List<Entity> multipleSelectedPlayers;
+    public List<Unit> multipleSelectedPlayers;
 
     private void Update()
     {
@@ -23,15 +23,15 @@ public class PlayerHandler : MonoBehaviour
           
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.transform != null && hit.transform.GetComponentInParent<Entity>() != null)
+                if (hit.transform != null && hit.transform.GetComponentInParent<Unit>() != null)
                 {
                     print($"Player {hit.transform.parent} has been selected");
 
 
-                    if (hit.transform.GetComponentInParent<Entity>().ownerPlayer && hit.transform.GetComponentInParent<Entity>().ownerPlayer.isLocalPlayer)
+                    if (hit.transform.GetComponentInParent<Unit>().ownerPlayer && hit.transform.GetComponentInParent<Unit>().ownerPlayer.isLocalPlayer)
                     {
                         this.multipleSelectedPlayers.Clear();
-                        this.selectedPlayer = hit.transform.GetComponentInParent<Entity>();
+                        this.selectedPlayer = hit.transform.GetComponentInParent<Unit>();
 
                         PythonInterpreter.instance.OpenEditor(this.selectedPlayer.codeContext);
                         //GameObject.FindObjectOfType<CodeExecutor>().ClearOtherContexts();
@@ -53,13 +53,13 @@ public class PlayerHandler : MonoBehaviour
                 {
 
                     //print(hit.transform.parent.name);
-                    if (hit.transform != null && hit.transform.GetComponentInChildren<Entity>() != null)
+                    if (hit.transform != null && hit.transform.GetComponentInChildren<Unit>() != null)
                     {
                         
-                        if (hit.transform.GetComponentInChildren<Entity>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
+                        if (hit.transform.GetComponentInChildren<Unit>().ownerPlayer.playerID == GameManager.activePlayer.playerID)
                         {
-                            this.multipleSelectedPlayers.Add(hit.transform.GetComponentInChildren<Entity>());
-                            //GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Entity>().codeContext);
+                            this.multipleSelectedPlayers.Add(hit.transform.GetComponentInChildren<Unit>());
+                            //GameObject.FindObjectOfType<CodeExecutor>().AddEditingContext(hit.transform.GetComponentInChildren<Unit>().codeContext);
                         }
                     }
                 }
@@ -67,10 +67,10 @@ public class PlayerHandler : MonoBehaviour
         }
     }
 
-    public List<Character> getEnemies()
+    public List<Unit> getEnemies()
     {
-        List<Character> characters = new List<Character>();
-        foreach (Character c in GameObject.FindObjectsOfType<Character>())
+        List<Unit> characters = new List<Unit>();
+        foreach (Unit c in GameObject.FindObjectsOfType<Unit>())
         {
             if (!c.ownerPlayer.isLocalPlayer)
             {
@@ -96,10 +96,10 @@ public class PlayerHandler : MonoBehaviour
         return GameObject.FindObjectOfType<Tower>();
     }
 
-    public List<Entity> getAllEntities(Character from)
+    public List<Unit> getAllUnits(Unit from)
     {
-        List<Entity> entities = new List<Entity>();
-        foreach (Entity c in GameObject.FindObjectsOfType<Entity>())
+        List<Unit> entities = new List<Unit>();
+        foreach (Unit c in GameObject.FindObjectsOfType<Unit>())
         {
             if (c != from)
                 entities.Add(c);
@@ -108,9 +108,9 @@ public class PlayerHandler : MonoBehaviour
         return entities;
     }
 
-    public Entity findClosest(Entity sender, string typeName, bool enemyOnly)
+    public Unit findClosest(Unit sender, string typeName, bool enemyOnly)
     {
-        Entity closest = null;
+        Unit closest = null;
         float minDistance = Mathf.Infinity;
         Type type = Type.GetType(typeName);
 
@@ -120,7 +120,7 @@ public class PlayerHandler : MonoBehaviour
             return null;
         }
 
-        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        foreach (Unit c in GameObject.FindObjectsOfType(type))
         {
             if (c == sender || (enemyOnly && c.ownerPlayer && c.ownerPlayer.playerID == sender.ownerPlayer.playerID))
                 continue;
@@ -135,9 +135,9 @@ public class PlayerHandler : MonoBehaviour
         return closest;
     }
 
-    public List<Entity> getAllEntitiesOfType(String typeName)
+    public List<Unit> getAllEntitiesOfType(String typeName)
     {
-        List<Entity> entities = new List<Entity>();
+        List<Unit> entities = new List<Unit>();
         Type type = Type.GetType(typeName);
 
         if (type == null)
@@ -146,7 +146,7 @@ public class PlayerHandler : MonoBehaviour
             return null;
         }
 
-        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        foreach (Unit c in GameObject.FindObjectsOfType(type))
         {
            entities.Add(c);
         }

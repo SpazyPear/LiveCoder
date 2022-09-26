@@ -47,7 +47,7 @@ public class Pathfinder : ControlledMonoBehavour
         for (int i = 0; i < path.Count; i++)
         {
             if (i == 0) continue;
-            Debug.DrawLine(GridManager.GridContents[path[i - 1].x, path[i - 1].y].Object.transform.position, GridManager.GridContents[path[i].x, path[i].y].Object.transform.position, Color.red, 5);
+            Debug.DrawLine(GridManager.GridContents[path[i - 1].x, path[i - 1].y].TileObject.transform.position, GridManager.GridContents[path[i].x, path[i].y].TileObject.transform.position, Color.red, 5);
         }
 
         List<Vector2Int> moves = new List<Vector2Int>();
@@ -76,7 +76,7 @@ public class Pathfinder : ControlledMonoBehavour
         return moves;
     }
 
-    public List<Vector2Int> FindPath (Character from, Character to)
+    public List<Vector2Int> FindPath (PlaceableObject from, PlaceableObject to)
     {
         return FindPath(from.gridPos, to.gridPos);
     }

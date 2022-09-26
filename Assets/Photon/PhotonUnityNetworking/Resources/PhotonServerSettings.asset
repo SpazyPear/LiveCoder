@@ -59,6 +59,7 @@ MonoBehaviour:
   - replicatedSelfDestruct
   - deductCredits
   - RotateWall
+  - replicatedLowerShield
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

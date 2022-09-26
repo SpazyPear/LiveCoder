@@ -7,7 +7,7 @@ public class TurretBullet : ProjectileBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        lane = ProjectileLane.Flat;
+        projectileLane = ProjectileLane.Flat;
     }
 
     // Update is called once per frame

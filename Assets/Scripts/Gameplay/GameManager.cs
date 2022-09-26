@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     int currentPhase;
     int playersReadied;
     public int counter = 0;
-    public static Dictionary<int, Entity> unitInstances = new Dictionary<int, Entity>(); 
+    public static Dictionary<int, Unit> unitInstances = new Dictionary<int, Unit>(); 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
 
     // Start is called before the first frame update
@@ -41,19 +41,6 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     {
         State.onLevelLoad += initGameManager;
         State.initializeLevel();
-    }
-
-
-    public void SetIDs(int phase)
-    {
-        if (phase == 1)
-        {
-            int counter = 0;
-            foreach (Entity e in GameObject.FindObjectsOfType<Entity>())
-            {
-                e.ID = counter++;
-            }
-        }
     }
 
     public void initGameManager(object sender, EventArgs e)

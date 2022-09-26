@@ -17,7 +17,7 @@ public class DragDropManager : MonoBehaviour
     public Transform dragDropTransform;
     public UIManager uiManager;
     public PlayerManager playerManager;
-    Entity draggingEntity;
+    PlaceableObject draggingEntity;
 
     private void Start() 
     { 
@@ -55,10 +55,13 @@ public class DragDropManager : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            Entity hitEntity = Physics.Raycast(ray, out hit) ? hit.collider.gameObject.GetComponentInParent<Entity>() : null;
-            if (hitEntity && !hitEntity.executing && hitEntity.ownerPlayer && hitEntity.ownerPlayer.isLocalPlayer)
+            PlaceableObject hitObject = Physics.Raycast(ray, out hit) ? hit.collider.gameObject.GetComponentInParent<PlaceableObject>() : null;
+            
+            if (hitObject is Unit && (hitObject as Unit).executing) return;
+            
+            if (hitObject && hitObject.ownerPlayer && hitObject.ownerPlayer.isLocalPlayer)
             {
-                draggingEntity = hitEntity;
+                draggingEntity = hitObject;
             }
         }
         if (Input.GetMouseButtonUp(0) && draggingEntity)
@@ -72,9 +75,9 @@ public class DragDropManager : MonoBehaviour
             {
                 GameManager.photonView.RPC("placeOnGrid", Photon.Pun.RpcTarget.All, draggingEntity.photonView.ViewID, hitTile.gridTile.gridPosition.x, hitTile.gridTile.gridPosition.y, playerManager.isLeftSide);
             }
-            else if (!hit.transform)
+            else if (!hit.transform && draggingEntity is Unit)
             {
-                playerManager.deleteUnit(draggingEntity);
+                playerManager.deleteUnit(draggingEntity as Unit);
             }
 
             draggingEntity = null;

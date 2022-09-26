@@ -8,7 +8,7 @@ using PythonProxies;
 public class World : MonoBehaviour
 {
 
-    [PythonMethod]
+    /*[PythonMethod]
     public List<CharacterHandlerProxy> getEnemies()
     {
         List<CharacterHandlerProxy> characters = new List<CharacterHandlerProxy>();
@@ -21,9 +21,9 @@ public class World : MonoBehaviour
         }
 
         return characters;
-    }
+    }*/
 
-    [PythonMethod]
+    /*[PythonMethod]
     public List<OreDepositProxy> getOreDeposits()
     {
         List<OreDepositProxy> ores = new List<OreDepositProxy>();
@@ -33,7 +33,7 @@ public class World : MonoBehaviour
         }
 
         return ores;
-    }
+    }*/
 
     [PythonMethod]
     public EntityProxy getEnemyTower()
@@ -45,7 +45,7 @@ public class World : MonoBehaviour
     public List<object> getAllEntities()
     {
         List<object> entities = new List<object>();
-        foreach (Entity c in GameObject.FindObjectsOfType<Entity>())
+        foreach (Unit c in GameObject.FindObjectsOfType<Unit>())
         {
             entities.Add(c.CreateProxy());
         }
@@ -67,7 +67,7 @@ public class World : MonoBehaviour
             return null;
         }
 
-        foreach (Entity c in GameObject.FindObjectsOfType(type))
+        foreach (Unit c in GameObject.FindObjectsOfType(type))
         {
             entities.Add(c.CreateProxy() as EntityProxy);
         }

@@ -5,26 +5,44 @@ using Photon.Pun;
 
 public class CoinStoreProxy
 {
-    Entity target;
+    CoinStore target;
 
     public CoinStoreProxy(CoinStore p)
     {
         this.target = p;
     }
-
+    
 }
 
 public class CoinStore : Entity
-{    
+{
+    public PlayerManager ownerPlayer;
+    public PhotonView photonView;
+
+    private void Awake()
+    {
+        ownerPlayer = GameManager.activePlayer;
+        photonView = GetComponent<PhotonView>();
+    }
+    
     public override void takeDamage(int damage, object sender = null)
     {
-        Entity attacker = sender as Entity;
+        if (currentHealth != 0)
+        {
+            handleSteal(damage, sender);
+        }
+        
+        base.takeDamage(damage, sender);
+    }
+    
+    public void handleSteal(int damage, object sender = null)
+    {
+        Unit attacker = sender as Unit;
         if (attacker.ownerPlayer)
         {
             attacker.ownerPlayer.creditsLeft.value += damage * 5;
             photonView.RPC("deductCredits", RpcTarget.Others, damage * 5);
         }
-        base.takeDamage(damage, sender);
     }
 
     [PunRPC]

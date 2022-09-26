@@ -4479,7 +4479,7 @@ MonoBehaviour:
   editingContext:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
-    character: {fileID: 0}
+    entity: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   codeContexts: []

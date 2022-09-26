@@ -54,7 +54,7 @@ public class CodeContext
     public Microsoft.Scripting.Hosting.ScriptSource pythonScript;
     public Microsoft.Scripting.Hosting.ScriptScope pythonScriptScope;
 
-    public Entity entity;
+    public Unit unit;
     public int ownerPlayer;
 
     public bool shouldExecute = true;
@@ -482,7 +482,7 @@ public class CodeExecutor : MonoBehaviour
     public ControlPanelManager controlPanelManager;
 
 
-    public IEnumerator ResetScript (string newSource, Entity sender)
+    public IEnumerator ResetScript (string newSource, Unit sender)
     {
         
         for (int i = 0; i < codeContexts.Count; i++)

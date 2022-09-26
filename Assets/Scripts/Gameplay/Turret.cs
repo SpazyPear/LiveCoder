@@ -8,12 +8,12 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 
 
-public class Turret : Entity
+public class Turret : Unit
 {
-
+/*
     TurretData turretData { get { return entityData as TurretData; } }
     GameObject projectile;
-    Entity currentTarget;
+    Unit currentTarget;
     Transform pivot;
     [SerializeField] Transform barrel;
     ParticleSystem shootPS;
@@ -40,7 +40,7 @@ public class Turret : Entity
         //StartCoroutine(debugShoot());
     }
 
-    public void target(Entity enemy)
+    public void target(Unit enemy)
     {
         if (isInRange(enemy))
         {
@@ -144,5 +144,5 @@ public class Turret : Entity
     {
         base.EMPRecover();
         barrel.GetComponent<MeshRenderer>().material.SetFloat("_EMPFactor", 0);
-    }
+    }*/
 }

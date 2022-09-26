@@ -8,50 +8,37 @@ using Photon.Pun;
 
 
 using PythonProxies;
+using System.Linq;
+
 public class PythonProxyObject {
 
     public string pythonClassName;
 
 }
 
-
-
-public class Entity : ControlledMonoBehavour
+public class Entity : PlaceableObject
 {
-    public int currentHealth;
     public int selfDestructRange = 2;
     public int selfDestructDamage = 2;
-    public Vector2Int gridPos;
-    public PlayerManager ownerPlayer;
-    public int cost;
-    public CodeContext codeContext;
-    public int ID;
     public bool isDisabled;
-    public EntityData entityData;
+    public UnitData entityData;
     RectTransform CanvasRect;
     RectTransform healthBarObj;
     protected Slider healthBar;
-    public PhotonView photonView;
+    public int currentHealth;
+    public int maxHealth = 5;
     public int viewID => photonView.ViewID;
-
     public bool executing = false;
    
     public virtual async void die(object sender = null)
     {
-        if (ownerPlayer)
-            ownerPlayer.units.Remove(this);
-     
-        
         float timer = 0;
-
-
 
         if (healthBar != null)
             Destroy(healthBar.gameObject);
 
         while (timer < 1)
         {
-
             if (gameObject != null)
             {
                 transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, timer / 1);
@@ -67,27 +54,17 @@ public class Entity : ControlledMonoBehavour
         //GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
     }
 
-    public virtual void Awake()
+    protected virtual void Awake()
     {
+           
         
-        codeContext.entity = this;
-      
-        GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
-        PythonInterpreter.AddContext(codeContext);
         CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
-        currentHealth = entityData.maxHealth;
         healthBar = healthBarObj.GetComponentInChildren<Slider>();
         photonView = GetComponentInParent<PhotonView>();
-        GameManager.unitInstances.Add(viewID, this);
+        currentHealth = maxHealth;
         //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "unitInstances", GameManager.unitInstances } });
         // healthBar.value = currentHealth;
-    }
-
-    public virtual void Update()
-    {
-
-       
     }
 
     void setupHealthBar()
@@ -127,7 +104,7 @@ public class Entity : ControlledMonoBehavour
             currentHealth -= damage;
             StopCoroutine(shakeHealthBar());
             StartCoroutine(shakeHealthBar());
-            healthBar.value = (float)currentHealth / entityData.maxHealth;
+            healthBar.value = (float)currentHealth / maxHealth;
             return;
         }
             
@@ -148,10 +125,10 @@ public class Entity : ControlledMonoBehavour
             {
                 try
                 {
-                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Character>() != gameObject.GetComponentInChildren<Character>())
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject && GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() != gameObject.GetComponentInChildren<Unit>())
                     {
-                        if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>() != null)
-                            GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren<Entity>().takeDamage(2);
+                        if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() != null)
+                            GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>().attachedModules.ForEach(x => x.takeDamage(2));
                     }
                 }
                 catch (IndexOutOfRangeException) { }
@@ -163,34 +140,7 @@ public class Entity : ControlledMonoBehavour
         yield return null;
     }
     
-    async void EMPTimer(float strength)
-    {
-        if (!entityData) return;
 
-        float timer = entityData.empResistance * strength;
-        while (timer > 0)
-        {
-            timer -= Time.deltaTime;
-            await Task.Yield();
-        }
-        EMPRecover();
-    }
-
-    public virtual void EMPRecover()
-    {
-        isDisabled = false;
-
-    }
-
-    public virtual void OnEMPDisable(float strength)
-    {
-        if (isDisabled)
-        {
-            return;
-        }
-        isDisabled = true;
-        EMPTimer(strength);
-    }
 
     [PunRPC]
     public IEnumerator replicatedTeleport(float x, float y, float z, float pitch, float yaw, float roll, int gridX, int gridY)
@@ -201,83 +151,7 @@ public class Entity : ControlledMonoBehavour
         yield return null;
     }
 
-    public List<Entity> checkForInRangeEntities(string typeName, bool friendlies, bool enemies)
-    {
-        Type type = Type.GetType(typeName);
-        List<Entity> foundEntities = new List<Entity>();
-        for (int x = -entityData.range; x <= entityData.range; x++)
-        {
-            for (int y = -entityData.range; y <= entityData.range; y++)
-            {
-                try
-                {
-                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) && GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) != this)
-                    {
-                        if (!friendlies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer == this.ownerPlayer) continue;
-
-                        if (!enemies && (GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity).ownerPlayer != this.ownerPlayer) continue;
-
-                        foundEntities.Add(GridManager.GridContents[gridPos.x + x, gridPos.y + y].Entity.GetComponentInChildren(type) as Entity);
-                    }
-                }
-                catch (IndexOutOfRangeException) { }
-            }
-        }
-        return foundEntities;
-    }
-
-    public bool isInRange(Entity enemy)
-    {
-        for (int x = -entityData.range; x <= entityData.range; x++)
-        {
-            for (int y = -entityData.range; y <= entityData.range; y++)
-            {
-                if (GridManager.isPosInBounds(new Vector2Int(x, y)))
-                {
-
-                    if (GridManager.entityOnTile(x, y) == enemy)
-                        return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    private void OnDestroy()
-    {
-        
-    }
-
-    // TODO Change TypeName to enum for ease of use
-    public Entity findClosestEntityOfType(Entity sender, string typeName)
-    {
-        Entity closest = null;
-        float minDistance = Mathf.Infinity;
-        Type type = Type.GetType(typeName);
-
-        if (type == null)
-        {
-            ErrorManager.instance.PushError(new ErrorSource { function = "findClosestEntityOfType", playerId = gameObject.name }, new Error("Incorrect type name."));
-            return null;
-        }
-
-        foreach (Entity c in GameObject.FindObjectsOfType(type))
-        {
-            if (c == sender)
-                continue;
-
-            if (Vector2Int.Distance(c.gridPos, sender.gridPos) < minDistance)
-            {
-                closest = c;
-                minDistance = Vector2Int.Distance(c.gridPos, sender.gridPos);
-            }
-        }
-
-        return closest;
-    }
-
-
-    public virtual object CreateProxy()
+    public PythonProxyObject CreateProxy()
     {
         return new EntityProxy(this);
     }

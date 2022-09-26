@@ -4,6 +4,9 @@ using UnityEngine;
 using TMPro;
 using Newtonsoft.Json.Linq;
 using Microsoft.Scripting.Hosting;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using Photon.Pun;
 
 public class PythonTypeDef
 {
@@ -11,7 +14,7 @@ public class PythonTypeDef
     public List<string> possibleValues;
 }
 
-public class PythonInterpreter : MonoBehaviour
+public class PythonInterpreter : MonoBehaviour, IOnEventCallback
 {
     [Header("Editor UI")]
     public TMP_InputField input;
@@ -22,6 +25,7 @@ public class PythonInterpreter : MonoBehaviour
 
     private void Awake()
     {
+        
         instance = this;
 
         Microsoft.Scripting.Hosting.ScriptRuntime runtime = IronPython.Hosting.Python.CreateRuntime();
@@ -36,9 +40,7 @@ public class PythonInterpreter : MonoBehaviour
         currentSearchPaths.Add(Application.streamingAssetsPath + "/Lib");
         currentSearchPaths.Add(Application.streamingAssetsPath + "/Lib/site-packages");
 
-
         pythonEngine.SetSearchPaths(currentSearchPaths);
-
 
         input.onValueChanged.AddListener(OnValueChanged);
 
@@ -49,9 +51,9 @@ public class PythonInterpreter : MonoBehaviour
         instance.codeContexts.Add(context);
     }
 
-    public void ResetScript(string newSource, Entity sender)
+    public void ResetScript(string newSource, Unit sender)
     {
-        CodeContext context = codeContexts.Find(x => x.entity == sender);
+        CodeContext context = codeContexts.Find(x => x.unit == sender);
         
         context.source = newSource;
         context.pythonScript = pythonEngine.CreateScriptSourceFromString(ProcessSource(context));
@@ -98,18 +100,15 @@ public class PythonInterpreter : MonoBehaviour
         editingContext = context;
 
         globalAssigns = "";
-        SetVariable("current", context.entity);
+        SetVariable("current", context.unit);
         SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
-        foreach (Module m in context.character.transform.GetComponents<Module>())
+        foreach (Module m in context.unit.transform.GetComponents<Module>())
         {
             print("Using module " + m.displayName());
             SetVariable(m.displayName(), m);
         }
-
-        
-
 
         print("Starting intellisense");
 
@@ -219,9 +218,9 @@ public class PythonInterpreter : MonoBehaviour
     public void SetVariable(string name, object var, Microsoft.Scripting.Hosting.ScriptScope scope = null)
     {
 
-        if (var is Entity)
+        if (var is Unit)
         {
-            object proxy = ((Entity)var).CreateProxy();
+            object proxy = ((Unit)var).CreateProxy();
 
             globalAssigns += $"{name} = {TypeToPythonTypeString(proxy.GetType())}()\n";
 
@@ -287,9 +286,9 @@ public class PythonInterpreter : MonoBehaviour
 
                 globalAssigns = "";
                
-                SetVariable("current", context.character, scope);
+                SetVariable("current", context.unit, scope);
 
-                foreach (Module m in context.character.transform.GetComponents<Module>()) 
+                foreach (Module m in context.unit.transform.GetComponents<Module>()) 
                 {
                     SetVariable(m.displayName(), m, scope);
                 }
@@ -352,5 +351,14 @@ public class PythonInterpreter : MonoBehaviour
             }
             yield return new WaitForSeconds(1);
         } while (Application.isPlaying && runOnStep);
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code == State.CodeInjectionCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            ResetScript((string)data[0], PhotonView.Find((int)data[1]).GetComponent<Unit>());
+        }
     }
 }

@@ -9,9 +9,10 @@ public static class State
     public static int EnergyRegen = 4;
     public static GameManager gameManager;
 
-    public static byte ReadyUpCode = 0;
-    public static byte EMPCode = 1;
-
+    public static readonly byte ReadyUpCode = 0;
+    public static readonly byte EMPCode = 1;
+    public static readonly byte CodeInjectionCode = 2;
+    
     public static void initializeLevel()
     {
         onLevelLoad?.Invoke(null, EventArgs.Empty);

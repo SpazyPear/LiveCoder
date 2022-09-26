@@ -20,9 +20,9 @@ public class MoveCommand : Command
 
 public class AttackCommand : Command
 {
-    public Entity toAttack;
+    public Unit toAttack;
     
-    public AttackCommand(Entity toAttack)
+    public AttackCommand(Unit toAttack)
     {
         this.toAttack = toAttack;
     }

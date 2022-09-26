@@ -82,6 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac4be0461c4a46418aedc8ea6fe53da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentEnergy: 0
   currentHealth: 0
   selfDestructRange: 2
   selfDestructDamage: 2
@@ -90,7 +91,7 @@ MonoBehaviour:
   cost: 20
   codeContext:
     source: "def OnStart():\r\n   print(\"stub\")\ndef OnStep():\n   print(\"stub\")"
-    character: {fileID: 0}
+    entity: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0
@@ -100,7 +101,6 @@ MonoBehaviour:
   executing: 0
   tweener: {fileID: 3467221991074472160}
   isMoveThreadRunning: 0
-  currentEnergy: 0
   debugMove: 0
   startInScene: 0
 --- !u!114 &8967698964722667375

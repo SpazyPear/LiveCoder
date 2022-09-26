@@ -7,7 +7,7 @@ using PythonProxies;
 
 public class OreDeposit : Entity
 {
-    public OreDepositData data;
+    /*public OreDepositData data;
 
     private void Start()
     {
@@ -25,5 +25,5 @@ public class OreDeposit : Entity
     public override object CreateProxy()
     {
         return new OreDepositProxy(this);
-    }
+    }*/
 }

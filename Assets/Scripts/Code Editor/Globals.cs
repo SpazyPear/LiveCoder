@@ -54,7 +54,7 @@ class GlobalManager
         RegisterProxy<GiantHandlerProxy, Giant>(r => new GiantHandlerProxy(r));
         RegisterProxy<HealerHandlerProxy, Healer>(r => new HealerHandlerProxy(r));
 
-        RegisterProxy<EntityProxy, Entity>(r => new EntityProxy(r));
+        RegisterProxy<EntityProxy, Unit>(r => new EntityProxy(r));
 
         RegisterProxy<TrapProxy, Trap>(r => new TrapProxy(r));
         RegisterProxy<OreDepositProxy, OreDeposit>(r => new OreDepositProxy(r));
@@ -73,19 +73,19 @@ class GlobalManager
 
         RegisterGlobalFunction <System.Func<System.Collections.Generic.List<OreDeposit>>> (script, "getOreDeposits", handler.getOreDeposits, ((System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits).Method);
 
-        RegisterGlobalFunction<System.Func<Entity>>(script, "getEnemyTower", handler.getEnemyTower, ((System.Func<Entity>)handler.getEnemyTower).Method);
+        RegisterGlobalFunction<System.Func<Unit>>(script, "getEnemyTower", handler.getEnemyTower, ((System.Func<Unit>)handler.getEnemyTower).Method);
 
-        RegisterGlobalFunction<System.Func<Character, string, bool, Entity>>(script, "findClosest", handler.findClosest, ((System.Func<Character, string, bool, Entity>)handler.findClosest).Method);
+        RegisterGlobalFunction<System.Func<Character, string, bool, Unit>>(script, "findClosest", handler.findClosest, ((System.Func<Character, string, bool, Unit>)handler.findClosest).Method);
 
 
-        RegisterGlobalFunction<System.Func<string, List<Entity>>>(script, "getEntitiesOfType", handler.getAllEntitiesOfType, ((System.Func<string, List<Entity>>)handler.getAllEntitiesOfType).Method);
+        RegisterGlobalFunction<System.Func<string, List<Unit>>>(script, "getEntitiesOfType", handler.getAllEntitiesOfType, ((System.Func<string, List<Unit>>)handler.getAllEntitiesOfType).Method);
 
 
         // Get Enemy Reference -- only for passing into other methods (doesnt give access to alot)
         *//*script.Globals["getEnemies"] = (System.Func<System.Collections.Generic.List<Character>>)handler.getEnemies;
         script.Globals["getOreDeposits"] = (System.Func<System.Collections.Generic.List<OreDeposit>>)handler.getOreDeposits;
-        script.Globals["getEnemyTower"] = (System.Func<Entity>)handler.getEnemyTower;
-        script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Entity>)handler.findClosestEntityOfType;
+        script.Globals["getEnemyTower"] = (System.Func<Unit>)handler.getEnemyTower;
+        script.Globals["findClosestEntityOfType"] = (System.Func<Character, string, Unit>)handler.findClosestEntityOfType;
 *//*
 
     }
@@ -171,7 +171,7 @@ class GlobalManager
 
     }
 
-    public void OnScriptStart(Script script, Entity target = null)
+    public void OnScriptStart(Script script, Unit target = null)
     {
 
         RegisterGlobalFunction<System.Action<DynValue>>(script, "print", DebugLog, ((System.Action<DynValue>)DebugLog).Method);

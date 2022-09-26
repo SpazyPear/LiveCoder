@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51919da2d55ccc74ba089b55ea77408f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentEnergy: 0
   currentHealth: 0
   selfDestructRange: 2
   selfDestructDamage: 2
@@ -54,7 +55,7 @@ MonoBehaviour:
   cost: 0
   codeContext:
     source: 
-    character: {fileID: 0}
+    entity: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   ID: 0

@@ -13,7 +13,8 @@ public class ProjectileBehaviour : MonoBehaviour
     public int damage = 1;
     public PlayerManager ownerPlayer;
     public float aliveRange;
-    public ProjectileLane lane;
+    public ProjectileLane projectileLane;
+    public int lane;
 
     private void Start()
     {
@@ -23,10 +24,10 @@ public class ProjectileBehaviour : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         Shield shield = collision.GetComponentInParent<Shield>();
-        Entity character = collision.gameObject.GetComponentInParent<Entity>();
+        Unit character = collision.gameObject.GetComponentInParent<Unit>();
         if (shield == null && character && character.ownerPlayer != ownerPlayer)
         {
-            character.takeDamage(damage, this);
+            character.attachedModules[lane].takeDamage(damage, this);
             Destroy(gameObject);
         }
         else if (shield)

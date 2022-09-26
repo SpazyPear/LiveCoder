@@ -16,7 +16,7 @@ public class PlayerManager : ControlledMonoBehavour
     public BindableValue<int> creditsLeft;
     public string playerID => LocalPlayer.UserId;
     public bool isLocalPlayer => LocalPlayer.IsLocal;
-    public List<Entity> units;
+    public List<Unit> units;
     public bool isLeftSide => PhotonNetwork.IsMasterClient;
 
     void Awake()
@@ -43,17 +43,17 @@ public class PlayerManager : ControlledMonoBehavour
         spawnUnit("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
     }
 
-    public Entity spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
+    public Unit spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
     {
         GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;
         if (prefab)
         {
             if (GridManager.validMovePosition(spawnPos))
             {
-                if (prefab.GetComponentInChildren<Entity>().cost <= creditsLeft.value)
+                if (prefab.GetComponentInChildren<Unit>().cost <= creditsLeft.value)
                 {
-                    creditsLeft.value -= prefab.GetComponentInChildren<Entity>().cost;
-                    Entity entity = GridManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Entity>();
+                    creditsLeft.value -= prefab.GetComponentInChildren<Unit>().cost;
+                    Unit entity = GridManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Unit>();
                     entity.ownerPlayer = this;
                     units.Add(entity);
                     return entity;
@@ -75,12 +75,12 @@ public class PlayerManager : ControlledMonoBehavour
         Debug.Log("Won");
     }
 
-    public bool checkUnitOwnerShip(Character unit)
+    public bool checkUnitOwnerShip(Unit unit)
     {
         return units.Contains(unit);
     }
-
-    public void deleteUnit(Entity unit)
+    
+    public void deleteUnit(Unit unit)
     {
         units.Remove(unit);
         PhotonNetwork.Destroy(unit.gameObject);

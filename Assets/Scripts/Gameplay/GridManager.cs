@@ -30,9 +30,9 @@ public class GridManager : MonoBehaviour
 
     }
 
-    public static Entity entityOnTile(int x, int y)
+    public static PlaceableObject entityOnTile(int x, int y)
     {
-        return GridContents[x, y].Entity ? GridContents[x, y].Entity.GetComponent<Entity>() : null;
+        return GridContents[x, y].OccupyingObject ? GridContents[x, y].OccupyingObject.GetComponent<PlaceableObject>() : null;
     }
 
     public void generateGrid(object sender, EventArgs e)
@@ -98,7 +98,7 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < GridBreadth; y++)
             {
 
-                if (GridContents[x, y] != null && GridContents[x, y].Entity != null && GridContents[x,y].Entity.GetComponentInChildren<Wall>() != null)
+                if (GridContents[x, y] != null && GridContents[x, y].OccupyingObject != null && GridContents[x,y].OccupyingObject.GetComponentInChildren<Wall>() != null)
                 {
                     costMap[x, y] = 0f;
                 }
@@ -122,13 +122,12 @@ public class GridManager : MonoBehaviour
         }
 
         GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
-        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<Entity>().viewID, pos.x, pos.y, isLeftSide);
-
+        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<Unit>().viewID, pos.x, pos.y, isLeftSide);
         return instance;
     }
 
     [PunRPC]
-    public IEnumerator placeOnGrid(int viewID, int x, int y, bool isLeftSide)
+    public void placeOnGrid(int viewID, int x, int y, bool isLeftSide)
     {
         Debug.Log(GridContents.GetLength(1) + " " + GameManager.gridDimensions.x);
         if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
@@ -139,15 +138,31 @@ public class GridManager : MonoBehaviour
             Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
             float hieght = (GridHeight / 2);
             obj.transform.position += new Vector3(0, 1, 0);
-            GridContents[pos.x, pos.y].Entity = obj;
+            GridContents[pos.x, pos.y].OccupyingObject = obj;
             if (isLeftSide) obj.transform.Rotate(0, 180, 0);
 
-            obj.GetComponentInChildren<Entity>().gridPos = pos;
+            obj.GetComponentInChildren<Unit>().gridPos = pos;
         }
-        yield return null;
+    }
+    
+    public static bool isInRange(int range, Unit enemy)
+    {
+        for (int x = -range; x <= range; x++)
+        {
+            for (int y = -range; y <= range; y++)
+            {
+                if (isPosInBounds(new Vector2Int(x, y)))
+                {
+
+                    if (entityOnTile(x, y) == enemy)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Entity
+    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Unit
     {
         float min = Mathf.Infinity;
         T closest = null;
@@ -165,11 +180,11 @@ public class GridManager : MonoBehaviour
         return closest;
     }
 
-    public static Character findClosestEnemy(Character sender)
+    public static Unit findClosestEnemy(Unit sender)
     {
         float min = Mathf.Infinity;
-        Character closest = null;
-        foreach (Character character in GameObject.FindObjectsOfType<Character>())
+        Unit closest = null;
+        foreach (Unit character in GameObject.FindObjectsOfType<Unit>())
         {
             if (Vector2Int.Distance(sender.gridPos, character.gridPos) < min && character.ownerPlayer != sender.ownerPlayer)
             {
@@ -180,13 +195,13 @@ public class GridManager : MonoBehaviour
         return closest;
     }
 
-    public static Entity getEntityAtPos(Vector2Int pos)
+    public static Unit getEntityAtPos(Vector2Int pos)
     {
         if (GridContents != null)
         {
-            if (isPosInBounds(pos) && GridContents[pos.x, pos.y].Entity)
+            if (isPosInBounds(pos) && GridContents[pos.x, pos.y].OccupyingObject)
             {
-                return GridContents[pos.x, pos.y].Entity.GetComponentInChildren<Entity>();
+                return GridContents[pos.x, pos.y].OccupyingObject.GetComponentInChildren<Unit>();
             }
         }
         return null;
@@ -216,7 +231,7 @@ public class GridManager : MonoBehaviour
 
     public static bool validMovePosition(Vector2Int pos)
     {
-        if (isPosInBounds(pos) && GridContents[pos.x, pos.y].Entity == null)
+        if (isPosInBounds(pos) && GridContents[pos.x, pos.y].OccupyingObject == null)
         {
             return true;
         }
@@ -225,24 +240,24 @@ public class GridManager : MonoBehaviour
 
     public static Vector3 gridToWorldPos(Vector2Int gridPoint)
     {
-        return GridContents[gridPoint.x, gridPoint.y].Object.transform.position;
+        return GridContents[gridPoint.x, gridPoint.y].TileObject.transform.position;
     }
-    public static List<Entity> checkForInRangeEntities(Entity sender, int range, bool friendlies, bool enemies)
+    public static List<Unit> checkForInRangeEntities(Unit sender, int range, bool friendlies, bool enemies)
     {
-        List<Entity> foundEntities = new List<Entity>();
+        List<Unit> foundEntities = new List<Unit>();
         for (int x = -range; x <= range; x++)
         {
             for (int y = -range; y <= range; y++)
             {
                 try
                 {
-                    if (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>() && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>() != sender)
+                    if (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() && GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() != sender)
                     {
-                        if (!friendlies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>()).ownerPlayer == sender.ownerPlayer) continue;
+                        if (!friendlies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>()).ownerPlayer == sender.ownerPlayer) continue;
 
-                        if (!enemies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>()).ownerPlayer != sender.ownerPlayer) continue;
+                        if (!enemies && (GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>()).ownerPlayer != sender.ownerPlayer) continue;
 
-                        foundEntities.Add(GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].Entity.GetComponentInChildren<Entity>());
+                        foundEntities.Add(GridManager.GridContents[sender.gridPos.x + x, sender.gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>());
                     }
                 }
                 catch (IndexOutOfRangeException) { }

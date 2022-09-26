@@ -9,7 +9,7 @@ using Photon.Pun;
 using PythonProxies;
 public class WallProxy : EntityProxy
 {
-    Entity target;
+    Wall target;
 
     public WallProxy(Wall p) : base(p)
     {
@@ -17,11 +17,11 @@ public class WallProxy : EntityProxy
     }
 }
 
-public class Wall : Entity
+public class Wall : Module
 {
     [SerializeField] bool rotationInitiator = true;
     
-    async public override void Start()
+    async protected override void Start()
     {
         await Task.Yield();
         if (photonView.IsMine && rotationInitiator)
@@ -31,7 +31,6 @@ public class Wall : Entity
     
     public void CheckWallRotation(bool initiator)
     {
-        print(gridPos);
         if (wallAt(gridPos.x, gridPos.y + 1) || wallAt(gridPos.x, gridPos.y - 1))
         {
             photonView.RPC("RotateWall", RpcTarget.All);
@@ -102,11 +101,20 @@ public class Wall : Entity
         if (x < 0 || x >= GridManager.GridContents.GetLength(0) || y < 0 || y >= GridManager.GridContents.GetLength(1))
             return null;
         
-        if (GridManager.GridContents[x, y].Entity && GridManager.GridContents[x, y].Entity.GetComponentInChildren<Wall>())
+        if (GridManager.GridContents[x, y].OccupyingObject && GridManager.GridContents[x, y].OccupyingObject.GetComponentInChildren<Wall>())
         {
-            return GridManager.GridContents[x, y].Entity.GetComponentInChildren<Wall>();
+            return GridManager.GridContents[x, y].OccupyingObject.GetComponentInChildren<Wall>();
         }
         return null;
     }
 
+    public override string displayName()
+    {
+        return "wall";
+    }
+
+    public override object CreateProxy()
+    {
+        throw new NotImplementedException();
+    }
 }
