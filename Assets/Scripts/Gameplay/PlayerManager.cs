@@ -43,6 +43,18 @@ public class PlayerManager : ControlledMonoBehavour
         spawnUnit("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
     }
 
+    public bool spendCredits (int amount)
+    {
+        print("Spending Credits : " + amount.ToString());
+        if (amount <= creditsLeft.value)
+        {
+            creditsLeft.value -= amount;
+            return true;
+        }
+
+        return false;
+    }
+
     public Entity spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
     {
         GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;

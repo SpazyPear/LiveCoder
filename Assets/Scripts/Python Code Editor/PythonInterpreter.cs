@@ -15,10 +15,15 @@ public class PythonInterpreter : MonoBehaviour
 {
     [Header("Editor UI")]
     public TMP_InputField input;
+    public TMPro.TextMeshProUGUI coinCounterText;
     public CodeContext editingContext;
     public List<CodeContext> codeContexts;
     public static PythonInterpreter instance;
+    public PlayerManager myPlayer;
     Queue<CodeContext> contextsToBeAdded = new Queue<CodeContext>();
+
+    private int initialCost = 0;
+    private int currentCost = 0;
 
     private void Awake()
     {
@@ -80,9 +85,16 @@ public class PythonInterpreter : MonoBehaviour
 
     public void OnExecuteCode()
     {
-        editingContext.source = input.text;
-        print("Intellisense removed");
-        input.onValueChanged.RemoveAllListeners();
+        if (myPlayer.spendCredits(currentCost - initialCost))
+        {
+            editingContext.source = input.text;
+            print("Intellisense removed");
+            input.onValueChanged.RemoveAllListeners();
+
+
+            initialCost = 0;
+            currentCost = 0;
+        }
     }
 
     public void RunCode()
@@ -102,18 +114,20 @@ public class PythonInterpreter : MonoBehaviour
         SetVariable("world", GameObject.FindObjectOfType<World>());
         SetVariable("debug", (System.Action<dynamic>)debug);
 
-        foreach (Module m in context.character.transform.GetComponents<Module>())
+        foreach (Module m in context.entity.transform.GetComponents<Module>())
         {
             print("Using module " + m.displayName());
             SetVariable(m.displayName(), m);
         }
 
-        
-
+        initialCost = context.source.Trim().Split('\n').Length;
+        currentCost = initialCost;
 
         print("Starting intellisense");
 
         input.onValueChanged.AddListener(OnValueChanged);
+
+        CheckCoinCostValue(context.source);
 
     }
 
@@ -162,8 +176,31 @@ public class PythonInterpreter : MonoBehaviour
 
     string globalAssigns = "";
 
+    private void CheckCoinCostValue(string value)
+    {
+        if (coinCounterText != null)
+        {
+            int cost = value.Trim().Split('\n').Length;
+            currentCost = cost;
+
+            coinCounterText.text = $"Code Cost : {cost - initialCost} Coins";
+
+            if (myPlayer.creditsLeft.value - initialCost > cost)
+            {
+                coinCounterText.color = Color.green;
+            }
+            else
+            {
+                coinCounterText.color = Color.red;
+            }
+
+        }
+    }
+
     void OnValueChanged(string value)
     {
+
+        CheckCoinCostValue(value);
 
 
         string importDefinitions = "from game_stubs import *\n";
@@ -287,9 +324,9 @@ public class PythonInterpreter : MonoBehaviour
 
                 globalAssigns = "";
                
-                SetVariable("current", context.character, scope);
+                SetVariable("current", context.entity, scope);
 
-                foreach (Module m in context.character.transform.GetComponents<Module>()) 
+                foreach (Module m in context.entity.transform.GetComponents<Module>()) 
                 {
                     SetVariable(m.displayName(), m, scope);
                 }

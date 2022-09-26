@@ -62,12 +62,12 @@ public class Entity : ControlledMonoBehavour
         Destroy(gameObject);
     }
     
-    public virtual void Start()
+   /* public virtual void Start()
     {
         //GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
     }
-
-    public virtual void Awake()
+*/
+    public virtual void Start()
     {
         
         codeContext.entity = this;
