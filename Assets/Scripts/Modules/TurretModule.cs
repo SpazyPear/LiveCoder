@@ -133,4 +133,10 @@ public class TurretModule : Module
     {
         return "turretModule";
     }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/TurretModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
+    }
 }

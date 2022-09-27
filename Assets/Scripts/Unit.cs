@@ -9,16 +9,18 @@ using UnityEngine;
 
 public class Unit : PlaceableObject
 {
+    public int selfDestructRange = 2;
+    public int selfDestructDamage = 2;
+    public bool isDisabled;
     public UnitData unitData;
     public int currentEnergy;
     public List<Module> attachedModules = new List<Module>();
     public int cost => attachedModules.Sum(x => x.moduleData.cost);
     public CodeContext codeContext;
-    public int viewID => photonView.ViewID;
     public bool executing = false;
-
-    // Start is called before the first frame update
-    void Awake()
+    public new string name;
+    
+    protected virtual void Awake()
     {
         if (ownerPlayer)
             ownerPlayer.units.Remove(this);
@@ -26,13 +28,14 @@ public class Unit : PlaceableObject
         codeContext.unit = this;
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         PythonInterpreter.AddContext(codeContext);
-        GameManager.unitInstances.Add(viewID, this);
+        GameManager.unitInstances.Add(ViewID, this);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void InitializeUnit(List<string> moduleNames, string code, string name)
     {
-        
+        moduleNames.ForEach(x => addModule(x));
+        codeContext.source = code;
+        this.name = name;
     }
 
     public override void OnStart()
@@ -69,13 +72,14 @@ public class Unit : PlaceableObject
         attachedModules.ForEach(delegate (Module module) { module.OnEMPDisable(strength); });
         EMPTimer(strength);
     }
-
-    public void addModule(Module module)
+    
+    public void addModule(string moduleName)
     {
+        Module module = gameObject.AddComponent(Type.GetType(moduleName)) as Module;
         attachedModules.Add(module);
         module.lane = attachedModules.Count;
     }
-
+    
     public void energyRegen()
     {
         currentEnergy = Mathf.Clamp(currentEnergy + 1, 0, unitData.maxEnergy);
@@ -109,6 +113,35 @@ public class Unit : PlaceableObject
         return closest;
     }
 
+    public virtual void selfDestruct()
+    {
+        photonView.RPC("replicatedSelfDestruct", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void replicatedSelfDestruct()
+    {
+        for (int x = -selfDestructRange; x <= selfDestructRange; x++)
+        {
+            for (int y = -selfDestructRange; y <= selfDestructRange; y++)
+            {
+                try
+                {
+                    if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject && GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() != gameObject.GetComponentInChildren<Unit>())
+                    {
+                        if (GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>() != null)
+                            GridManager.GridContents[gridPos.x + x, gridPos.y + y].OccupyingObject.GetComponentInChildren<Unit>().attachedModules.ForEach(x => x.takeDamage(2));
+                    }
+                }
+                catch (IndexOutOfRangeException) { }
+            }
+        }
+        Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
+        Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
+    
     public PythonProxyObject CreateProxy()
     {
         return new UnitProxy(this);

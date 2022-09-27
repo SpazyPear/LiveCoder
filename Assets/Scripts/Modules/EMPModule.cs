@@ -17,7 +17,7 @@ public class EMPModule : Module
     
     public void EMP()
     {
-        int[] inRange = GridManager.checkForInRangeEntities(owningUnit, empData.range, false, true).Select(x => x.viewID).ToArray();
+        int[] inRange = GridManager.checkForInRangeEntities(owningUnit, empData.range, false, true).Select(x => x.ViewID).ToArray();
         owningUnit.photonView.RPC("replicatedEMP", RpcTarget.AllViaServer, inRange);
     }
 
@@ -41,5 +41,11 @@ public class EMPModule : Module
     public override object CreateProxy()
     {
         return new EMPModuleProxy(this);
+    }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/EMPModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
     }
 }

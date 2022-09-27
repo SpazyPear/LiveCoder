@@ -23,7 +23,7 @@ public class MeleeModule : Module
             if (target != null && owningUnit.currentEnergy > 0)
             {
                 owningUnit.currentEnergy--; //todo check if exist
-                owningUnit.photonView.RPC("replicatedAttack", RpcTarget.All, target.viewID, lane);
+                owningUnit.photonView.RPC("replicatedAttack", RpcTarget.All, target.ViewID, lane);
             }
             else
             {
@@ -50,5 +50,11 @@ public class MeleeModule : Module
     public override object CreateProxy()
     {
         return new MeleeModuleProxy(this);
+    }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/MeleeModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
     }
 }

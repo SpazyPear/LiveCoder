@@ -60,6 +60,22 @@ public class PythonInterpreter : MonoBehaviour, IOnEventCallback
         //codeContexts[i].script.DoString(newSource);
         //globalManager.OnScriptStart(codeContexts[i].script, target: codeContexts[i].entity);
         //controlPanelManager.UpdateGlobals(codeContexts[i]);
+        Microsoft.Scripting.Hosting.ScriptScope scope = pythonEngine.CreateScope();
+
+        globalAssigns = "";
+
+        SetVariable("current", context.unit, scope);
+
+        foreach (Module m in context.unit.transform.GetComponents<Module>())
+        {
+            SetVariable(m.displayName(), m, scope);
+        }
+
+        SetVariable("world", GameObject.FindObjectOfType<World>(), scope);
+        SetVariable("debug", (System.Action<dynamic>)debug, scope);
+
+        context.pythonScriptScope = scope;
+        context.pythonScript.Execute(scope);
 
         print("Script Reset");
         if (context.shouldExecute)

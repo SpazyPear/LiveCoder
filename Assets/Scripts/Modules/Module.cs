@@ -4,13 +4,17 @@ using UnityEngine;
 using PythonProxies;
 
 
-public abstract class Module : Entity
+public abstract class Module : MonoBehaviour, IDamageable
 {
     public ModuleData moduleData;
 
     public int lane;
 
     protected Unit owningUnit;
+
+    public GameObject moduleObj;
+
+    public int currentHealth;
     
     public abstract string displayName();
 
@@ -19,10 +23,11 @@ public abstract class Module : Entity
     protected virtual void Update() { }
 
 
-    protected override void Awake()
+    protected virtual void Awake()
     {
         currentHealth = moduleData.maxHealth;
         owningUnit = GetComponent<Unit>();
+        AddPrefab();
     }
 
     public abstract object CreateProxy();
@@ -31,5 +36,15 @@ public abstract class Module : Entity
 
     public virtual void EMPRecover() { }
 
-    //public abstract void addVisuals();
+    protected abstract void AddPrefab();
+
+    public void die(object sender = null)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void takeDamage(int damage, object sender = null)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -6,10 +6,10 @@ using UnityEngine;
 public class Tile
 {
     public GameObject TileObject;
-    public GameObject OccupyingObject;
+    public PlaceableObject OccupyingObject;
     public Vector2Int gridPosition;
 
-    public Tile(GameObject Object, Vector2Int gridPos, GameObject Unit = null )
+    public Tile(GameObject Object, Vector2Int gridPos, PlaceableObject Unit = null )
     {
         this.TileObject = Object;
         this.OccupyingObject = Unit;

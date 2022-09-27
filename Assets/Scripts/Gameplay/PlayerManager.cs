@@ -21,6 +21,7 @@ public class PlayerManager : ControlledMonoBehavour
 
     void Awake()
     {
+        FileManager.WriteDefaults();
         LocalPlayer = PhotonNetwork.LocalPlayer;
         creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();
@@ -39,23 +40,50 @@ public class PlayerManager : ControlledMonoBehavour
 
     void spawnStartingObjects()
     {
-        spawnUnit("BaseTower", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2, 0));
-        spawnUnit("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
+        spawnEntity("BaseTower", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2, 0));
+        spawnEntity("CoinStore", isLeftSide ? new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, GridManager.GridContents.GetLength(1) - 1) : new Vector2Int(GridManager.GridContents.GetLength(0) / 2 + 1, 0));
+    }
+    
+    public Unit spawnUnit(string unitName, Vector2Int spawnPos, bool ignoreCost = false)
+    {
+        UnitConfig unitConfig = FileManager.GetUnitConfig(unitName);
+        if (unitConfig != null)
+        {
+            if (GridManager.validMovePosition(spawnPos))
+            {
+                if (unitConfig.cost <= creditsLeft.value)
+                {
+                    creditsLeft.value -= unitConfig.cost;
+                    Unit unit = GridManager.spawnOnGrid("Prefabs/Unit", spawnPos, false, isLeftSide).GetComponentInChildren<Unit>();
+                    unit.InitializeUnit(unitConfig.moduleNames, unitConfig.codeContext, unit.name);
+                    unit.ownerPlayer = this;
+                    units.Add(unit);
+                    return unit;
+                }
+                else
+                    ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Not enough credits"));
+            }
+            else
+                ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Can't spawn there"));
+        }
+        else
+            ErrorManager.instance.PushError(new ErrorSource { function = "spawnUnit", playerId = gameObject.name }, new Error("Invalid character name"));
+
+        return null;
     }
 
-    public Unit spawnUnit(string entityType, Vector2Int spawnPos, bool ignoreCost = false)
+    public Entity spawnEntity(string name, Vector2Int spawnPos, bool ignoreCost = false)
     {
-        GameObject prefab = Resources.Load("Prefabs/" + entityType) as GameObject;
+        GameObject prefab = Resources.Load("Prefabs/" + name) as GameObject;
         if (prefab)
         {
             if (GridManager.validMovePosition(spawnPos))
             {
-                if (prefab.GetComponentInChildren<Unit>().cost <= creditsLeft.value)
+                if (prefab.GetComponentInChildren<Entity>().entityData.cost <= creditsLeft.value)
                 {
-                    creditsLeft.value -= prefab.GetComponentInChildren<Unit>().cost;
-                    Unit entity = GridManager.spawnOnGrid(prefab, spawnPos, false, isLeftSide).GetComponentInChildren<Unit>();
+                    creditsLeft.value -= prefab.GetComponentInChildren<Entity>().entityData.cost;
+                    Entity entity = GridManager.spawnOnGrid(name, spawnPos, false, isLeftSide).GetComponentInChildren<Entity>();
                     entity.ownerPlayer = this;
-                    units.Add(entity);
                     return entity;
                 }
                 else

@@ -114,31 +114,31 @@ public class GridManager : MonoBehaviour
 
     }
 
-    public static GameObject spawnOnGrid(GameObject obj, Vector2Int pos, bool ignorePosClash = false, bool isLeftSide = false)
+    public static GameObject spawnOnGrid(string objName, Vector2Int pos, bool ignorePosClash = false, bool isLeftSide = false)
     {
         if (!validMovePosition(pos) && !ignorePosClash)
         {
             return null;
         }
 
-        GameObject instance = PhotonNetwork.Instantiate("Prefabs/" + obj.name, Vector3.zero, Quaternion.identity);
-        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<Unit>().viewID, pos.x, pos.y, isLeftSide);
+        GameObject instance = InstantiateObject("Prefabs/" + objName, Vector3.zero, Quaternion.identity);
+        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<PhotonView>().ViewID, pos.x, pos.y, isLeftSide);
         return instance;
     }
 
     [PunRPC]
-    public void placeOnGrid(int viewID, int x, int y, bool isLeftSide)
+    public void placeOnGrid(int ViewID, int x, int y, bool isLeftSide)
     {
         Debug.Log(GridContents.GetLength(1) + " " + GameManager.gridDimensions.x);
         if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
         {
-            GameObject obj = PhotonView.Find(viewID).gameObject;
+            GameObject obj = PhotonView.Find(ViewID).gameObject;
             Vector2Int pos = new Vector2Int(x, y);
             obj.transform.position = gridToWorldPos(pos);
             Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
             float hieght = (GridHeight / 2);
             obj.transform.position += new Vector3(0, 1, 0);
-            GridContents[pos.x, pos.y].OccupyingObject = obj;
+            GridContents[pos.x, pos.y].OccupyingObject = PhotonView.Find(ViewID).GetComponent<PlaceableObject>();
             if (isLeftSide) obj.transform.Rotate(0, 180, 0);
 
             obj.GetComponentInChildren<Unit>().gridPos = pos;
@@ -265,49 +265,21 @@ public class GridManager : MonoBehaviour
         }
         return foundEntities;
     }
+    
+    public static void DestroyObject(GameObject obj)
+    {
+        if (PhotonNetwork.IsConnected)
+            PhotonNetwork.Destroy(obj);
+        else
+            Destroy(obj);
+    }
 
+    public static GameObject InstantiateObject(string obj, Vector3 pos, Quaternion rot)
+    {
+        if (PhotonNetwork.IsConnected)
+            return PhotonNetwork.Instantiate(obj, pos, rot);
+        else
+            return Instantiate(Resources.Load(obj) as GameObject, pos, rot);
+    }
 
 }
-
-
-/*
- * 
- * function OnStart()
-	e = getEnemies()
-	
-	if len(e) > 0 then
-		closest = e[1]
-		
-		for i,v in e do
-			if dist(current.position, v) < dist(current.position, closest) then
-				closest = v
-			end
-		end
-	end
-end
-
-
-function OnStep()
-	current.MoveToCharacter(closest)
-end
-*/
-
-/*
- * function OnStart()
-	e = getEnemies()
-	
-	if len(e) > 0 then
-		closest = e[1]
-		
-		for i,v in e do
-			if dist(current.position, v) < dist(current.position, closest) then
-				closest = v
-			end
-		end
-	end
-end
-
-
-function OnStep()
-	current.MoveToCharacter(closest)
-end*/

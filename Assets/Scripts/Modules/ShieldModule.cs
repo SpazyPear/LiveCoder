@@ -97,4 +97,10 @@ public class ShieldModule : Module
     {
         return "shieldModule";
     }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/ShieldModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
+    }
 }

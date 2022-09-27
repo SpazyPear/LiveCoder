@@ -59,5 +59,11 @@ public class HealerModule : Module
         return "healModule";
     }
 
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/HealerModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
+    }
+
 }
 

@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Web.UI.WebControls;
 using UnityEngine;
 using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
+public enum ObjectType
+{
+    Unit,
+    Module,
+    Entity
+}
 
 public class DragAndDropUnit : MonoBehaviour
 {
     public Canvas canvas;
-    public string unitType;
+    public new string name;
+    public ObjectType objectType;
     public Transform dragType; // Duplicates on drag
 
 
@@ -25,7 +34,7 @@ public class DragAndDropUnit : MonoBehaviour
 
             dragging = true;
             StartCoroutine("DuringDrag");
-            print($"Drag started of {unitType}");
+            //print($"Drag started of {unitType}");
         }
     }
 
@@ -54,20 +63,35 @@ public class DragAndDropUnit : MonoBehaviour
         RaycastHit hit;
 
         print(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, float.PositiveInfinity, 7))
         {
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
 
                 if ((pos.y > GridManager.GridContents.GetLength(1) / 2 && GameManager.activePlayer.isLeftSide) || (pos.y < GridManager.GridContents.GetLength(1) / 2 && !GameManager.activePlayer.isLeftSide))
-                    GameManager.activePlayer.spawnUnit(unitType, pos);
+                    SpawnObject(pos);
             }
         }
         
-        print($"Drag ended of {unitType} at {Input.mousePosition}");
-
     }
 
+    void SpawnObject(Vector2Int pos)
+    {
+        switch (objectType)
+        {
+            case ObjectType.Unit:
+                GameManager.activePlayer.spawnUnit(name, pos);
+                break;
+            case ObjectType.Module:
+                Unit unit = GridManager.GridContents[pos.x, pos.y].OccupyingObject as Unit;
+                if (unit && unit.photonView.AmOwner)
+                    GridManager.getEntityAtPos(pos).GetComponent<Unit>().addModule(name);
+                break;
+            case ObjectType.Entity:
+                GameManager.activePlayer.spawnEntity(name, pos);
+                break;
+        }
+    }
 
 }

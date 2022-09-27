@@ -17,11 +17,11 @@ public class WallProxy : EntityProxy
     }
 }
 
-public class Wall : Module
+public class Wall : Entity
 {
     [SerializeField] bool rotationInitiator = true;
     
-    async protected override void Start()
+    async public override void Start()
     {
         await Task.Yield();
         if (photonView.IsMine && rotationInitiator)
@@ -47,10 +47,9 @@ public class Wall : Module
     }
 
     [PunRPC]
-    public IEnumerator RotateWall()
+    public void RotateWall()
     {
         transform.eulerAngles = new Vector3(0, 90, 0);
-        yield break;
     }
 
     void CheckSurroundingWallRotations()
@@ -67,7 +66,7 @@ public class Wall : Module
 
     void ReplaceWithCorner()
     {
-        GridManager.spawnOnGrid(Resources.Load("Prefabs/CornerWall") as GameObject, gridPos, true);
+        GridManager.spawnOnGrid("CornerWall", gridPos, true);
         PhotonNetwork.Destroy(transform.gameObject);
     }
 /*
@@ -108,7 +107,7 @@ public class Wall : Module
         return null;
     }
 
-    public override string displayName()
+/*    public override string displayName()
     {
         return "wall";
     }
@@ -116,5 +115,5 @@ public class Wall : Module
     public override object CreateProxy()
     {
         throw new NotImplementedException();
-    }
+    }*/
 }

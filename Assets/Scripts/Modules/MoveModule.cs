@@ -70,7 +70,7 @@ public class MoveModule : Module
         if (GridManager.validMovePosition(new Vector2Int(owningUnit.gridPos.x + XDirection, owningUnit.gridPos.y + YDirecton)))
         {
             owningUnit.gridPos = new Vector2Int(owningUnit.gridPos.x + XDirection, owningUnit.gridPos.y + YDirecton);
-            GridManager.GridContents[owningUnit.gridPos.x, owningUnit.gridPos.y].OccupyingObject = gameObject;
+            GridManager.GridContents[owningUnit.gridPos.x, owningUnit.gridPos.y].OccupyingObject = owningUnit;
             owningUnit.currentEnergy -= 1;
         }
         else
@@ -93,5 +93,11 @@ public class MoveModule : Module
     public override string displayName()
     {
         return "moveModule";
+    }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/MoveModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
     }
 }

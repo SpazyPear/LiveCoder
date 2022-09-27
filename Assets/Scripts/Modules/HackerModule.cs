@@ -51,7 +51,7 @@ public class HackerModule : Module
     {
         object[] data = new object[2];
         data[0] = codeOverride;
-        data[1] = entity.viewID;
+        data[1] = entity.ViewID;
         PhotonNetwork.RaiseEvent(3, (object)data, new RaiseEventOptions { Receivers = ReceiverGroup.Others }, SendOptions.SendReliable);
     }
     
@@ -71,5 +71,11 @@ public class HackerModule : Module
     public override object CreateProxy()
     {
         return new HackerModuleProxy(this);
+    }
+
+    protected override void AddPrefab()
+    {
+        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/HackerModule", transform.position, Quaternion.identity);
+        moduleObj.transform.SetParent(transform);
     }
 }

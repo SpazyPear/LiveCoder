@@ -7,7 +7,8 @@ using UnityEngine;
 [System.Serializable]
 public class DragAndDropType
 {
-    public string characterType; // If Character
+    public string name; 
+    public ObjectType objectType;
 }
 
 public class DragDropManager : MonoBehaviour
@@ -31,7 +32,8 @@ public class DragDropManager : MonoBehaviour
         {
             Transform t = Transform.Instantiate(dragDropTransform, transform);
             t.GetComponent<DragAndDropUnit>().canvas = canvas;
-            t.GetComponent<DragAndDropUnit>().unitType = type.characterType;
+            t.GetComponent<DragAndDropUnit>().name = type.name;
+            t.GetComponent<DragAndDropUnit>().objectType = type.objectType;
         }
     }
 
