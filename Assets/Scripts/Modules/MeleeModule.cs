@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MeleeModule : Module
 {
-    public MeleeData meleeData { get { return moduleData as MeleeData; } private set { } }
+    public MeleeData meleeData { get { return moduleData as MeleeData; } private set { moduleData = value; } }
     
 
     protected override void Awake()
@@ -39,7 +39,7 @@ public class MeleeModule : Module
     [PunRPC]
     public virtual void replicatedAttack(int targetInstance, int lane)
     {
-        GameManager.unitInstances[targetInstance].attachedModules[lane].takeDamage(1, this);
+        (GameManager.objectInstances[targetInstance] as Unit).attachedModules[lane].takeDamage(1, this);
     }
 
     public override string displayName()

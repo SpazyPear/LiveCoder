@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class UnitConfig
 {
-    public List<string> moduleNames;
+    public List<string> moduleNames = new List<string>();
     public string codeContext;
     public string name;
     [System.NonSerialized] public int cost;

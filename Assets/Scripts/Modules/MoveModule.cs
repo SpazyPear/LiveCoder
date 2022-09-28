@@ -8,7 +8,7 @@ using static PythonProxies.UnitProxy;
 
 public class MoveModule : Module
 {
-    public MoveData moveData { get { return moduleData as MoveData; } private set { } }
+    public MoveData moveData { get { return moduleData as MoveData; } private set { moduleData = value; } }
     private List<Vector2Int> moveSet = new List<Vector2Int>();
     private int moveIndex = 0;
 

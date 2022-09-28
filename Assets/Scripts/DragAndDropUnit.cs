@@ -63,7 +63,7 @@ public class DragAndDropUnit : MonoBehaviour
         RaycastHit hit;
 
         print(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, float.PositiveInfinity, 7))
+        if (Physics.Raycast(ray, out hit, float.PositiveInfinity, ~7))
         {
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
@@ -85,8 +85,13 @@ public class DragAndDropUnit : MonoBehaviour
                 break;
             case ObjectType.Module:
                 Unit unit = GridManager.GridContents[pos.x, pos.y].OccupyingObject as Unit;
-                if (unit && unit.photonView.AmOwner)
+                if (unit && unit.AmOwner)
                     GridManager.getEntityAtPos(pos).GetComponent<Unit>().addModule(name);
+                else
+                {
+                    Unit emptyUnit = GameManager.activePlayer.spawnUnit("Empty", pos);
+                    emptyUnit.addModule(name);
+                }
                 break;
             case ObjectType.Entity:
                 GameManager.activePlayer.spawnEntity(name, pos);

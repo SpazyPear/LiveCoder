@@ -10,7 +10,7 @@ using static IronPython.Runtime.Profiler;
 
 public class HackerModule : Module
 {
-    public HackerData hackerData { get { return moduleData as HackerData; } private set { } }
+    public HackerData hackerData { get { return moduleData as HackerData; } private set { moduleData = value; } }
     bool planted;
     string codeOverride;
     

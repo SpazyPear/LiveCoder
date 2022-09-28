@@ -14,7 +14,7 @@ public class HealerModule : Module
 
     public ParticleSystem healRing;
     public ParticleSystem healCrosses;
-    public HealerData healerData { get { return moduleData as HealerData; } private set { } }
+    public HealerData healerData { get { return moduleData as HealerData; } private set { moduleData = value; } }
 
     protected override void Awake()
     {

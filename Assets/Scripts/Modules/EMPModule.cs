@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class EMPModule : Module
 {
-    public EMPData empData { get { return moduleData as EMPData; } private set { } }
+    public EMPData empData { get { return moduleData as EMPData; } private set { moduleData = value; } }
 
     protected override void Awake()
     {

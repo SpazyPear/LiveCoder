@@ -10,7 +10,7 @@ public class GridManager : MonoBehaviour
 {
     public int GridWidth = 5;
     public int GridBreadth = 5;
-    public int GridHeight = 2;
+    public static int GridHeight = 2;
     public float TileSize = 10;
     public GameObject[] tilePrefabs;
     public Transform GridParent;
@@ -122,26 +122,32 @@ public class GridManager : MonoBehaviour
         }
 
         GameObject instance = InstantiateObject("Prefabs/" + objName, Vector3.zero, Quaternion.identity);
-        photonView.RPC("placeOnGrid", RpcTarget.All, instance.GetComponentInChildren<PhotonView>().ViewID, pos.x, pos.y, isLeftSide);
+        PlaceableObject placeableObject = instance.GetComponentInChildren<PlaceableObject>();
+        GameManager.objectInstances.Add(placeableObject.ViewID, placeableObject);
+        State.CallRPC(photonView, () => placeOnGrid(placeableObject.ViewID, pos.x, pos.y, isLeftSide), RpcTarget.All, placeableObject.ViewID, pos.x, pos.y, isLeftSide);
         return instance;
     }
 
     [PunRPC]
-    public void placeOnGrid(int ViewID, int x, int y, bool isLeftSide)
+    public static void placeOnGrid(int ViewID, int x, int y, bool isLeftSide)
     {
         Debug.Log(GridContents.GetLength(1) + " " + GameManager.gridDimensions.x);
         if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
         {
-            GameObject obj = PhotonView.Find(ViewID).gameObject;
+            GameObject obj = GameManager.objectInstances[ViewID].gameObject;
             Vector2Int pos = new Vector2Int(x, y);
             obj.transform.position = gridToWorldPos(pos);
-            Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
-            float hieght = (GridHeight / 2);
-            obj.transform.position += new Vector3(0, 1, 0);
-            GridContents[pos.x, pos.y].OccupyingObject = PhotonView.Find(ViewID).GetComponent<PlaceableObject>();
+            try
+            {
+                Transform mesh = obj.GetComponentInChildren<Renderer>().transform;
+                float hieght = (GridHeight / 2);
+                obj.transform.position += new Vector3(0, 1, 0);
+            }
+            catch { }
+            GridContents[pos.x, pos.y].OccupyingObject = GameManager.objectInstances[ViewID];
             if (isLeftSide) obj.transform.Rotate(0, 180, 0);
 
-            obj.GetComponentInChildren<Unit>().gridPos = pos;
+            obj.GetComponentInChildren<PlaceableObject>().gridPos = pos;
         }
     }
     

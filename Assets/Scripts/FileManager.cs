@@ -22,6 +22,8 @@ public static class FileManager
     
     public static UnitConfig GetUnitConfig(string name) 
     {
+        if (name == "Empty") { return new UnitConfig { cost = 0, name = "Empty" }; }
+
         string path = Application.streamingAssetsPath + "/UnitConfig/savedUnits.json";
         if (File.Exists(path))
         {

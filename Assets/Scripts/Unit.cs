@@ -20,15 +20,15 @@ public class Unit : PlaceableObject
     public bool executing = false;
     public new string name;
     
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();   
         if (ownerPlayer)
             ownerPlayer.units.Remove(this);
         
         codeContext.unit = this;
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
         PythonInterpreter.AddContext(codeContext);
-        GameManager.unitInstances.Add(ViewID, this);
     }
 
     public void InitializeUnit(List<string> moduleNames, string code, string name)

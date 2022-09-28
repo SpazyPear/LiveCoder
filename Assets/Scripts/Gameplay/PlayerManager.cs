@@ -17,7 +17,7 @@ public class PlayerManager : ControlledMonoBehavour
     public string playerID => LocalPlayer.UserId;
     public bool isLocalPlayer => LocalPlayer.IsLocal;
     public List<Unit> units;
-    public bool isLeftSide => PhotonNetwork.IsMasterClient;
+    public bool isLeftSide => PhotonNetwork.IsConnected ? PhotonNetwork.IsMasterClient : true;
 
     void Awake()
     {
@@ -54,7 +54,7 @@ public class PlayerManager : ControlledMonoBehavour
                 if (unitConfig.cost <= creditsLeft.value)
                 {
                     creditsLeft.value -= unitConfig.cost;
-                    Unit unit = GridManager.spawnOnGrid("Prefabs/Unit", spawnPos, false, isLeftSide).GetComponentInChildren<Unit>();
+                    Unit unit = GridManager.spawnOnGrid("Unit", spawnPos, false, isLeftSide).GetComponentInChildren<Unit>();
                     unit.InitializeUnit(unitConfig.moduleNames, unitConfig.codeContext, unit.name);
                     unit.ownerPlayer = this;
                     units.Add(unit);

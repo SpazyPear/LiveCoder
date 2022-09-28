@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class TurretModule : Module
 {
-    public TurretData turretData { get { return moduleData as TurretData; } private set { } }
+    public TurretData turretData { get { return moduleData as TurretData; } private set { moduleData = value; } }
 
     GameObject projectile;
     Unit currentTarget;

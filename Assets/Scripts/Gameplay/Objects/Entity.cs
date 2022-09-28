@@ -45,10 +45,10 @@ public class Entity : PlaceableObject, IDamageable
         //GameManager.unitInstances.Add(gameObject.GetInstanceID(), this);
     }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         //healthBarObj = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.FindObjectOfType<Canvas>().transform).GetComponent<RectTransform>();
-        photonView = GetComponentInParent<PhotonView>();
         currentHealth = maxHealth;
     }
     

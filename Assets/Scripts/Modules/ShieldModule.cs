@@ -11,7 +11,7 @@ public class ShieldModule : Module
     public Transform shieldUpPoint;
 
     Shield shield;
-    public ShieldData shieldData { get { return moduleData as ShieldData; } private set { } }
+    public ShieldData shieldData { get { return moduleData as ShieldData; } private set { moduleData = value; } }
 
     protected override void Awake()
     {

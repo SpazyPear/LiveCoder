@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     int currentPhase;
     int playersReadied;
     public int counter = 0;
-    public static Dictionary<int, Unit> unitInstances = new Dictionary<int, Unit>(); 
+    public static Dictionary<int, PlaceableObject> objectInstances = new Dictionary<int, PlaceableObject>(); 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
 
     // Start is called before the first frame update
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
 
     public void initGameManager(object sender, EventArgs e)
     {
-        gridDimensions = new Vector3(gridManager.GridBreadth, gridManager.GridHeight, gridManager.GridWidth);
+        gridDimensions = new Vector3(gridManager.GridBreadth, GridManager.GridHeight, gridManager.GridWidth);
     }
 
     public void OnReadyUp()
@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour, IOnEventCallback
                 break;
         }
     }
+
+
 
     public void OnEvent(EventData photonEvent)
     {
