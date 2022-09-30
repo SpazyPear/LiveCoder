@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum ProjectileLane
@@ -18,7 +19,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, aliveRange);
+        //Destroy(gameObject, aliveRange);
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -28,12 +29,12 @@ public class ProjectileBehaviour : MonoBehaviour
         if (shield == null && character && character.ownerPlayer != ownerPlayer)
         {
             character.attachedModules[lane].takeDamage(damage, this);
-            Destroy(gameObject);
+            GridManager.DestroyObject(gameObject);
         }
         else if (shield)
         {
             shield.takeShieldDamage(damage);
-            Destroy(gameObject);
+            GridManager.DestroyObject(gameObject);
         }
     }
 }

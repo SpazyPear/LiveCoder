@@ -22,7 +22,6 @@ public class HackerModule : Module
     // Start is called before the first frame update
     protected override void Awake()
     {
-        hackerData = Resources.Load("ModuleConfig/HackerScriptableObject") as HackerData;
         base.Awake();
     }
 
@@ -73,9 +72,4 @@ public class HackerModule : Module
         return new HackerModuleProxy(this);
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/HackerModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 }

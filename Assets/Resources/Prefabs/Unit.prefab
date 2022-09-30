@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6605395215968662364}
   - component: {fileID: 3359102472500238136}
   - component: {fileID: 4972520070823611539}
+  - component: {fileID: -4816489618410388331}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -48,10 +49,11 @@ MonoBehaviour:
   gridPos: {x: 0, y: 0}
   ownerPlayer: {fileID: 0}
   photonView: {fileID: 0}
+  tweener: {fileID: 0}
   selfDestructRange: 2
   selfDestructDamage: 2
   isDisabled: 0
-  unitData: {fileID: 0}
+  unitData: {fileID: 11400000, guid: 67edfe02c04ceac4981309406f0f1214, type: 2}
   currentEnergy: 0
   attachedModules: []
   codeContext:
@@ -62,6 +64,7 @@ MonoBehaviour:
     shouldExecute: 1
   executing: 0
   name: 
+  nextModuleY: 0
 --- !u!114 &4972520070823611539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,3 +87,15 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-4816489618410388331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6417114817914491253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f38a32ae7a744a29233264962223da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

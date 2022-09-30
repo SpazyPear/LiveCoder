@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
 
     public void OnReadyUp()
     {
-        if (PhotonNetwork.IsMasterClient) { OnReadyUpRecieved(PhotonNetwork.LocalPlayer.UserId); }
+        if (PhotonNetwork.IsMasterClient || !PhotonNetwork.IsConnected) { OnReadyUpRecieved(PhotonNetwork.LocalPlayer.UserId); }
         else { PhotonNetwork.RaiseEvent(0, PhotonNetwork.LocalPlayer.UserId, new RaiseEventOptions(), new SendOptions()); }
     }
 
@@ -64,7 +64,8 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         }
         else
         {
-            photonView.RPC("playerReady", RpcTarget.All, player);
+            if (!PhotonNetwork.IsConnected) activePlayer.isLeftSide = false;
+            GameManager.CallRPC(this, "playerReady", RpcTarget.All, player);
         }
     }
 
@@ -91,8 +92,22 @@ public class GameManager : MonoBehaviour, IOnEventCallback
             case 0:
                 break;
             case 1:
-                photonView.RPC("replicatedRunCode", RpcTarget.All);
+                GameManager.CallRPC(this, "replicatedRunCode", RpcTarget.All);
                 break;
+        }
+    }
+
+
+    public static void CallRPC(MonoBehaviour component, string functionName, RpcTarget target, params object[] para)
+    {
+
+        if (PhotonNetwork.IsConnected)
+        {
+            component.GetComponent<PhotonView>().RPC(functionName, target, para);
+        }
+        else
+        {
+            component.StartCoroutine(functionName, para);
         }
     }
 

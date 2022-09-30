@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO;
+using System.Drawing.Printing;
 
 public static class FileManager
 {
@@ -22,16 +23,16 @@ public static class FileManager
     
     public static UnitConfig GetUnitConfig(string name) 
     {
-        if (name == "Empty") { return new UnitConfig { cost = 0, name = "Empty" }; }
+        if (name == "Empty") { return new UnitConfig { cost = 0, name = "Empty", codeContext = "def OnStart():\n\ndef OnStep():" }; }
 
-        string path = Application.streamingAssetsPath + "/UnitConfig/savedUnits.json";
+        string path = Application.streamingAssetsPath + "/UnitConfig/defaultUnits.json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SavedUnits savedUnits = JsonUtility.FromJson<SavedUnits>(json);
             UnitConfig unitConfig = savedUnits.units.FirstOrDefault(x => x.name == name);
             if (unitConfig == null) return null;
-            unitConfig.cost = unitConfig.moduleNames.Sum(x => (Resources.Load("ModuleConfig/" + x) as ModuleData).cost);
+            unitConfig.cost = unitConfig.moduleNames.Sum(x => (Resources.Load("ModuleConfig/" + x + "ScriptableObject") as ModuleData).cost);
             return unitConfig;
         }
         return null;

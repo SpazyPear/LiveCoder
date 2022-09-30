@@ -48,13 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridPos: {x: 0, y: 0}
   ownerPlayer: {fileID: 0}
-  photonView: {fileID: 0}
+  photonView: {fileID: 362062438550448843}
   entityData: {fileID: 11400000, guid: c1cbcb064056fe14fb51d1814b6ca2f4, type: 2}
   healthBar: {fileID: 0}
   currentHealth: 0
   maxHealth: 5
   ownerPlayer: {fileID: 0}
-  photonView: {fileID: 0}
+  photonView: {fileID: 362062438550448843}
 --- !u!114 &362062438550448843
 MonoBehaviour:
   m_ObjectHideFlags: 0

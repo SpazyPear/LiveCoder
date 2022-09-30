@@ -207,23 +207,23 @@ namespace PythonProxies
     [PythonClass("TurretModule", false, "turretModule")]
     public class TurretModuleProxy : ModuleProxy
     {
-        public TurretModule t;
+        public TurretModule target;
         public TurretModuleProxy(TurretModule p) : base(p)
         {
-            this.t = p;
+            this.target = p;
         }
 
         public void shoot()
         {
-            this.t.shoot();
+            this.target.shoot();
         }
         
-        public void target(Unit entity)
+        public void targetEntity(PlaceableObject entity)
         {
-            this.t.targetEntity(entity);
+            this.target.targetEntity(entity);
         }
         
-        public void lookAt(vector2 pos) => t.lookAt(pos);
+        public void lookAt(vector2 pos) => target.lookAt(pos);
     }
 
 }

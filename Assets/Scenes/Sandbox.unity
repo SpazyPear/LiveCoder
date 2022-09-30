@@ -425,7 +425,6 @@ GameObject:
   - component: {fileID: 143205213}
   - component: {fileID: 143205206}
   - component: {fileID: 143205205}
-  - component: {fileID: 143205208}
   - component: {fileID: 143205209}
   - component: {fileID: 143205210}
   - component: {fileID: 143205212}
@@ -481,18 +480,6 @@ MonoBehaviour:
   - {fileID: 0}
   dragDropManager: {fileID: 360286193}
   counter: 0
---- !u!114 &143205208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143205204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 377bcb9669cb9684ab1e4d3a8daba1de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &143205209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1657,13 +1644,13 @@ MonoBehaviour:
     objectType: 1
   - name: Empty
     objectType: 0
-  - name: CoinStore
-    objectType: 2
-  - name: 
+  - name: MoveModule
+    objectType: 1
+  - name: Soldier
     objectType: 0
-  - name: 
+  - name: Healer
     objectType: 0
-  - name: 
+  - name: Giant
     objectType: 0
   dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
     type: 3}
@@ -1916,6 +1903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 712fc3a76c6424c43bf17b54b63c15f0, type: 2}
   units: []
+  isLeftSide: 0
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0

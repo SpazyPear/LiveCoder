@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     void phaseUIChange(int phase)
     {
-        GameManager.photonView.RPC("replicatedPhaseUIChange", RpcTarget.All, phase);
+        GameManager.CallRPC(this, "replicatedPhaseUIChange", RpcTarget.All, phase);
     }
 
     [PunRPC]
@@ -70,8 +70,8 @@ public class UIManager : MonoBehaviour
     
     public void readyPressed()
     {
-        readyButton.SetActive(false);
-        GameManager.photonView.RPC("playerReady", RpcTarget.All, PhotonNetwork.LocalPlayer.UserId);
+        readyButton.SetActive(!PhotonNetwork.IsConnected);
+        GameManager.CallRPC(this, "playerReady", RpcTarget.All, PhotonNetwork.LocalPlayer.UserId);
         gameManager.OnReadyUp();
     }
 

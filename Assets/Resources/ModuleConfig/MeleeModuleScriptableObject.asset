@@ -9,15 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16a9b0737c0b5744b6c5487d239fc14, type: 3}
-  m_Name: ShieldScriptableObject
+  m_Script: {fileID: 11500000, guid: 763cf5c54dce40d4da88c0d3535d771d, type: 3}
+  m_Name: MeleeModuleScriptableObject
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  cost: 0
-  empResistance: 1
   range: 1
-  maxEnergy: 2
-  playerSpeed: 2
-  classType: 0
-  maxShieldHealth: 10
-  shieldRegenRate: 1

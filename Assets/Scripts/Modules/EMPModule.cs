@@ -11,7 +11,6 @@ public class EMPModule : Module
 
     protected override void Awake()
     {
-        empData = Resources.Load("ModuleConfig/EMPScriptableObject") as EMPData;
         base.Awake();
     }
     
@@ -43,9 +42,4 @@ public class EMPModule : Module
         return new EMPModuleProxy(this);
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/EMPModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 }

@@ -62,12 +62,13 @@ public class DragAndDropUnit : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        print(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, float.PositiveInfinity, ~7))
         {
             if (hit.transform != null && hit.transform.GetComponent<GridTile>() != null)
             {
+                print(hit.transform.gameObject.name);
                 Vector2Int pos = hit.transform.GetComponent<GridTile>().gridTile.gridPosition;
+                print(pos + "position");
 
                 if ((pos.y > GridManager.GridContents.GetLength(1) / 2 && GameManager.activePlayer.isLeftSide) || (pos.y < GridManager.GridContents.GetLength(1) / 2 && !GameManager.activePlayer.isLeftSide))
                     SpawnObject(pos);
@@ -86,7 +87,7 @@ public class DragAndDropUnit : MonoBehaviour
             case ObjectType.Module:
                 Unit unit = GridManager.GridContents[pos.x, pos.y].OccupyingObject as Unit;
                 if (unit && unit.AmOwner)
-                    GridManager.getEntityAtPos(pos).GetComponent<Unit>().addModule(name);
+                    unit.addModule(name);
                 else
                 {
                     Unit emptyUnit = GameManager.activePlayer.spawnUnit("Empty", pos);

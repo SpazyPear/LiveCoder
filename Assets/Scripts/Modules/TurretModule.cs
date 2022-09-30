@@ -9,11 +9,11 @@ public class TurretModule : Module
 {
     public TurretData turretData { get { return moduleData as TurretData; } private set { moduleData = value; } }
 
-    GameObject projectile;
-    Unit currentTarget;
-    Transform pivot;
-    [SerializeField] Transform barrel;
-    ParticleSystem shootPS;
+    public GameObject projectile;
+    PlaceableObject currentTarget;
+    public Transform pivot;
+    public Transform barrel;
+    public ParticleSystem shootPS;
     public Transform shootPoint;
     bool rotatingBarrel;
 
@@ -24,20 +24,16 @@ public class TurretModule : Module
 
     protected override void Awake()
     {
-        turretData = Resources.Load("ModuleConfig/TurretScriptableObject") as TurretData;
         base.Awake();
     }
 
     protected override void Start()
     {
         base.Start();
-        projectile = Resources.Load("Prefabs/projectile") as GameObject;
-        pivot = transform.GetChild(0);
-        shootPS = GetComponentInChildren<ParticleSystem>();
     }
 
 
-    public void targetEntity(Unit enemy)
+    public void targetEntity(PlaceableObject enemy)
     {
         if (GridManager.isInRange(turretData.range, enemy))
         {
@@ -53,18 +49,23 @@ public class TurretModule : Module
     }
 
     [PunRPC]
-    void replicatedShoot()
+    IEnumerator replicatedShoot()
     {
         GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
         obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = owningUnit.ownerPlayer;
         obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.projectileAliveTime;
         obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
         shootPS.Play();
+        yield return null;
     }
 
-    public void shoot() //todo action function type that checks if disabled, has energy and depletes energy
+    public void shoot()
     {
-        owningUnit.photonView.RPC("replicatedShoot", RpcTarget.All);
+        if (!owningUnit.isDisabled && owningUnit.currentEnergy > 0)
+        {
+            owningUnit.currentEnergy--;
+            GameManager.CallRPC(this, "replicatedShoot", RpcTarget.All);
+        }
     }
 
     IEnumerator rotateBarrel()
@@ -134,9 +135,4 @@ public class TurretModule : Module
         return "turretModule";
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/TurretModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 }

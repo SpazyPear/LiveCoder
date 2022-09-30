@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.Reflection;
+using System.Drawing.Printing;
+using Microsoft.Scripting.Utils;
 
 public static class State
 {
@@ -18,19 +20,6 @@ public static class State
     public static void initializeLevel()
     {
         onLevelLoad?.Invoke(null, EventArgs.Empty);
-    }
-
-    public static void CallRPC(PhotonView photonView, Action function, RpcTarget target, params object[] para)
-    {
-        
-        if (PhotonNetwork.IsConnected)
-        {
-            photonView.RPC(function.GetMethodInfo().Name, target, para);
-        }
-        else
-        {
-            function();
-        }
     }
 
 }

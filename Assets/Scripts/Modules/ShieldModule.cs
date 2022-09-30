@@ -15,7 +15,6 @@ public class ShieldModule : Module
 
     protected override void Awake()
     {
-        shieldData = Resources.Load("ModuleConfig/ShieldScriptableObject") as ShieldData;
         base.Awake();
     }
 
@@ -98,9 +97,4 @@ public class ShieldModule : Module
         return "shieldModule";
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/ShieldModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 }

@@ -14,7 +14,6 @@ public class MoveModule : Module
 
     protected override void Awake()
     {
-        moveData = Resources.Load("ModuleConfig/MoveScriptableObject") as MoveData;
         base.Awake();
     }
 
@@ -61,22 +60,25 @@ public class MoveModule : Module
 
     public void moveUnit(int x, int y)
     {
-        owningUnit.photonView.RPC("moveUnit", RpcTarget.All, x, y);
+        GameManager.CallRPC(this, "replicatedMove", RpcTarget.All, x, y);
     }
     
     [PunRPC]
-    public void replicatedMove(int XDirection, int YDirecton)
+    public IEnumerator replicatedMove(int XDirection, int YDirecton)
     {
         if (GridManager.validMovePosition(new Vector2Int(owningUnit.gridPos.x + XDirection, owningUnit.gridPos.y + YDirecton)))
         {
+            GridManager.GridContents[owningUnit.gridPos.x, owningUnit.gridPos.y].OccupyingObject = null;
             owningUnit.gridPos = new Vector2Int(owningUnit.gridPos.x + XDirection, owningUnit.gridPos.y + YDirecton);
             GridManager.GridContents[owningUnit.gridPos.x, owningUnit.gridPos.y].OccupyingObject = owningUnit;
             owningUnit.currentEnergy -= 1;
+            owningUnit.tweener.AddTween(owningUnit.transform, owningUnit.transform.position, GridManager.gridToWorldPos(owningUnit.gridPos), 1f);
         }
         else
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
         }
+        yield return null;
     }
 
     public bool checkPosOnGrid(Vector2Int pos)
@@ -95,9 +97,4 @@ public class MoveModule : Module
         return "moveModule";
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/MoveModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 }

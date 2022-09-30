@@ -60,6 +60,7 @@ MonoBehaviour:
   - deductCredits
   - RotateWall
   - replicatedLowerShield
+  - ReplicatedDestroyComponent
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

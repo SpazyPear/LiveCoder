@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfb767b5380befb4b8c9d3c5c4b77ccd, type: 3}
-  m_Name: EMPScriptableObject
+  m_Script: {fileID: 11500000, guid: d70f14de5d4ad3745b7071549ea26f38, type: 3}
+  m_Name: TurretModuleScriptableObject
   m_EditorClassIdentifier: 
-  EMPRange: 3
-  EMPDuration: 3
-  EMPEnergy: 3
+  maxHealth: 4
+  cost: 20
+  empResistance: 1
+  range: 7
+  prpjectileAliveTime: 3

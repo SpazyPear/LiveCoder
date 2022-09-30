@@ -75,10 +75,11 @@ public class DragDropManager : MonoBehaviour
 
             if (hitTile)
             {
-                GameManager.photonView.RPC("placeOnGrid", Photon.Pun.RpcTarget.All, draggingEntity.photonView.ViewID, hitTile.gridTile.gridPosition.x, hitTile.gridTile.gridPosition.y, playerManager.isLeftSide);
+                GameManager.CallRPC(this, "placeOnGrid", RpcTarget.All, draggingEntity.ViewID, hitTile.gridTile.gridPosition.x, hitTile.gridTile.gridPosition.y, playerManager.isLeftSide);
             }
             else if (!hit.transform && draggingEntity is Unit)
             {
+                playerManager.creditsLeft.value += (draggingEntity as Unit).cost;
                 playerManager.deleteUnit(draggingEntity as Unit);
             }
 

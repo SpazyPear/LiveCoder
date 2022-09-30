@@ -15,13 +15,14 @@ public class PlayerManager : ControlledMonoBehavour
     public GameData gameData;
     public BindableValue<int> creditsLeft;
     public string playerID => LocalPlayer.UserId;
-    public bool isLocalPlayer => LocalPlayer.IsLocal;
+    public bool isLocalPlayer => PhotonNetwork.IsConnected ? LocalPlayer.IsLocal : true;
     public List<Unit> units;
-    public bool isLeftSide => PhotonNetwork.IsConnected ? PhotonNetwork.IsMasterClient : true;
+    public bool isLeftSide;
 
     void Awake()
     {
-        FileManager.WriteDefaults();
+        //FileManager.WriteDefaults();
+        isLeftSide = PhotonNetwork.IsConnected ? PhotonNetwork.IsMasterClient : true;
         LocalPlayer = PhotonNetwork.LocalPlayer;
         creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();

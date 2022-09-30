@@ -18,7 +18,6 @@ public class HealerModule : Module
 
     protected override void Awake()
     {
-        healerData = Resources.Load("ModuleConfig/HealerScriptableObject") as HealerData;
         base.Awake();
     }
 
@@ -59,11 +58,6 @@ public class HealerModule : Module
         return "healModule";
     }
 
-    protected override void AddPrefab()
-    {
-        moduleObj = GridManager.InstantiateObject("Prefabs/Modules/HealerModule", transform.position, Quaternion.identity);
-        moduleObj.transform.SetParent(transform);
-    }
 
 }
 

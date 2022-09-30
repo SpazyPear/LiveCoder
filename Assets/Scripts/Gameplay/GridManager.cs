@@ -17,10 +17,12 @@ public class GridManager : MonoBehaviour
     public static Tile[,] GridContents;
     public static Material[,] tileMaterials;
     public static PhotonView photonView;
+    public static GridManager gridInstance;
 
     // Start is called before the first frame update
     void Awake()
     {
+        gridInstance = this;
         photonView = GetComponent<PhotonView>();
         State.onLevelLoad += generateGrid;
     }
@@ -124,17 +126,21 @@ public class GridManager : MonoBehaviour
         GameObject instance = InstantiateObject("Prefabs/" + objName, Vector3.zero, Quaternion.identity);
         PlaceableObject placeableObject = instance.GetComponentInChildren<PlaceableObject>();
         GameManager.objectInstances.Add(placeableObject.ViewID, placeableObject);
-        State.CallRPC(photonView, () => placeOnGrid(placeableObject.ViewID, pos.x, pos.y, isLeftSide), RpcTarget.All, placeableObject.ViewID, pos.x, pos.y, isLeftSide);
+        GameManager.CallRPC(gridInstance, "placeOnGrid", RpcTarget.All, placeableObject.ViewID, pos.x, pos.y, isLeftSide);
         return instance;
     }
 
     [PunRPC]
-    public static void placeOnGrid(int ViewID, int x, int y, bool isLeftSide)
+    public IEnumerator placeOnGrid(object[] dataArray)
     {
-        Debug.Log(GridContents.GetLength(1) + " " + GameManager.gridDimensions.x);
+        //object[] dataArray = data as object[];
+        int ViewID = (int)dataArray[0];
+        int x = (int)dataArray[1];
+        int y = (int)dataArray[2]; ;
+        bool isLeftSide = (bool)dataArray[3];
         if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
         {
-            GameObject obj = GameManager.objectInstances[ViewID].gameObject;
+            GameObject obj = GetObjectInstance(ViewID).gameObject;
             Vector2Int pos = new Vector2Int(x, y);
             obj.transform.position = gridToWorldPos(pos);
             try
@@ -144,14 +150,15 @@ public class GridManager : MonoBehaviour
                 obj.transform.position += new Vector3(0, 1, 0);
             }
             catch { }
-            GridContents[pos.x, pos.y].OccupyingObject = GameManager.objectInstances[ViewID];
-            if (isLeftSide) obj.transform.Rotate(0, 180, 0);
+            GridContents[pos.x, pos.y].OccupyingObject = GetObjectInstance(ViewID);
+            if (isLeftSide) obj.transform.rotation = Quaternion.Euler(0, 180, 0);
 
             obj.GetComponentInChildren<PlaceableObject>().gridPos = pos;
         }
+        yield return null;
     }
-    
-    public static bool isInRange(int range, Unit enemy)
+
+    public static bool isInRange(int range, PlaceableObject enemy)
     {
         for (int x = -range; x <= range; x++)
         {
@@ -271,7 +278,16 @@ public class GridManager : MonoBehaviour
         }
         return foundEntities;
     }
-    
+
+    public static GameObject SpawnModule(Unit unit, string moduleName)
+    {
+        GameObject moduleObj = Resources.Load("Prefabs/Modules/" + moduleName) as GameObject;
+        Instantiate(moduleObj, unit.transform);
+        moduleObj.transform.localPosition = new Vector3(0, unit.nextModuleY, 0);
+        unit.nextModuleY += moduleObj.GetComponentInChildren<Renderer>().bounds.size.y;
+        return moduleObj;
+    }
+
     public static void DestroyObject(GameObject obj)
     {
         if (PhotonNetwork.IsConnected)
@@ -286,6 +302,25 @@ public class GridManager : MonoBehaviour
             return PhotonNetwork.Instantiate(obj, pos, rot);
         else
             return Instantiate(Resources.Load(obj) as GameObject, pos, rot);
+    }
+
+    public static PlaceableObject GetObjectInstance(int id)
+    {
+        if (PhotonNetwork.IsConnected)
+            return PhotonView.Find(id).GetComponent<PlaceableObject>();
+        else
+            return GameManager.objectInstances[id];
+    }
+
+    public static void DestroyComponent(Component comp)
+    {
+
+    }
+
+    [PunRPC]
+    static void ReplicatedDestroyComponent(int ViewID, string componentName)
+    {
+
     }
 
 }
