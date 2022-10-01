@@ -46,7 +46,7 @@ public class CoinStore : Entity
     }
 
     [PunRPC]
-    public IEnumerator deductCredits(int toDeduct)
+    public void deductCredits(int toDeduct)
     {
         if (ownerPlayer)
         {
@@ -55,6 +55,5 @@ public class CoinStore : Entity
                 ownerPlayer.creditsLeft.value = Mathf.Clamp(ownerPlayer.creditsLeft.value - toDeduct, 0, ownerPlayer.creditsLeft.value - toDeduct);
             }
         }
-        yield break;
     }
 }

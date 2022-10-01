@@ -131,13 +131,8 @@ public class GridManager : MonoBehaviour
     }
 
     [PunRPC]
-    public IEnumerator placeOnGrid(object[] dataArray)
+    public void placeOnGrid(int ViewID, int x, int y, bool isLeftSide)
     {
-        //object[] dataArray = data as object[];
-        int ViewID = (int)dataArray[0];
-        int x = (int)dataArray[1];
-        int y = (int)dataArray[2]; ;
-        bool isLeftSide = (bool)dataArray[3];
         if ((y > GridContents.GetLength(1) / 2 && isLeftSide) || (y < GridContents.GetLength(1) / 2 && !isLeftSide))
         {
             GameObject obj = GetObjectInstance(ViewID).gameObject;
@@ -155,7 +150,6 @@ public class GridManager : MonoBehaviour
 
             obj.GetComponentInChildren<PlaceableObject>().gridPos = pos;
         }
-        yield return null;
     }
 
     public static bool isInRange(int range, PlaceableObject enemy)
@@ -277,15 +271,6 @@ public class GridManager : MonoBehaviour
             }
         }
         return foundEntities;
-    }
-
-    public static GameObject SpawnModule(Unit unit, string moduleName)
-    {
-        GameObject moduleObj = Resources.Load("Prefabs/Modules/" + moduleName) as GameObject;
-        Instantiate(moduleObj, unit.transform);
-        moduleObj.transform.localPosition = new Vector3(0, unit.nextModuleY, 0);
-        unit.nextModuleY += moduleObj.GetComponentInChildren<Renderer>().bounds.size.y;
-        return moduleObj;
     }
 
     public static void DestroyObject(GameObject obj)

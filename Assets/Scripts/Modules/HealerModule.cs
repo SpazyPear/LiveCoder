@@ -27,7 +27,7 @@ public class HealerModule : Module
     }
 
     [PunRPC]
-    public IEnumerator replicatedHeal()
+    public void replicatedHeal()
     {
         playHealFX();
         List<Unit> inRangeEntities = GridManager.checkForInRangeEntities(owningUnit, healerData.range, true, false);
@@ -39,7 +39,6 @@ public class HealerModule : Module
             }
             catch (System.Exception e) { }
         }
-        yield return null;
     }
 
     void playHealFX()

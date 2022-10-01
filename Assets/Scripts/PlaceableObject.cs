@@ -14,7 +14,7 @@ public class PlaceableObject : ControlledMonoBehavour
     protected virtual void Awake()
     {
         if (GetComponentInParent<PhotonView>() == null) { photonView = gameObject.AddComponent<PhotonView>(); }
-        else photonView = GetComponent<PhotonView>();
+        else photonView = GetComponentInParent<PhotonView>();
     }
 
     [PunRPC]

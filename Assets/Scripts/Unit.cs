@@ -86,9 +86,15 @@ public class Unit : PlaceableObject
     
     public void addModule(string moduleName)
     {
+        GameManager.CallRPC(this, "replicatedAddModule", RpcTarget.All, moduleName);
+    }
+
+    [PunRPC]
+    void replicatedAddModule(string moduleName)
+    {
         Type moduleType = Type.GetType(moduleName);
-        GameObject modulePrefab = Resources.Load("Prefabs/Modules/" + moduleName) as GameObject;
-        GameObject moduleObj = Instantiate(modulePrefab, transform);
+        GameObject moduleObj = Instantiate(Resources.Load("Prefabs/Modules/" + moduleName) as GameObject, transform.position, transform.rotation);
+        moduleObj.transform.SetParent(transform);
         var copyMethod = typeof(Unit).GetMethod("CopyComponent");
         var genericCopy = copyMethod.MakeGenericMethod(moduleType);
         Module module = genericCopy.Invoke(this, new object[] { moduleObj.GetComponent(moduleType), gameObject }) as Module;
@@ -159,7 +165,7 @@ public class Unit : PlaceableObject
     }
 
     [PunRPC]
-    public IEnumerator replicatedSelfDestruct()
+    public void replicatedSelfDestruct()
     {
         for (int x = -selfDestructRange; x <= selfDestructRange; x++)
         {
@@ -179,7 +185,6 @@ public class Unit : PlaceableObject
         Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
         Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
         Destroy(gameObject);
-        yield return null;
     }
 
     public static T CopyComponent<T>(T original, GameObject destination) where T : Component

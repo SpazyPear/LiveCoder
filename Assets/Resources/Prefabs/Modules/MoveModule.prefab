@@ -191,6 +191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5775715483408615264}
+  - component: {fileID: -1395670634655121209}
   m_Layer: 0
   m_Name: MoveModule
   m_TagString: Untagged
@@ -214,6 +215,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1395670634655121209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2592017752122471585}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068cbf85f8e98c4479e185aa017b0deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moduleData: {fileID: 11400000, guid: 730ca98cd39243749bfd81db5ffcef01, type: 2}
+  lane: 0
+  moduleObj: {fileID: 0}
+  currentHealth: 0
+  height: 0
+  healthBar: {fileID: 0}
 --- !u!1 &8988462125191943119
 GameObject:
   m_ObjectHideFlags: 0

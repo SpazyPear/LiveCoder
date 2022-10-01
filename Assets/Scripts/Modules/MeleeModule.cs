@@ -37,10 +37,9 @@ public class MeleeModule : Module
     }
     
     [PunRPC]
-    public virtual IEnumerator replicatedAttack(int targetInstance, int lane)
+    public virtual void replicatedAttack(int targetInstance, int lane)
     {
         (GridManager.GetObjectInstance(targetInstance) as Unit).attachedModules[lane].takeDamage(1, this);
-        yield return null;
     }
 
     public override string displayName()

@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
     }
 
     [PunRPC]
-    public IEnumerator replicatedPhaseUIChange(int phase)
+    public void replicatedPhaseUIChange(int phase)
     {
         switch (phase)
         {
@@ -41,7 +41,6 @@ public class UIManager : MonoBehaviour
                 resultsPhase();
                 break;
         }
-        yield return null;
     }
 
     private void Update()
@@ -76,10 +75,9 @@ public class UIManager : MonoBehaviour
     }
 
     [PunRPC]
-    public IEnumerator playerReady(string player)
+    public void playerReady(string player)
     {
         playerLabel.text = player == PhotonNetwork.LocalPlayer.UserId ? "Waiting for other player" : "Other Player Has Readied";
-        yield return null;
     }
 
     public void updateCreditUI(int value)

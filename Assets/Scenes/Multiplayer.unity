@@ -452,7 +452,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridWidth: 10
   GridBreadth: 15
-  GridHeight: 4
   TileSize: 10
   tilePrefabs:
   - {fileID: 3113893959486586600, guid: 2380adbf054c1ba4e811d0618a3bde13, type: 3}
@@ -1654,12 +1653,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1407332138}
   unitChoices:
-  - characterType: Wall
-  - characterType: Turret
-  - characterType: Soldier
-  - characterType: Giant
-  - characterType: Healer
-  - characterType: Trap
+  - name: MoveModule
+    objectType: 1
+  - name: Unit
+    objectType: 0
+  - name: 
+    objectType: 0
+  - name: MeleeModule
+    objectType: 1
+  - name: TurretModule
+    objectType: 1
+  - name: HealerModule
+    objectType: 1
   dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
     type: 3}
   uiManager: {fileID: 143205210}
@@ -1911,6 +1916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 712fc3a76c6424c43bf17b54b63c15f0, type: 2}
   units: []
+  isLeftSide: 0
 --- !u!4 &427652264
 Transform:
   m_ObjectHideFlags: 0
@@ -4479,7 +4485,7 @@ MonoBehaviour:
   editingContext:
     source: "\r\n\r\n        function OnStart()\r\n\r\n        end\r\n\r\n\r\n       
       function OnStep()\r\n\r\n        end\r\n\r\n    "
-    entity: {fileID: 0}
+    unit: {fileID: 0}
     ownerPlayer: 0
     shouldExecute: 1
   codeContexts: []

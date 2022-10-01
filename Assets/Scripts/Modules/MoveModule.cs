@@ -64,7 +64,7 @@ public class MoveModule : Module
     }
     
     [PunRPC]
-    public IEnumerator replicatedMove(int XDirection, int YDirecton)
+    public void replicatedMove(int XDirection, int YDirecton)
     {
         if (GridManager.validMovePosition(new Vector2Int(owningUnit.gridPos.x + XDirection, owningUnit.gridPos.y + YDirecton)))
         {
@@ -78,7 +78,6 @@ public class MoveModule : Module
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "movePlayer", playerId = gameObject.name }, new Error("Can't move there"));
         }
-        yield return null;
     }
 
     public bool checkPosOnGrid(Vector2Int pos)

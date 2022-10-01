@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System.Reflection;
 
 public class GameManager : MonoBehaviour, IOnEventCallback
 {
@@ -79,10 +80,9 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     }
 
     [PunRPC]
-    IEnumerator replicatedRunCode()
+    void replicatedRunCode()
     {
         codeExecutor.RunCode();
-        yield return null;
     }
 
     public void phaseEnter(int phase)
@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     }
 
 
-    public static void CallRPC(MonoBehaviour component, string functionName, RpcTarget target, params object[] para)
+    public static void CallRPC(Component component, string functionName, RpcTarget target, params object[] para)
     {
 
         if (PhotonNetwork.IsConnected)
@@ -107,7 +107,30 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         }
         else
         {
-            component.StartCoroutine(functionName, para);
+            CallMethod();
+        }
+        void CallMethod()
+        {
+            Type type = component.GetType();
+
+            if (type != null)
+            {
+                MethodInfo methodInfo = type.GetMethod(functionName);
+
+                if (methodInfo != null)
+                {
+                    object result = null;
+
+                    if (para.Length == 0)
+                    {
+                        methodInfo.Invoke(component, null);
+                    }
+                    else
+                    {       
+                        methodInfo.Invoke(component, para);
+                    }
+                }
+            }
         }
     }
 
