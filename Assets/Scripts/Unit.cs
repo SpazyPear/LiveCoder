@@ -90,7 +90,7 @@ public class Unit : PlaceableObject
     }
 
     [PunRPC]
-    void replicatedAddModule(string moduleName)
+    public void replicatedAddModule(string moduleName)
     {
         Type moduleType = Type.GetType(moduleName);
         GameObject moduleObj = Instantiate(Resources.Load("Prefabs/Modules/" + moduleName) as GameObject, transform.position, transform.rotation);

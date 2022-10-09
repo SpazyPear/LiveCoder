@@ -61,6 +61,8 @@ MonoBehaviour:
   - RotateWall
   - replicatedLowerShield
   - ReplicatedDestroyComponent
+  - replicateAddModule
+  - replicatedAddModule
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
