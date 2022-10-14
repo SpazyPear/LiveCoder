@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Linq;
 using Photon.Pun;
+using UnityEngine.Events;
 
 public class GridManager : MonoBehaviour
 {
@@ -18,13 +19,14 @@ public class GridManager : MonoBehaviour
     public static Material[,] tileMaterials;
     public static PhotonView photonView;
     public static GridManager gridInstance;
+    public static UnityEvent OnGridGenerated = new UnityEvent();
 
     // Start is called before the first frame update
     void Awake()
     {
         gridInstance = this;
         photonView = GetComponent<PhotonView>();
-        State.onLevelLoad += generateGrid;
+        State.onLevelLoad.AddListener(generateGrid);
     }
 
     public void HighlightGrid(int x, int y)
@@ -37,7 +39,7 @@ public class GridManager : MonoBehaviour
         return GridContents[x, y].OccupyingObject ? GridContents[x, y].OccupyingObject.GetComponent<PlaceableObject>() : null;
     }
 
-    public void generateGrid(object sender, EventArgs e)
+    public void generateGrid()
     {
         GridContents = new Tile[GridWidth, GridBreadth];
         tileMaterials = new Material[GridWidth, GridBreadth];
@@ -58,6 +60,7 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+        OnGridGenerated.Invoke();
     }
 
     List<Material> findTilesToToggle(int PlayerID)
@@ -202,13 +205,13 @@ public class GridManager : MonoBehaviour
         return closest;
     }
 
-    public static Unit getEntityAtPos(Vector2Int pos)
+    public static PlaceableObject getObjectAtPos(Vector2Int pos)
     {
         if (GridContents != null)
         {
             if (isPosInBounds(pos) && GridContents[pos.x, pos.y].OccupyingObject)
             {
-                return GridContents[pos.x, pos.y].OccupyingObject.GetComponentInChildren<Unit>();
+                return GridContents[pos.x, pos.y].OccupyingObject.GetComponentInChildren<PlaceableObject>();
             }
         }
         return null;

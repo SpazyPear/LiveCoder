@@ -19,7 +19,7 @@ public class MeleeModule : Module
     {
         if (Mathf.Max(x, y) <= meleeData.range)
         {
-            Unit target = GridManager.getEntityAtPos(owningUnit.gridPos + new Vector2Int(x, y));
+            Unit target = GridManager.getObjectAtPos(owningUnit.gridPos + new Vector2Int(x, y)) as Unit;
             if (target != null && owningUnit.currentEnergy > 0)
             {
                 owningUnit.currentEnergy--; //todo check if exist

@@ -479,6 +479,7 @@ MonoBehaviour:
   - {fileID: 427652263}
   - {fileID: 0}
   dragDropManager: {fileID: 360286193}
+  numOfControlPoints: 1
   counter: 0
 --- !u!114 &143205209
 MonoBehaviour:
@@ -1648,7 +1649,7 @@ MonoBehaviour:
     objectType: 1
   - name: Soldier
     objectType: 0
-  - name: Healer
+  - name: Hacker
     objectType: 0
   - name: Giant
     objectType: 0

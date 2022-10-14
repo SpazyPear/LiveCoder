@@ -6,10 +6,11 @@ using Photon.Pun;
 using System.Reflection;
 using System.Drawing.Printing;
 using Microsoft.Scripting.Utils;
+using UnityEngine.Events;
 
 public static class State
 {
-    public static event EventHandler onLevelLoad;
+    public static UnityEvent onLevelLoad = new UnityEvent();
     public static int EnergyRegen = 4;
     public static GameManager gameManager;
 
@@ -19,7 +20,7 @@ public static class State
     
     public static void initializeLevel()
     {
-        onLevelLoad?.Invoke(null, EventArgs.Empty);
+        onLevelLoad.Invoke();
     }
 
 }

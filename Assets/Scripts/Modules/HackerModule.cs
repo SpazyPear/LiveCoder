@@ -11,7 +11,7 @@ using static IronPython.Runtime.Profiler;
 public class HackerModule : Module
 {
     public HackerData hackerData { get { return moduleData as HackerData; } private set { moduleData = value; } }
-    bool planted;
+    bool planted => owningUnit.attachedModules.Count == 1;
     string codeOverride;
     
     public override string displayName()
@@ -29,12 +29,12 @@ public class HackerModule : Module
     {
         if (Mathf.Max(direction.x, direction.y) <= hackerData.range)
         {
-            Unit target = GridManager.getEntityAtPos(owningUnit.gridPos + new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y)));
-            if (target != null && owningUnit.currentEnergy > 0)
-            {
-                owningUnit.currentEnergy--;
-                hackOnClient(target);
-            }
+            Vector2Int pos = owningUnit.gridPos + new Vector2Int(Mathf.RoundToInt(direction.x), Mathf.RoundToInt(direction.y));
+            
+            if (GridManager.getObjectAtPos(pos) is Unit) { hackUnit(GridManager.getObjectAtPos(pos) as Unit); }
+            else if (GridManager.getObjectAtPos(pos) is ControlPoint) { hackControlPoint(GridManager.getObjectAtPos(pos) as ControlPoint); }
+
+
             else
             {
                 ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("That target isn't in range."));
@@ -44,6 +44,21 @@ public class HackerModule : Module
         {
             ErrorManager.instance.PushError(new ErrorSource { function = "attack", playerId = gameObject.name }, new Error("Attack position out of range for this unit."));
         }
+    }
+    
+    void hackUnit(Unit unit)
+    {
+        if (unit != null && owningUnit.currentEnergy > 0)
+        {
+            owningUnit.currentEnergy--;
+            hackOnClient(unit);
+        }
+    }
+        
+
+    void hackControlPoint(ControlPoint point)
+    {
+        point.Hack(owningUnit.ownerPlayer, 10);
     }
 
     void hackOnClient(Unit entity)

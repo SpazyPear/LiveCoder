@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     public DragDropManager dragDropManager;
     int currentPhase;
     int playersReadied;
+    public int numOfControlPoints;
     public int counter = 0;
     public static Dictionary<int, PlaceableObject> objectInstances = new Dictionary<int, PlaceableObject>(); 
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
@@ -36,15 +37,18 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         State.gameManager = this;
         photonView = GetComponent<PhotonView>();
         activePlayer = FindObjectOfType<PlayerManager>();
+
+        State.onLevelLoad.AddListener(initGameManager);
+        GridManager.OnGridGenerated.AddListener(spawnControlPoints);
+        State.initializeLevel();
     }
 
     void Start()
     {
-        State.onLevelLoad += initGameManager;
-        State.initializeLevel();
+       
     }
 
-    public void initGameManager(object sender, EventArgs e)
+    public void initGameManager()
     {
         gridDimensions = new Vector3(gridManager.GridBreadth, GridManager.GridHeight, gridManager.GridWidth);
     }
@@ -80,7 +84,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     }
 
     [PunRPC]
-    void replicatedRunCode()
+    public void replicatedRunCode()
     {
         codeExecutor.RunCode();
     }
@@ -134,7 +138,15 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         }
     }
 
-
+    void spawnControlPoints()
+    {
+        for (int x = 0; x < numOfControlPoints; x++)
+        {
+            Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, gridManager.GridBreadth / 2), UnityEngine.Random.Range(0, gridManager.GridWidth));
+            GridManager.spawnOnGrid("ControlPoints/ControlPoint", pos);
+        }
+    }
+ 
 
     public void OnEvent(EventData photonEvent)
     {
