@@ -108,7 +108,7 @@ public class Unit : PlaceableObject
 
     public void removeModule(int lane)
     {
-        if (lane < attachedModules.Count)
+        if (lane < attachedModules.Count && lane >= 0)
         {
             Module toRemove = attachedModules[lane];
             nextModuleY -= attachedModules[lane].height;
@@ -120,7 +120,8 @@ public class Unit : PlaceableObject
             }
             GridManager.DestroyObject(attachedModules[lane].moduleObj);
             attachedModules.RemoveAt(lane);
-            Destroy(toRemove);
+            if (attachedModules.Count == 0) GridManager.DestroyObject(this);
+
         }
         else
             print("No such module to remove");
@@ -185,6 +186,11 @@ public class Unit : PlaceableObject
         Camera.main.gameObject.GetComponent<CameraShake>().shakeCamera();
         Instantiate(Resources.Load("PS/PS_Explosion_Rocket") as GameObject, transform.position, Quaternion.identity);
         Destroy(gameObject);
+    }
+
+    public void takeDamage(int lane, int damage)
+    {
+        attachedModules[lane].takeDamage(damage);
     }
 
     public static T CopyComponent<T>(T original, GameObject destination) where T : Component

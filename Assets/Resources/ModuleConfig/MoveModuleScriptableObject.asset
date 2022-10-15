@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0552490fbab3a49a38818736f70248, type: 3}
   m_Name: MoveModuleScriptableObject
   m_EditorClassIdentifier: 
+  name: 
+  cost: 100
+  energyCost: 0
+  maxHealth: 0
+  range: 0
   moveSpeed: 0

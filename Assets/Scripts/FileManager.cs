@@ -9,12 +9,12 @@ public static class FileManager
 {
     public static void WriteDefaults()
     {
-        UnitConfig Soldier = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "MeleeModule" }, name = "Soldier" };
-        UnitConfig Giant = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "ShieldModule" }, name = "Giant" };
-        UnitConfig Healer = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "HealerModule" }, name = "Healer" };
-        UnitConfig EMP = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "EMPModule" }, name = "EMP" };
-        UnitConfig Hacker = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "HackerModule" }, name = "Hacker" };
-        UnitConfig Turret = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "TurretModule" }, name = "Turret" };
+        UnitConfig Soldier = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "MeleeModule" }, name = "Soldier", codeContext = "def OnStart():\n\ndef OnStep():" };
+        UnitConfig Giant = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "ShieldModule" }, name = "Giant", codeContext = "def OnStart():\n\ndef OnStep():" };
+        UnitConfig Healer = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "HealerModule" }, name = "Healer", codeContext = "def OnStart():\n\ndef OnStep():" };
+        UnitConfig EMP = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "EMPModule" }, name = "EMP", codeContext = "def OnStart():\n\ndef OnStep():" };
+        UnitConfig Hacker = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "HackerModule" }, name = "Hacker", codeContext = "def OnStart():\n\ndef OnStep():" };
+        UnitConfig Turret = new UnitConfig() { moduleNames = new List<string> { "MoveModule", "TurretModule" }, name = "Turret", codeContext = "def OnStart():\n\ndef OnStep():" };
 
         SavedUnits savedUnits = new SavedUnits() { units = new List<UnitConfig> { Soldier, Giant, Healer, EMP, Hacker, Turret } };
         

@@ -172,7 +172,7 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
-    public static T findClosest<T>(T sender, bool ignoreOwn) where T : Unit
+    public static T findClosest<T>(PlaceableObject sender, bool ignoreOwn) where T : PlaceableObject
     {
         float min = Mathf.Infinity;
         T closest = null;
@@ -252,9 +252,9 @@ public class GridManager : MonoBehaviour
     {
         return GridContents[gridPoint.x, gridPoint.y].TileObject.transform.position;
     }
-    public static List<Unit> checkForInRangeEntities(Unit sender, int range, bool friendlies, bool enemies)
+    public static List<PlaceableObject> checkForInRangeEntities(PlaceableObject sender, int range, bool friendlies, bool enemies)
     {
-        List<Unit> foundEntities = new List<Unit>();
+        List<PlaceableObject> foundEntities = new List<PlaceableObject>();
         for (int x = -range; x <= range; x++)
         {
             for (int y = -range; y <= range; y++)

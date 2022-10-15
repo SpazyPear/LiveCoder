@@ -58,7 +58,7 @@ public class HackerModule : Module
 
     void hackControlPoint(ControlPoint point)
     {
-        point.Hack(owningUnit.ownerPlayer, 10);
+        point.ReceiveHack(owningUnit.ownerPlayer, 10);
     }
 
     void hackOnClient(Unit entity)

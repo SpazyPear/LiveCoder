@@ -30,9 +30,10 @@ public class HealerModule : Module
     public void replicatedHeal()
     {
         playHealFX();
-        List<Unit> inRangeEntities = GridManager.checkForInRangeEntities(owningUnit, healerData.range, true, false);
+        List<PlaceableObject> inRangeEntities = GridManager.checkForInRangeEntities(owningUnit, healerData.range, true, false);
         foreach (Unit c in inRangeEntities)
         {
+            if (c == null) continue;
             try
             {
                 c.attachedModules.ForEach(x => x.currentHealth += healerData.healRate);

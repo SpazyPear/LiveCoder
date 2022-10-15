@@ -26,7 +26,10 @@ public abstract class Module : MonoBehaviour, IDamageable
 
     public abstract string displayName();
 
-    protected virtual void Start() { }
+    protected virtual void Start()
+    {
+        currentHealth = moduleData.maxHealth;
+    }
 
     protected virtual void Update() { }
 
@@ -39,7 +42,6 @@ public abstract class Module : MonoBehaviour, IDamageable
     protected async virtual void Initialize()
     {
         while (moduleData == null) await Task.Yield();
-        currentHealth = moduleData.maxHealth;
     }
 
     public abstract object CreateProxy();
