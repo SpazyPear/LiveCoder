@@ -49,11 +49,13 @@ public class TurretModule : Module
     }
 
     [PunRPC]
-    void replicatedShoot()
+    public void replicatedShoot()
     {
         GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
         obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = owningUnit.ownerPlayer;
         obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.projectileAliveTime;
+        obj.GetComponentInChildren<ProjectileBehaviour>().lane = lane;
+
         obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
         shootPS.Play();
     }

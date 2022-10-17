@@ -118,10 +118,16 @@ public class Unit : PlaceableObject
                 module.moduleObj.transform.localPosition -= new Vector3(0, toRemove.height * 2, 0);
                 module.lane -= 1;
             }
-            GridManager.DestroyObject(attachedModules[lane].moduleObj);
+            GridManager.DestroyOnNetwork(attachedModules[lane].moduleObj);
             attachedModules.RemoveAt(lane);
-            if (attachedModules.Count == 0) GridManager.DestroyObject(this);
 
+
+            if (attachedModules.Count == 0)
+            {
+                GameManager.objectInstances.Remove(ViewID);
+                ownerPlayer.units.Remove(this);
+                GridManager.DestroyOnNetwork(gameObject);
+            }
         }
         else
             print("No such module to remove");

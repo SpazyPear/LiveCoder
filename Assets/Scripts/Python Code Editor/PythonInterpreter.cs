@@ -336,6 +336,7 @@ public class PythonInterpreter : MonoBehaviour, IOnEventCallback
                 //ErrorBubbleManager.spawnBubble(context.character.gridPos, context.character.name + " threw: " + e.ToString());
             }
         }
+        foreach (ControlledMonoBehavour mono in FindObjectsOfType<ControlledMonoBehavour>()) mono.OnStart();
 
 
 
@@ -365,6 +366,7 @@ public class PythonInterpreter : MonoBehaviour, IOnEventCallback
                     }
                 }
             }
+            foreach (ControlledMonoBehavour mono in FindObjectsOfType<ControlledMonoBehavour>()) mono.OnStep();
             yield return new WaitForSeconds(1);
         } while (Application.isPlaying && runOnStep);
     }

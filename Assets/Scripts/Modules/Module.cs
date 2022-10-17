@@ -10,14 +10,18 @@ public abstract class Module : MonoBehaviour, IDamageable
 {
     public ModuleData moduleData;
 
+    [HideInInspector]
     public int lane;
 
     protected Unit owningUnit;
 
+    [HideInInspector]
     public GameObject moduleObj;
 
+    [HideInInspector]
     public int currentHealth;
 
+    [HideInInspector]
     public float height;
 
     public HealthBar healthBar;
@@ -29,14 +33,16 @@ public abstract class Module : MonoBehaviour, IDamageable
     protected virtual void Start()
     {
         currentHealth = moduleData.maxHealth;
+        healthBar = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.Find("HealthBars").transform).GetComponent<HealthBar>(); 
+        healthBar.setupHealthBar(moduleObj.transform);
+        owningUnit = GetComponent<Unit>();
     }
 
     protected virtual void Update() { }
 
     protected virtual void Awake()
     {
-        //healthBar.setupHealthBar(transform, OnHealthChanged);
-        owningUnit = GetComponent<Unit>();
+       
     }
 
     protected async virtual void Initialize()
@@ -56,9 +62,9 @@ public abstract class Module : MonoBehaviour, IDamageable
 
         while (timer < 1)
         {
-            if (gameObject != null)
+            if (moduleObj != null)
             {
-                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, timer / 1);
+                moduleObj.transform.localScale = Vector3.Lerp(moduleObj.transform.localScale, Vector3.zero, timer / 1);
                 timer += Time.deltaTime;
                 await Task.Yield();
             }
@@ -70,7 +76,7 @@ public abstract class Module : MonoBehaviour, IDamageable
 
     public void takeDamage(int damage, object sender = null)
     {
-        OnHealthChanged?.Invoke(this, (currentHealth - damage) / moduleData.maxHealth);
+        healthBar.OnHealthChanged(this, (currentHealth - damage) / (float)moduleData.maxHealth);
 
         if (currentHealth - damage > 0)
         {

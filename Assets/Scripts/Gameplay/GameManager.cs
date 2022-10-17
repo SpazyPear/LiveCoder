@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
         OnPhaseChange.AddListener(phaseEnter);
         State.gameManager = this;
         photonView = GetComponent<PhotonView>();
-        activePlayer = FindObjectOfType<PlayerManager>();
+        activePlayer = players[0];
 
         State.onLevelLoad.AddListener(initGameManager);
         GridManager.OnGridGenerated.AddListener(spawnControlPoints);
@@ -57,6 +57,11 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     {
         if (PhotonNetwork.IsMasterClient || !PhotonNetwork.IsConnected) { OnReadyUpRecieved(PhotonNetwork.LocalPlayer.UserId); }
         else { PhotonNetwork.RaiseEvent(0, PhotonNetwork.LocalPlayer.UserId, new RaiseEventOptions(), new SendOptions()); }
+      
+        if (!PhotonNetwork.IsConnected)
+        {
+            activePlayer = players[1];
+        }
     }
 
     void OnReadyUpRecieved(string player)
@@ -142,7 +147,7 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     {
         for (int x = 0; x < numOfControlPoints; x++)
         {
-            Vector2Int pos = new Vector2Int(UnityEngine.Random.Range(0, gridManager.GridBreadth / 2), UnityEngine.Random.Range(0, gridManager.GridWidth));
+            Vector2Int pos = new Vector2Int((gridManager.GridBreadth / 2), UnityEngine.Random.Range(0, gridManager.GridWidth));
             GridManager.spawnOnGrid("ControlPoints/ControlPoint", pos);
         }
     }

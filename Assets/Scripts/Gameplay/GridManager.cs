@@ -276,7 +276,7 @@ public class GridManager : MonoBehaviour
         return foundEntities;
     }
 
-    public static void DestroyObject(GameObject obj)
+    public static void DestroyOnNetwork(GameObject obj)
     {
         if (PhotonNetwork.IsConnected)
             PhotonNetwork.Destroy(obj);

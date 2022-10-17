@@ -28,13 +28,13 @@ public class ProjectileBehaviour : MonoBehaviour
         Unit character = collision.gameObject.GetComponentInParent<Unit>();
         if (shield == null && character && character.ownerPlayer != ownerPlayer)
         {
-            character.attachedModules[lane].takeDamage(damage, this);
-            GridManager.DestroyObject(gameObject);
+            character.takeDamage(lane, damage);
+            GridManager.DestroyOnNetwork(gameObject);
         }
         else if (shield)
         {
             shield.takeShieldDamage(damage);
-            GridManager.DestroyObject(gameObject);
+            GridManager.DestroyOnNetwork(gameObject);
         }
     }
 }

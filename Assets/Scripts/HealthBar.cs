@@ -1,31 +1,42 @@
 using Photon.Pun;
 using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class HealthBar : MonoBehaviour
 {
-    public UnitData entityData;
     RectTransform CanvasRect;
-    public RectTransform healthBarObj;
+    RectTransform healthBarObj;
     public Slider healthBar;
+    public const float yOffset = 2;
+    Transform target;
+    [HideInInspector]
     public int currentHealth;
     public PhotonView photonView;
     
     protected virtual void Awake()
     {
-        CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
-        photonView = GetComponentInParent<PhotonView>();
+        
     }
 
-    public void setupHealthBar(Transform target, EventHandler<float> OnHealthUpdateEvent)
+    public void setupHealthBar(Transform target)
     {
-        OnHealthUpdateEvent += OnHealthChanged;
-        transform.parent = target;
-        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target.position + new Vector3(0, 13f, 0));
+        this.target = target;
+        //photonView = target.parent.GetComponent<PhotonView>();
+        healthBarObj = GetComponent<RectTransform>();
+        CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
+        //transform.parent = target;
+       // transform.parent = GameObject.Find("HealthBars").transform;
+    }
+
+    void Update()
+    {
+        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target.position + new Vector3(0, yOffset, 0));
         Vector2 WorldObject_ScreenPosition = new Vector2(
         ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
         ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
@@ -55,13 +66,13 @@ public class HealthBar : MonoBehaviour
         if (!healthBarObj.gameObject.activeInHierarchy)
             healthBarObj.gameObject.SetActive(true);
 
-        if (value <= 0)
-        {
-            GridManager.DestroyObject(gameObject);
-        }
-
         StopCoroutine(shakeHealthBar());
         StartCoroutine(shakeHealthBar());
         healthBar.value = value;
+
+        if (value <= 0)
+        {
+            GridManager.DestroyOnNetwork(gameObject);
+        }
     }
 }
