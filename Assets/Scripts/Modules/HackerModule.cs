@@ -25,6 +25,11 @@ public class HackerModule : Module
         base.Awake();
     }
 
+    public void setCodeOverride(string code)
+    {
+        codeOverride = code;
+    }
+
     public void hack(vector2 direction)
     {
         if (Mathf.Max(direction.x, direction.y) <= hackerData.range)
@@ -63,10 +68,7 @@ public class HackerModule : Module
 
     void hackOnClient(Unit entity)
     {
-        object[] data = new object[2];
-        data[0] = codeOverride;
-        data[1] = entity.ViewID;
-        PhotonNetwork.RaiseEvent(3, (object)data, new RaiseEventOptions { Receivers = ReceiverGroup.Others }, SendOptions.SendReliable);
+        GameManager.CallRPC(FindObjectOfType<PythonInterpreter>(), "ResetScript", RpcTarget.Others, codeOverride, entity.ViewID);
     }
     
     private void OnTriggerEnter(Collider other)

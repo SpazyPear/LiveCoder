@@ -49,12 +49,12 @@ public class TurretModule : Module
     }
 
     [PunRPC]
-    public void replicatedShoot()
+    public void replicatedShoot(int ViewID)
     {
-        GameObject obj = Instantiate(projectile, shootPoint.position, pivot.rotation);
-        obj.GetComponentInChildren<ProjectileBehaviour>().ownerPlayer = owningUnit.ownerPlayer;
-        obj.GetComponentInChildren<ProjectileBehaviour>().aliveRange = turretData.projectileAliveTime;
-        obj.GetComponentInChildren<ProjectileBehaviour>().lane = lane;
+        ProjectileBehaviour obj = GridManager.GetProjectileInstance(ViewID);
+        obj.ownerPlayer = owningUnit.ownerPlayer;
+        obj.aliveRange = turretData.projectileAliveTime;
+        obj.lane = lane;
 
         obj.GetComponent<Rigidbody>().AddForce(pivot.forward * 3000f);
         shootPS.Play();
@@ -65,10 +65,12 @@ public class TurretModule : Module
         if (!owningUnit.isDisabled && owningUnit.currentEnergy > 0)
         {
             owningUnit.currentEnergy--;
-            GameManager.CallRPC(this, "replicatedShoot", RpcTarget.All);
+            GameObject proj = GridManager.InstantiateObject("Prefabs/projectile", shootPoint.position, pivot.rotation);
+            GameManager.projectiles.Add(proj.GetPhotonView().ViewID, proj.GetComponent<ProjectileBehaviour>());
+            GameManager.CallRPC(this, "replicatedShoot", RpcTarget.All, proj.GetPhotonView().ViewID);
         }
     }
-
+    
     IEnumerator rotateBarrel()
     {
         while (rotatingBarrel && currentTarget)

@@ -22,7 +22,7 @@ public class MeleeModule : Module
             Unit target = GridManager.getObjectAtPos(owningUnit.gridPos + new Vector2Int(x, y)) as Unit;
             if (target != null && owningUnit.currentEnergy > 0)
             {
-                owningUnit.currentEnergy--; //todo check if exist
+                owningUnit.currentEnergy--;
                 GameManager.CallRPC(this, "replicatedAttack", RpcTarget.All, target.ViewID, lane);
             }
             else

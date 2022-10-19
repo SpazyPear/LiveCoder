@@ -23,7 +23,7 @@ public class HealerModule : Module
 
     public void heal()
     {
-        owningUnit.photonView.RPC("replicatedHeal", RpcTarget.AllViaServer);
+        GameManager.CallRPC(this, "replicatedHeal", RpcTarget.AllViaServer);
     }
 
     [PunRPC]
@@ -36,7 +36,7 @@ public class HealerModule : Module
             if (c == null) continue;
             try
             {
-                c.attachedModules.ForEach(x => x.currentHealth += healerData.healRate);
+                c.attachedModules.ForEach(x => x.currentHealth.value += healerData.healRate);
             }
             catch (System.Exception e) { }
         }
@@ -55,7 +55,7 @@ public class HealerModule : Module
     }
     public override string displayName()
     {
-        return "healModule";
+        return "healerModule";
     }
 
 

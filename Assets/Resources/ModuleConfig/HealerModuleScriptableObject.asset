@@ -12,14 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013249d4f8dadde4baec387bdf7ba14e, type: 3}
   m_Name: HealerModuleScriptableObject
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  name: 
   cost: 40
-  empResistance: 1
+  energyCost: 20
+  maxHealth: 3
   range: 1
-  maxEnergy: 5
-  playerSpeed: 1
-  classType: 2
   healRate: 1
-  EMPStrength: 4
-  healRange: 1
-  EMPRange: 10

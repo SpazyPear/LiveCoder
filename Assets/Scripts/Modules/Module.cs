@@ -5,6 +5,7 @@ using PythonProxies;
 using IronPython.Compiler.Ast;
 using System;
 using System.Threading.Tasks;
+using Photon.Pun;
 
 public abstract class Module : MonoBehaviour, IDamageable
 {
@@ -19,23 +20,27 @@ public abstract class Module : MonoBehaviour, IDamageable
     public GameObject moduleObj;
 
     [HideInInspector]
-    public int currentHealth;
+    public BindableValue<int> currentHealth;
 
     [HideInInspector]
     public float height;
 
-    public HealthBar healthBar;
-
-    public EventHandler<float> OnHealthChanged;
+    HealthBar healthBar;
 
     public abstract string displayName();
 
     protected virtual void Start()
     {
-        currentHealth = moduleData.maxHealth;
-        healthBar = Instantiate(Resources.Load("UI/HealthBar") as GameObject, GameObject.Find("HealthBars").transform).GetComponent<HealthBar>(); 
-        healthBar.setupHealthBar(moduleObj.transform);
+     
+        Transform parent = GameObject.Find("HealthBars").transform;
+        healthBar = Instantiate(Resources.Load("UI/HealthBar") as GameObject, parent.position, Quaternion.identity).GetComponent<HealthBar>();
+        healthBar.transform.SetParent(parent.transform);
+
+        currentHealth = new BindableValue<int>(x => healthBar.OnHealthChanged(x));
+        healthBar.setupHealthBar(moduleObj.transform, moduleData.maxHealth);
+        currentHealth.value = moduleData.maxHealth;
         owningUnit = GetComponent<Unit>();
+        
     }
 
     protected virtual void Update() { }
@@ -76,14 +81,12 @@ public abstract class Module : MonoBehaviour, IDamageable
 
     public void takeDamage(int damage, object sender = null)
     {
-        healthBar.OnHealthChanged(this, (currentHealth - damage) / (float)moduleData.maxHealth);
-
-        if (currentHealth - damage > 0)
+        if (currentHealth.value - damage > 0)
         {
-            currentHealth -= damage;
+            currentHealth.value -= damage;
             return;
         }
-
+        currentHealth.value = 0;
         die(sender);
     }
 }

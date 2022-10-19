@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   cost: 100
-  energyCost: 0
-  maxHealth: 0
+  energyCost: 2
+  maxHealth: 3
   range: 1
   timeToHack: 2

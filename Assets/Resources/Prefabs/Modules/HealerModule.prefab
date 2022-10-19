@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 5775715483408615264}
   - component: {fileID: 4617555577438941949}
   m_Layer: 0
-  m_Name: HealModule
+  m_Name: HealerModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -230,11 +230,10 @@ MonoBehaviour:
   moduleData: {fileID: 11400000, guid: c1ead4b0adfe9e44c8694a23edc07ec8, type: 2}
   lane: 0
   moduleObj: {fileID: 0}
-  currentHealth: 0
   height: 0
-  healthBar: {fileID: 0}
-  healRing: {fileID: 0}
-  healCrosses: {fileID: 0}
+  healRing: {fileID: 198161763043939694, guid: fb1bfc45e39f46fe80f8ca0b02b73a8a, type: 3}
+  healCrosses: {fileID: 198012367258483776, guid: 499ea39bfd784211aca7942a38c7a9fa,
+    type: 3}
 --- !u!1 &8988462125191943119
 GameObject:
   m_ObjectHideFlags: 0

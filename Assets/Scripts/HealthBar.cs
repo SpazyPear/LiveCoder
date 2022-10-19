@@ -3,7 +3,6 @@ using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
@@ -16,7 +15,7 @@ public class HealthBar : MonoBehaviour
     public const float yOffset = 2;
     Transform target;
     [HideInInspector]
-    public int currentHealth;
+    public int maxHealth;
     public PhotonView photonView;
     
     protected virtual void Awake()
@@ -24,10 +23,11 @@ public class HealthBar : MonoBehaviour
         
     }
 
-    public void setupHealthBar(Transform target)
+    public void setupHealthBar(Transform target, int maxHealth)
     {
+        photonView = GetComponent<PhotonView>();
         this.target = target;
-        //photonView = target.parent.GetComponent<PhotonView>();
+        this.maxHealth = maxHealth;
         healthBarObj = GetComponent<RectTransform>();
         CanvasRect = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         //transform.parent = target;
@@ -36,13 +36,16 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target.position + new Vector3(0, yOffset, 0));
-        Vector2 WorldObject_ScreenPosition = new Vector2(
-        ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
-        ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
+        if (target)
+        {
+            Vector2 ViewportPosition = Camera.main.WorldToViewportPoint(target.position + new Vector3(0, yOffset, 0));
+            Vector2 WorldObject_ScreenPosition = new Vector2(
+            ((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f)),
+            ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)));
 
-        if (healthBarObj)
-            healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
+            if (healthBarObj)
+                healthBarObj.anchoredPosition = WorldObject_ScreenPosition;
+        }
     }
 
     IEnumerator shakeHealthBar()
@@ -61,18 +64,24 @@ public class HealthBar : MonoBehaviour
         healthBar.transform.position = orignalPosition;
     }
 
-    public void OnHealthChanged(object sender, float value)
+    public void OnHealthChanged(float value)
     {
-        if (!healthBarObj.gameObject.activeInHierarchy)
+        if (value / maxHealth != 1)
+        {
             healthBarObj.gameObject.SetActive(true);
 
-        StopCoroutine(shakeHealthBar());
-        StartCoroutine(shakeHealthBar());
-        healthBar.value = value;
+            StopCoroutine(shakeHealthBar());
+            StartCoroutine(shakeHealthBar());
+            healthBar.value = value / maxHealth;
 
-        if (value <= 0)
+            if (value <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
         {
-            GridManager.DestroyOnNetwork(gameObject);
+            healthBarObj.gameObject.SetActive(false);
         }
     }
 }

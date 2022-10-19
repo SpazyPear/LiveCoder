@@ -10,7 +10,7 @@ public class ShieldModule : Module
     public Transform shieldDownPoint;
     public Transform shieldUpPoint;
 
-    Shield shield;
+    public Shield shield;
     public ShieldData shieldData { get { return moduleData as ShieldData; } private set { moduleData = value; } }
 
     protected override void Awake()
@@ -21,7 +21,6 @@ public class ShieldModule : Module
     protected override void Start()
     {
         base.Start();
-        shield = GetComponentInChildren<Shield>();
         shield.transform.position = transform.position;
         shield.transform.rotation = transform.rotation;
         shield.setDefaults(shieldData.maxShieldHealth, shieldData.shieldRegenRate);
@@ -30,19 +29,19 @@ public class ShieldModule : Module
 
     public void positionShield(bool raised)
     {
-        if (shield.shieldHealth > 0)
+        if (shield.shieldHealth.value > 0)
         {
-            owningUnit.photonView.RPC("replicatedPositionShield", RpcTarget.AllViaServer, raised);
+            GameManager.CallRPC(this, "replicatedPositionShield", RpcTarget.AllViaServer, raised);
         }
     }
 
     public void lowerShield()
     {
-        owningUnit.photonView.RPC("replicatedLowerShield", RpcTarget.AllViaServer);
+        GameManager.CallRPC(this, "replicatedLowerShield", RpcTarget.AllViaServer);
     }
 
     [PunRPC]
-    void replicatedLowerShield()
+    public void replicatedLowerShield()
     {
         shield.gameObject.SetActive(false);
     }

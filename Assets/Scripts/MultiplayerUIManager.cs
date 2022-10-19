@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class MultiplayerUIManager : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class MultiplayerUIManager : MonoBehaviour
     public NetworkManager NetworkManager;
     public TMP_Text WaitingText;
 
+    private void Start()
+    {
+        NetworkManager.OnConnectedToLobbyCallback += OnConnectedToLobby;
+    }
+
     public void Join()
     {
         NetworkManager.JoinRoom(JoinInput.text);
@@ -22,5 +28,11 @@ public class MultiplayerUIManager : MonoBehaviour
     {
         NetworkManager.CreateRoom(CreateInput.text);
         WaitingText.enabled = true;
+    }
+
+    public void OnConnectedToLobby(object sender, EventArgs e)
+    {
+        JoinButton.interactable = true;
+        CreateButton.interactable = true;
     }
 }

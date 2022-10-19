@@ -75,7 +75,7 @@ public class DragDropManager : MonoBehaviour
 
             if (hitTile)
             {
-                GameManager.CallRPC(this, "placeOnGrid", RpcTarget.All, draggingEntity.ViewID, hitTile.gridTile.gridPosition.x, hitTile.gridTile.gridPosition.y, playerManager.isLeftSide);
+                GameManager.CallRPC(GridManager.gridInstance, "placeOnGrid", RpcTarget.All, draggingEntity.ViewID, hitTile.gridTile.gridPosition.x, hitTile.gridTile.gridPosition.y, playerManager.isLeftSide);
             }
             else if (!hit.transform && draggingEntity is Unit)
             {

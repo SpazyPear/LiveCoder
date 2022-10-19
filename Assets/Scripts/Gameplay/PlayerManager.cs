@@ -22,7 +22,7 @@ public class PlayerManager : ControlledMonoBehavour
     void Awake()
     {
         //FileManager.WriteDefaults();
-        //isLeftSide = PhotonNetwork.IsConnected ? PhotonNetwork.IsMasterClient : true;
+        isLeftSide = PhotonNetwork.IsConnected ? PhotonNetwork.IsMasterClient : isLeftSide;
         LocalPlayer = PhotonNetwork.LocalPlayer;
         creditsLeft = new BindableValue<int>((x) => GameObject.FindObjectOfType<UIManager>().updateCreditUI(x));
         initPlayer();

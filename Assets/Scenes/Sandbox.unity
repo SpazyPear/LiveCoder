@@ -1237,14 +1237,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.4198925, y: -0.008245629, z: -0.01781829, w: 0.9073615}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.898345, y: 119.195045, z: -31.328772}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1643,16 +1643,16 @@ MonoBehaviour:
   unitChoices:
   - name: TurretModule
     objectType: 1
-  - name: Empty
-    objectType: 0
   - name: MoveModule
+    objectType: 1
+  - name: HackerModule
     objectType: 1
   - name: Soldier
     objectType: 0
   - name: Hacker
     objectType: 0
-  - name: Giant
-    objectType: 0
+  - name: HealerModule
+    objectType: 1
   dragDropTransform: {fileID: 698797626685292558, guid: 124bb99ce85924414ad061dac1c45591,
     type: 3}
   uiManager: {fileID: 143205210}

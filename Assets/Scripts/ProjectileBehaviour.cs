@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,25 +17,44 @@ public class ProjectileBehaviour : MonoBehaviour
     public float aliveRange;
     public ProjectileLane projectileLane;
     public int lane;
+    PhotonView photonView;
 
     private void Start()
     {
-        //Destroy(gameObject, aliveRange);
+        Destroy(gameObject, aliveRange);
+        photonView = GetComponent<PhotonView>();
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        Shield shield = collision.GetComponentInParent<Shield>();
-        Unit character = collision.gameObject.GetComponentInParent<Unit>();
-        if (shield == null && character && character.ownerPlayer != ownerPlayer)
+        if (!PhotonNetwork.IsConnected || photonView.AmOwner)
         {
-            character.takeDamage(lane, damage);
-            GridManager.DestroyOnNetwork(gameObject);
+            Shield shield = collision.GetComponentInParent<Shield>();
+            Unit character = collision.gameObject.GetComponentInParent<Unit>();
+            if (shield == null && character && character.ownerPlayer != ownerPlayer)
+            {
+                GameManager.CallRPC(this, "DoDamage", RpcTarget.All, character.ViewID);
+                GameManager.projectiles.Remove(photonView.ViewID);
+                GridManager.DestroyOnNetwork(gameObject);
+            }
+            else if (shield)
+            {
+                GameManager.CallRPC(this, "DoShieldDamage", RpcTarget.All, character.ViewID);
+                GameManager.projectiles.Remove(photonView.ViewID);
+                GridManager.DestroyOnNetwork(gameObject);
+            }
         }
-        else if (shield)
-        {
-            shield.takeShieldDamage(damage);
-            GridManager.DestroyOnNetwork(gameObject);
-        }
+    }
+
+    [PunRPC]
+    public void DoDamage(int ViewID)
+    {
+        GridManager.GetObjectInstance(ViewID).GetComponent<Unit>().takeDamage(lane, damage);
+    }
+
+    [PunRPC]
+    public void DoShieldDamage(int ViewID)
+    {
+        GridManager.GetObjectInstance(ViewID).GetComponent<ShieldModule>().shield.takeShieldDamage(damage);
     }
 }

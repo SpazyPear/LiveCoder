@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 763cf5c54dce40d4da88c0d3535d771d, type: 3}
   m_Name: MeleeModuleScriptableObject
   m_EditorClassIdentifier: 
+  name: 
+  cost: 10
+  energyCost: 1
+  maxHealth: 5
   range: 1
+  damage: 1

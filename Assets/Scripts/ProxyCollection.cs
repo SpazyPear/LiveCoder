@@ -187,6 +187,11 @@ namespace PythonProxies
         {
             this.target.hack(direction);
         }
+
+        public void setCodeOverride(string code)
+        {
+            target.setCodeOverride(code);
+        }
     }
 
     [PythonClass("EMPModule", false, "empModule")]

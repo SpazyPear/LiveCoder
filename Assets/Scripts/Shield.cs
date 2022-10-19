@@ -11,26 +11,35 @@ public enum ShieldState
     Lowered
 }
 
-public class Shield : MonoBehaviour
+public class Shield : ControlledMonoBehavour
 {
-    public float shieldHealth;
-    public CancellationTokenSource shieldRegenTokenSource;
+    public BindableValue<float> shieldHealth;
     public float maxShieldHealth;
     public float shieldRegenRate;
     public ShieldState shieldState = ShieldState.InActive;
     public ShieldState prevShieldState;
+    public bool shieldRegenerating;
+    public Material shieldMat;
+    public Color shieldFullColour;
+    public Color shieldDeadColour;
 
     public void setDefaults(float maxShieldHealth, float shieldRegenRate)
     {
         this.maxShieldHealth = maxShieldHealth;
         this.shieldRegenRate = shieldRegenRate;
-        shieldHealth = maxShieldHealth;
+        shieldHealth = new BindableValue<float>(x => shieldMat.SetColor("_TintColor", Color.Lerp(shieldDeadColour, shieldFullColour, x / maxShieldHealth)));
+        shieldHealth.value = maxShieldHealth;
+    }
+
+    public override void OnStep()
+    {
+        shieldRegen();
     }
 
     public void takeShieldDamage(float damage)
     {
-        shieldHealth -= damage;
-        if (shieldHealth <= 0)
+        shieldHealth.value -= damage;
+        if (shieldHealth.value <= 0)
         {
             gameObject.SetActive(false);
             shieldState = ShieldState.InActive;
@@ -38,15 +47,15 @@ public class Shield : MonoBehaviour
         }
     }
 
-    async void shieldRegen() //probably doesnt work like that with the tokens
+    void shieldRegen() //probably doesnt work like that with the tokens
     {
-        if (shieldRegenTokenSource != null) shieldRegenTokenSource.Cancel();
-        shieldRegenTokenSource = new CancellationTokenSource();
-        while (!shieldRegenTokenSource.Token.IsCancellationRequested && shieldHealth <= maxShieldHealth && shieldState == ShieldState.InActive)
+        if (shieldRegenerating && shieldHealth.value <= maxShieldHealth && shieldState == ShieldState.InActive)
         {
-            await Task.Yield();
-            shieldHealth += shieldRegenRate * Time.deltaTime;
+            shieldHealth.value = Mathf.Clamp(shieldRegenRate + shieldHealth.value, 0, maxShieldHealth);
         }
-        shieldHealth = maxShieldHealth;
+        else
+        {
+            shieldRegenerating = false;
+        }
     }
 }

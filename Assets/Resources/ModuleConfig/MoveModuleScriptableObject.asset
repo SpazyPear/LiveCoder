@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   cost: 100
-  energyCost: 0
-  maxHealth: 0
-  range: 0
-  moveSpeed: 0
+  energyCost: 1
+  maxHealth: 5
+  range: 1
+  moveSpeed: 1

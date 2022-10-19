@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 2463397684468256050}
   - component: {fileID: 555304374270647011}
   - component: {fileID: 2048173794520389070}
+  - component: {fileID: 4516513905638783044}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -196,11 +197,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f4a5519c6d5ec14697f4e352b294c39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldHealth: 0
   maxShieldHealth: 5
   shieldRegenRate: 1
   shieldState: 0
   prevShieldState: 0
+  shieldRegenerating: 0
+  shieldMat: {fileID: 2100000, guid: e510d76bc6c14a80a7e98d59a5cdfb11, type: 2}
+  shieldFullColour: {r: 0.121568635, g: 0.6276692, b: 0.8784314, a: 1}
+  shieldDeadColour: {r: 0.9137255, g: 0.09019608, b: 0.153928, a: 0.9843137}
+--- !u!65 &4516513905638783044
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618888857403865959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9999995, y: 3.9999995, z: 4}
+  m_Center: {x: 0.0000000018626451, y: 0, z: 0}
 --- !u!1 &2209433631209218754
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +302,7 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   shieldDownPoint: {fileID: 5778659597924279660}
   shieldUpPoint: {fileID: 1239575745231056725}
+  shield: {fileID: 2048173794520389070}
 --- !u!1 &6810126295700875776
 GameObject:
   m_ObjectHideFlags: 0

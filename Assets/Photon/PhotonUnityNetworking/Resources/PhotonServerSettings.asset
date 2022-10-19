@@ -63,6 +63,12 @@ MonoBehaviour:
   - ReplicatedDestroyComponent
   - replicateAddModule
   - replicatedAddModule
+  - ResetScript
+  - AddObjectInstance
+  - AddProjectileInstance
+  - DoDamage
+  - DoShieldDamage
+  - removeModule
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

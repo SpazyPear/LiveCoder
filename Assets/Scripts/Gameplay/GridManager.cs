@@ -300,6 +300,14 @@ public class GridManager : MonoBehaviour
             return GameManager.objectInstances[id];
     }
 
+    public static ProjectileBehaviour GetProjectileInstance(int id)
+    {
+        if (PhotonNetwork.IsConnected)
+            return PhotonView.Find(id).GetComponent<ProjectileBehaviour>();
+        else
+            return GameManager.projectiles[id];
+    }
+
     public static void DestroyComponent(Component comp)
     {
 

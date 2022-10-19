@@ -27,12 +27,17 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     int playersReadied;
     public int numOfControlPoints;
     public int counter = 0;
-    public static Dictionary<int, PlaceableObject> objectInstances = new Dictionary<int, PlaceableObject>(); 
+    public static Dictionary<int, PlaceableObject> objectInstances = new Dictionary<int, PlaceableObject>();
+    public static Dictionary<int, ProjectileBehaviour> projectiles = new Dictionary<int, ProjectileBehaviour>();
+
+    GameManager instance;
+    
     public static UnityEvent<int> OnPhaseChange = new UnityEvent<int>();
 
     // Start is called before the first frame update
     void Awake()
     {
+        instance = this;
         OnPhaseChange.AddListener(phaseEnter);
         State.gameManager = this;
         photonView = GetComponent<PhotonView>();
@@ -46,6 +51,19 @@ public class GameManager : MonoBehaviour, IOnEventCallback
     void Start()
     {
        
+    }
+
+    [PunRPC]
+    public void AddObjectInstance(int viewID, PlaceableObject obj)
+    {
+        objectInstances.Add(viewID, obj);
+    }
+
+    [PunRPC]
+    public void AddProjectileInstance(int viewID)
+    {
+        if (PhotonNetwork.IsConnected)
+            projectiles.Add(viewID, PhotonView.Find(viewID).GetComponent<ProjectileBehaviour>());
     }
 
     public void initGameManager()

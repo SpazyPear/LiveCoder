@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfb767b5380befb4b8c9d3c5c4b77ccd, type: 3}
   m_Name: EMPModuleScriptableObject
   m_EditorClassIdentifier: 
-  EMPRange: 3
+  name: 
+  cost: 10
+  energyCost: 2
+  maxHealth: 3
+  range: 3
   EMPDuration: 3
-  EMPEnergy: 3

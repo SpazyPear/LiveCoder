@@ -26,9 +26,8 @@ public class Unit : PlaceableObject
 
     protected override void Awake()
     {
-        base.Awake();   
-        if (ownerPlayer)
-            ownerPlayer.units.Remove(this);
+        base.Awake();
+
         tweener = GetComponent<Tweener>();
         codeContext.unit = this;
         GameObject.FindObjectOfType<CodeExecutor>().codeContexts.Add(codeContext);
@@ -38,7 +37,6 @@ public class Unit : PlaceableObject
     public void InitializeUnit(List<string> moduleNames, string code, string name)
     {
         moduleNames.ForEach(x => addModule(x));
-        print(moduleNames.Count + "pre added");
         codeContext.source = code;
         currentEnergy = unitData.maxEnergy;
         this.name = name;
@@ -86,7 +84,12 @@ public class Unit : PlaceableObject
     
     public void addModule(string moduleName)
     {
-        GameManager.CallRPC(this, "replicatedAddModule", RpcTarget.All, moduleName);
+        int moduleCost = (Resources.Load("Prefabs/Modules/" + moduleName) as GameObject).GetComponentInChildren<Module>().moduleData.cost;
+        if (moduleCost <= GameManager.activePlayer.creditsLeft.value)
+        {
+            GameManager.CallRPC(this, "replicatedAddModule", RpcTarget.All, moduleName);
+            GameManager.activePlayer.creditsLeft.value -= moduleCost;
+        }
     }
 
     [PunRPC]
@@ -118,20 +121,22 @@ public class Unit : PlaceableObject
                 module.moduleObj.transform.localPosition -= new Vector3(0, toRemove.height * 2, 0);
                 module.lane -= 1;
             }
-            GridManager.DestroyOnNetwork(attachedModules[lane].moduleObj);
+            Destroy(attachedModules[lane].moduleObj);
             attachedModules.RemoveAt(lane);
 
 
             if (attachedModules.Count == 0)
             {
                 GameManager.objectInstances.Remove(ViewID);
-                ownerPlayer.units.Remove(this);
-                GridManager.DestroyOnNetwork(gameObject);
+                if (ownerPlayer)
+                    ownerPlayer.units.Remove(this);
+                Destroy(gameObject);
             }
         }
         else
             print("No such module to remove");
     }
+
     
     public void energyRegen()
     {
@@ -196,7 +201,8 @@ public class Unit : PlaceableObject
 
     public void takeDamage(int lane, int damage)
     {
-        attachedModules[lane].takeDamage(damage);
+        if (lane >= 0 && lane < attachedModules.Count)
+            attachedModules[lane].takeDamage(damage);
     }
 
     public static T CopyComponent<T>(T original, GameObject destination) where T : Component

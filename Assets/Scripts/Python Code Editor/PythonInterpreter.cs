@@ -14,7 +14,7 @@ public class PythonTypeDef
     public List<string> possibleValues;
 }
 
-public class PythonInterpreter : MonoBehaviour, IOnEventCallback
+public class PythonInterpreter : MonoBehaviour
 {
     [Header("Editor UI")]
     public TMP_InputField input;
@@ -51,9 +51,10 @@ public class PythonInterpreter : MonoBehaviour, IOnEventCallback
         instance.codeContexts.Add(context);
     }
 
-    public void ResetScript(string newSource, Unit sender)
+    [PunRPC]
+    public void ResetScript(string newSource, int ViewID)
     {
-        CodeContext context = codeContexts.Find(x => x.unit == sender);
+        CodeContext context = (GameManager.objectInstances[ViewID] as Unit).codeContext;
         
         context.source = newSource;
         context.pythonScript = pythonEngine.CreateScriptSourceFromString(ProcessSource(context));
@@ -371,12 +372,4 @@ public class PythonInterpreter : MonoBehaviour, IOnEventCallback
         } while (Application.isPlaying && runOnStep);
     }
 
-    public void OnEvent(EventData photonEvent)
-    {
-        if (photonEvent.Code == State.CodeInjectionCode)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-            ResetScript((string)data[0], PhotonView.Find((int)data[1]).GetComponent<Unit>());
-        }
-    }
 }
